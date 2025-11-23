@@ -23,7 +23,7 @@ class MainWindow(ctk.CTk):
         # Window settings
         self.title(f"{PROJECT_NAME}")
         self.iconbitmap(f"{Path(__file__).resolve().parent / "Ziro.ico"}")
-        self.geometry("460x640")
+        self.geometry("400x640")
 
         # Theme
         ctk.set_appearance_mode("light")
@@ -99,10 +99,10 @@ class MainWindow(ctk.CTk):
 
         self.whisper_model = ctk.CTkOptionMenu(
             whisper_frame,
-            values=["tiny", "base", "small", "medium", "large"],
+            values=["Tiny", "Base", "Small", "Medium", "Large"],
             width=150
         )
-        self.whisper_model.set("base")
+        self.whisper_model.set("Base")
         self.whisper_model.pack(side="right", padx=10)
 
         # Choosing a translation model
@@ -118,12 +118,12 @@ class MainWindow(ctk.CTk):
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
             values=[
-                "M2M100 418M (m2m100_418M)",
-                "M2M100 1.2B (m2m100_1.2B)"
+                "M2M100 418M",
+                "M2M100 1.2B"
             ],
-            width=250
+            width=150
         )
-        self.translation_model.set("M2M100 418M (m2m100_418M)")
+        self.translation_model.set("M2M100 418M")
         self.translation_model.pack(side="right", padx=10)
 
         # Checkboxes
@@ -237,7 +237,7 @@ class MainWindow(ctk.CTk):
 
             # 2. Transcription (20-50%)
             self.update_status("Converting speech to text ...", 0.2)
-            self.transcriber.model_name = self.whisper_model.get()
+            self.transcriber.model_name = self.whisper_model.get().lower()
             transcription = self.transcriber.transcribe(audio_path)
             segments_en = self.transcriber.get_segments(transcription)
             self.update_status("Transcription completed", 0.5)
@@ -248,7 +248,8 @@ class MainWindow(ctk.CTk):
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
-            self.translator.model_name = self.translation_model.get()
+            model_name_parts = self.translation_model.get().split()
+            self.translator.model_name = f"{model_name_parts[0].lower()}_{model_name_parts[1]}"
 
             texts_en = [seg['text'] for seg in segments_en]
             texts_fa = self.translator.translate_batch(texts_en)
