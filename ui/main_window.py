@@ -23,7 +23,7 @@ class MainWindow(ctk.CTk):
         # Window settings
         self.title(f"{PROJECT_NAME}")
         self.iconbitmap(f"{Path(__file__).resolve().parent / "Ziro.ico"}")
-        self.geometry("400x640")
+        self.geometry("400x680")
 
         # Theme
         ctk.set_appearance_mode("light")
@@ -86,6 +86,12 @@ class MainWindow(ctk.CTk):
             font=ctk.CTkFont(size=16, weight="bold")
         )
         settings_label.pack(pady=10)
+
+        ctk.CTkLabel(
+            settings_frame,
+            text=f"Using device: {self.transcriber.device.upper()}",
+            font=ctk.CTkFont(size=12)
+        ).pack()
 
         # Choosing a Whisper model
         whisper_frame = ctk.CTkFrame(settings_frame)
