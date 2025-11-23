@@ -15,7 +15,6 @@ DEBUG = True
 
 # Whisper settings
 WHISPER_MODEL = "base"  # tiny, base, small, medium, large
-WHISPER_DEVICE = "cpu"  # or "cuda" for GPU
 WHISPER_LANGUAGE = "en"
 
 # Translate settings
