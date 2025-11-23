@@ -1,18 +1,19 @@
 from typing import List, Dict
 
+import torch
 import whisper
 
-from settings import WHISPER_MODEL, WHISPER_DEVICE, WHISPER_LANGUAGE
 from exceptions.transcriber_exc import *
+from settings import WHISPER_MODEL, WHISPER_LANGUAGE
 
 
 class Transcriber:
     """Speech to text conversion with OpenAI Whisper"""
 
-    def __init__(self, model_name: str = WHISPER_MODEL, device: str = WHISPER_DEVICE):
+    def __init__(self, model_name: str = WHISPER_MODEL):
         self.model_name = model_name
-        self.device = device
         self.model = None
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
     def load_model(self):
         """Loading the Whisper model"""
