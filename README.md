@@ -29,7 +29,7 @@ Convert English videos into fully processed content enriched with both Persian a
 - Python 3.12 or higher
 - ffmpeg
 - 8GB RAM (16GB recommended)
-- GPU optional (for faster processing)
+- **GPU with CUDA support recommended for excellent performance**
 
 ---
 
