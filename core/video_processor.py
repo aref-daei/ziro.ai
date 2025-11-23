@@ -36,16 +36,12 @@ class VideoProcessor:
 
             # Add subtitles
             subtitle_inputs = []
-            metadata = []
+            metadata = {}
 
-            for i, (lang, sub_path) in enumerate(subtitle_paths.items()):
+            for i, (lang, sub_path) in enumerate(reversed(list(subtitle_paths.items()))):
                 subtitle_inputs.append(ffmpeg.input(sub_path))
-                metadata.extend([
-                    f'-metadata:s:s:{i}',
-                    f'language={lang}',
-                    f'-metadata:s:s:{i}',
-                    f'title={lang.upper()}'
-                ])
+                metadata[f'metadata:s:s:{i}'] = f'language={lang}'
+                # metadata[f'metadata:s:s:{i}'] = f'title={lang.upper()}'
 
             # Combine all
             inputs = [video] + subtitle_inputs
@@ -53,7 +49,8 @@ class VideoProcessor:
             output_args = {
                 'c:v': 'copy',  # Copy video without re-encoding
                 'c:a': 'copy',  # Copy audio without re-encoding
-                'c:s': 'srt'  # Subtitle format
+                'c:s': 'srt',  # Subtitle format
+                **metadata  # Metadata
             }
 
             stream = ffmpeg.output(
