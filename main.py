@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 """
-SUMO.AI - Automated Subtitle Generation Application
+Ziro.ai - Automated Subtitle Generation Application
 Version: 1.0.0
 """
 
 import sys
 from pathlib import Path
+
+from settings import PROJECT_NAME
 
 # Add project path to PYTHON_PATH
 sys.path.insert(0, str(Path(__file__).parent))
@@ -66,7 +68,7 @@ def check_requirements():
 def main():
     """Main function"""
     logger = Logger()
-    logger.info("Starting SUMO.AI application")
+    logger.info(f"Starting {PROJECT_NAME} application")
 
     # Check requirements
     if not check_requirements():
