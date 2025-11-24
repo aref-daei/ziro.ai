@@ -1,3 +1,4 @@
+import os, platform, subprocess
 import shutil
 from pathlib import Path
 from typing import Union, List
@@ -6,7 +7,18 @@ from settings import TEMP_DIR
 
 
 class FileHandler:
-    """File management utilities for temporary files and file operations"""
+    """File management utilities"""
+
+    @staticmethod
+    def open_path(path: Path):
+        """Open path"""
+        system = platform.system()
+        if system == "Windows":
+            os.startfile(path)
+        elif system == "Darwin":
+            subprocess.Popen(["open", path])
+        else:
+            subprocess.Popen(["xdg-open", path])
 
     @staticmethod
     def get_file_size(file_path: Union[str, Path]) -> int:
