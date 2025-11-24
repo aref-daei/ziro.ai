@@ -8,7 +8,8 @@ PROJECT_VERSION = "1.0.0-rc"
 # Project paths
 BASE_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "output"
-TEMP_DIR = OUTPUT_DIR / "temp"
+LOGS_DIR = OUTPUT_DIR / ".logs"
+TEMP_DIR = OUTPUT_DIR / ".temp"
 
 # If DEBUG is False, disable logging completely
 DEBUG = True
@@ -33,4 +34,5 @@ MAX_SUBTITLE_LENGTH = 42  # Maximum character in a line
 
 # Create directories
 OUTPUT_DIR.mkdir(exist_ok=True)
+LOGS_DIR.mkdir(exist_ok=True)
 TEMP_DIR.mkdir(exist_ok=True)
