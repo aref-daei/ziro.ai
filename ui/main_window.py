@@ -348,6 +348,7 @@ class MainWindow(ctk.CTk):
             f"Persian subtitles: {fa.name}\n"
             f"{'Video with subtitles: ' + ov.name if self.embed_subtitles.get() else ''}"
         )
+        FileHandler.open_path(ov.parent)
 
     def _show_error(self, e):
         """Show error"""
