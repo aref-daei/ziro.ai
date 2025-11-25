@@ -2,7 +2,7 @@ from pathlib import Path
 
 # Project name
 PROJECT_NAME = "Ziro.ai"
-PROJECT_LICENSE = "(c) 2025 Aref Daei - MIT License"
+PROJECT_LICENSE = "Copyright 2025 Aref Daei - NCAL 1.0"
 PROJECT_VERSION = "1.0.0-rc"
 
 # Project paths
