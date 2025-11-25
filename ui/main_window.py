@@ -4,7 +4,7 @@ from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
 
-from settings import PROJECT_NAME, TEMP_DIR
+from settings import PROJECT_NAME, TEMP_DIR, DEBUG
 from core.audio_extractor import AudioExtractor
 from core.subtitle_generator import SubtitleGenerator
 from core.transcriber import Transcriber
@@ -321,10 +321,11 @@ class MainWindow(ctk.CTk):
             self.processing = False
             self.process_btn.configure(state="normal")
             self.disable_controls(False)
-            try:
-                FileHandler.clean_temp_files()
-            except RuntimeError as e:
-                self.logger.error(str(e))
+            if not DEBUG and self.embed_subtitles.get():
+                try:
+                    FileHandler.clean_temp_files()
+                except RuntimeError as e:
+                    self.logger.error(str(e))
 
     def disable_controls(self, disabled: bool):
         """Enable/disable UI controls during processing"""
@@ -341,18 +342,17 @@ class MainWindow(ctk.CTk):
             control.configure(state=state)
 
     def _show_success(self, en: Path, fa: Path, ov: Path):
-        messagebox.showinfo(
-            "Success",
-            f"Processing complete!\n\n"
-            f"English subtitles: {en.name}\n"
-            f"Persian subtitles: {fa.name}\n"
-            f"{'Video with subtitles: ' + ov.name if self.embed_subtitles.get() else ''}"
-        )
-        FileHandler.open_path(ov.parent)
+        message = f"Processing complete!" \
+                  f"{"\n\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
+        if DEBUG or not self.embed_subtitles.get():
+            message = f"Processing complete!\n\n" \
+                      f"English subtitles: {en.name}\n" \
+                      f"Persian subtitles: {fa.name}" \
+                      f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
+        messagebox.showinfo("Success", message)
+        FileHandler.open_path(ov.parent if self.embed_subtitles.get() else TEMP_DIR)
 
     def _show_error(self, e):
         """Show error"""
-        messagebox.showerror(
-            "Error",
-            f"Error processing:\n{e}"
-        )
+        message = f"Error processing:\n{e}"
+        messagebox.showerror("Error", message)
