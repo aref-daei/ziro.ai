@@ -8,7 +8,7 @@
 
 [Persian](README.fa.md) | [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Quick Start](#quick-start) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
 
-This tool uses advanced AI to handle the entire process—from transcription and translation to generating the final subtitled video—with minimal effort.
+This tool uses advanced AI to handle the entire process, from transcription and translation to generating the final subtitled video.
 
 ## How It Works
 
@@ -34,8 +34,6 @@ Before you begin, make sure you have the following installed:
 2. Select video file
 3. Adjust options
 4. Click "Start Processing"
-
----
 
 ## Offline Model Setup
 
@@ -69,14 +67,10 @@ self.tokenizer = M2M100Tokenizer.from_pretrained("./models/m2m100", local_files_
 self.model = M2M100ForConditionalGeneration.from_pretrained("./models/m2m100", local_files_only=True)
 ```
 
----
-
 ## Future Development
 
 - Quantize the multilingual translation model to reduce model size
 - Upgrade to PyQt 6 and UI improvements
-
----
 
 ## License
 
