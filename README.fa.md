@@ -78,7 +78,6 @@ self.model = M2M100ForConditionalGeneration.from_pretrained("./models/m2m100", l
 
 ## 🚀 برنامه‌های آینده
 
-- ترجمه از طریق Google Translate API با کلید امنیتی
 - ارتقا رابط کاربری و انتقال به PyQt 6
 
 ---
