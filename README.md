@@ -2,7 +2,7 @@
 
 **Automatically add Persian & English subtitles to your English videos.**
 
-![Version](https://img.shields.io/badge/version-1.0.0_rc-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-green.svg)
 ![License](https://img.shields.io/badge/license-AGPL-orange.svg)
 
