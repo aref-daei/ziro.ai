@@ -4,7 +4,7 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0_rc-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-green.svg)
-![License](https://img.shields.io/badge/license-MIT-orange.svg)
+![License](https://img.shields.io/badge/license-NCAL-orange.svg)
 
 [Persian](README.fa.md) | [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Quick Start](#quick-start) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
 
@@ -74,4 +74,4 @@ self.model = M2M100ForConditionalGeneration.from_pretrained("./models/m2m100", l
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Non-Commercial Academic License 1.0. You are free to use, modify, and distribute this software for non-commercial, academic, and research purposes, but you must provide explicit attribution to the original author. All commercial use is strictly prohibited without written permission. See the [LICENSE](LICENSE) file for details.
