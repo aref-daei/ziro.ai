@@ -4,7 +4,7 @@ from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
 
-from settings import PROJECT_NAME, TEMP_DIR, DEBUG
+from settings import PROJECT_NAME, PROJECT_LICENSE, PROJECT_SOURCE, TEMP_DIR, DEBUG
 from core.audio_extractor import AudioExtractor
 from core.subtitle_generator import SubtitleGenerator
 from core.transcriber import Transcriber
@@ -23,7 +23,7 @@ class MainWindow(ctk.CTk):
         # Window settings
         self.title(f"{PROJECT_NAME}")
         self.iconbitmap(f"{Path(__file__).resolve().parent / "Ziro.ico"}")
-        self.geometry("400x680")
+        self.geometry("400x700")
 
         # Theme
         ctk.set_appearance_mode("light")
@@ -175,7 +175,14 @@ class MainWindow(ctk.CTk):
             font=ctk.CTkFont(size=16, weight="bold"),
             state="disabled"
         )
-        self.process_btn.pack(pady=20)
+        self.process_btn.pack(pady=16)
+
+        # Project info
+        ctk.CTkLabel(
+            self,
+            text=f"{PROJECT_LICENSE}\nSource code: {PROJECT_SOURCE}\n",
+            font=ctk.CTkFont(size=10)
+        ).pack()
 
     def select_video(self):
         """Select video file"""
