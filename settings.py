@@ -1,9 +1,13 @@
 from pathlib import Path
 
-# Project name
+# Project info
 PROJECT_NAME = "Ziro.ai"
-PROJECT_LICENSE = "Copyright 2025 Aref Daei - NCAL 1.0"
+PROJECT_DESCRIPTION = "Automated Subtitle Generation Application"
 PROJECT_VERSION = "1.0.0-rc"
+PROJECT_LICENSE = "Copyright (C) 2025  Aref Daei - AGPL-3.0"
+PROJECT_AUTHOR = "Aref Daei"
+PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"
+PROJECT_SOURCE = "https://github.com/aref-daei/ziro.ai"
 
 # Project paths
 BASE_DIR = Path(__file__).resolve().parent
