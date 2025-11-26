@@ -7,7 +7,7 @@ PROJECT_VERSION = "1.0.0-rc"
 PROJECT_LICENSE = "Copyright (C) 2025  Aref Daei - AGPL-3.0"
 PROJECT_AUTHOR = "Aref Daei"
 PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"
-PROJECT_SOURCE = "https://github.com/aref-daei/ziro.ai"
+PROJECT_URL = "https://github.com/aref-daei/ziro.ai"
 
 # Project paths
 BASE_DIR = Path(__file__).resolve().parent

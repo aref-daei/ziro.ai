@@ -4,7 +4,7 @@ from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
 
-from settings import PROJECT_NAME, PROJECT_LICENSE, PROJECT_SOURCE, TEMP_DIR, DEBUG
+from settings import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
 from core.audio_extractor import AudioExtractor
 from core.subtitle_generator import SubtitleGenerator
 from core.transcriber import Transcriber
@@ -180,7 +180,7 @@ class MainWindow(ctk.CTk):
         # Project info
         ctk.CTkLabel(
             self,
-            text=f"{PROJECT_LICENSE}\nSource code: {PROJECT_SOURCE}\n",
+            text=f"{PROJECT_LICENSE}\nSource code: {PROJECT_URL}\n",
             font=ctk.CTkFont(size=10)
         ).pack()
 
