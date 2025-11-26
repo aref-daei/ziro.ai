@@ -4,7 +4,7 @@
 
 ![نسخه](https://img.shields.io/badge/version-1.0.0_rc-blue.svg)
 ![پایتون](https://img.shields.io/badge/python-3.11+-green.svg)
-![مجوز](https://img.shields.io/badge/license-NCAL-orange.svg)
+![مجوز](https://img.shields.io/badge/license-AGPL-orange.svg)
 
 [انگلیسی](README.md) | [نحوه عملکرد](#نحوه-عملکرد) - [پیش‌نیازها](#پیش‌نیازها) - [شروع سریع](#شروع-سریع) - [راه‌اندازی مدل آفلاین](#راهاندازی-مدل-آفلاین) - [توسعه آینده](#توسعه-آینده) - [مجوز](#مجوز)
 
@@ -74,4 +74,4 @@ self.model = M2M100ForConditionalGeneration.from_pretrained("./models/m2m100", l
 
 ## مجوز
 
-این پروژه تحت مجوز Non-Commercial Academic License 1.0 مجوز گرفته است. شما آزاد هستید که از این نرم‌افزار برای مقاصد غیرتجاری، آکادمیک و تحقیقاتی استفاده، آن را تغییر داده و توزیع کنید، اما باید صراحتاً به نویسنده اصلی نسبت‌دهی انجام دهید. کلیه استفاده‌های تجاری بدون کسب اجازه کتبی اکیداً ممنوع است. برای جزئیات بیشتر به فایل [LICENSE](LICENSE) مراجعه کنید.
+این پروژه تحت لایسنس AGPL-3.0 منتشر شده است. برای اطلاعات بیشتر فایل [LICENSE](LICENSE) را مشاهده کنید.
