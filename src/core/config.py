@@ -10,7 +10,7 @@ PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"
 PROJECT_URL = "https://github.com/aref-daei/ziro.ai"
 
 # Project paths
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 OUTPUT_DIR = BASE_DIR / "output"
 LOGS_DIR = OUTPUT_DIR / ".logs"
 TEMP_DIR = OUTPUT_DIR / ".temp"
