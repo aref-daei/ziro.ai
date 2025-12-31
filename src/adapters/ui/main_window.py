@@ -7,7 +7,7 @@ import torch
 
 from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
 from services.audio_extractor.service import AudioExtractorService
-from services.subtitle_generator import SubtitleGenerator
+from services.subtitle_generator.service import SubtitleGeneratorService
 from services.video_processor import VideoProcessor
 from services.transcriber.providers.whisper_provider import WhisperTranscriber
 from services.transcriber.service import TranscriberService
@@ -33,11 +33,10 @@ class MainWindow(ctk.CTk):
         ctk.set_default_color_theme("green")
 
         # Variables
-        self.video_path = None
+        self.video_path = ""
         self.processing = False
 
         # Main components
-        self.subtitle_gen = SubtitleGenerator()
         self.video_processor = VideoProcessor()
 
         # Logger
@@ -120,14 +119,6 @@ class MainWindow(ctk.CTk):
         # Checkboxes
         options_frame = ctk.CTkFrame(settings_frame)
         options_frame.pack(pady=10, padx=20, fill="x")
-
-        self.create_bilingual = ctk.CTkCheckBox(
-            options_frame,
-            text="Create bilingual subtitles",
-            font=ctk.CTkFont(size=12),
-            state="disabled",
-        )
-        self.create_bilingual.pack(pady=5)
 
         self.embed_subtitles = ctk.CTkCheckBox(
             options_frame, text="Add subtitles to video", font=ctk.CTkFont(size=12)
@@ -240,7 +231,8 @@ class MainWindow(ctk.CTk):
 
             # 3. Save English subtitles
             srt_en_path = TEMP_DIR / f"{video_name}_en.srt"
-            self.subtitle_gen.generate_srt(segments_en, str(srt_en_path))
+            subtitle_generator_service = SubtitleGeneratorService()
+            subtitle_generator_service.generate_srt(segments_en, str(srt_en_path))
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
@@ -261,14 +253,7 @@ class MainWindow(ctk.CTk):
 
             # 5. Save Persian subtitles
             srt_fa_path = TEMP_DIR / f"{video_name}_fa.srt"
-            self.subtitle_gen.generate_srt(segments_fa, str(srt_fa_path))
-
-            # 6. Bilingual subtitles (optional)
-            if self.create_bilingual.get():
-                srt_bilingual_path = TEMP_DIR / f"{video_name}_bilingual.srt"
-                self.subtitle_gen.create_bilingual_srt(
-                    segments_en, segments_fa, str(srt_bilingual_path)
-                )
+            subtitle_generator_service.generate_srt(segments_fa, str(srt_fa_path))
 
             # 7. Add subtitles to the video (80-100%)
             output_video = ""

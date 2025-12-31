@@ -46,31 +46,3 @@ class SubtitleGenerator:
             f.write('\n'.join(srt_content))
 
         return str(output_path)
-
-    def create_bilingual_srt(self, segments_en: List[Dict],
-                             segments_fa: List[Dict],
-                             output_path: str) -> str:
-        """Generate bilingual SRT file (English + Persian)"""
-        rtl, end = "\u202B", "\u202C"
-
-        srt_content = []
-
-        for i, (seg_en, seg_fa) in enumerate(zip(segments_en, segments_fa), start=1):
-            srt_content.append(str(i))
-
-            start_time = self.format_timestamp(seg_en['start'])
-            end_time = self.format_timestamp(seg_en['end'])
-            srt_content.append(f"{start_time} --> {end_time}")
-
-            # Display two languages
-            srt_content.append(seg_en['text'])
-            srt_content.append(f"{rtl}{seg_fa['text']}{end}")
-            srt_content.append("")
-
-        output_path = Path(output_path)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-
-        with open(output_path, 'w', encoding=SRT_ENCODING) as f:
-            f.write('\n'.join(srt_content))
-
-        return str(output_path)
