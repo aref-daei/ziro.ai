@@ -14,7 +14,7 @@ class M2M100Translator(Translator):
         SMALL = "418M"
         LARGE = "1.2B"
 
-    def __init__(self, variant: Variant, src_lang: str, tgt_lang: str) -> None:
+    def __init__(self, variant: Variant) -> None:
         self._model_name = f"facebook/m2m100_{variant.value}"
 
         self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -23,11 +23,8 @@ class M2M100Translator(Translator):
         self._model.to(self._device)  # type: ignore
 
         self._tokenizer = M2M100Tokenizer.from_pretrained(self._model_name)
-        self._tokenizer.src_lang = src_lang
 
-        self._tgt_lang = tgt_lang
-
-    def translate(self, texts: List[str]) -> List[str]:
+    def translate(self, texts: List[str], src_lang: str, tgt_lang: str) -> List[str]:
         translations = []
 
         # Batch processing
@@ -42,6 +39,7 @@ class M2M100Translator(Translator):
                 continue
 
             # Tokenize
+            self._tokenizer.src_lang = src_lang
             inputs = self._tokenizer(
                 non_empty_batch,
                 return_tensors="pt",
@@ -57,7 +55,7 @@ class M2M100Translator(Translator):
                     max_length=MAX_TRANSLATION_LENGTH,
                     num_beams=4,
                     early_stopping=True,
-                    forced_bos_token_id=self._tokenizer.get_lang_id(self._tgt_lang),
+                    forced_bos_token_id=self._tokenizer.get_lang_id(tgt_lang),
                 )
 
             # Decode
