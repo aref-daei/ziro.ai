@@ -12,6 +12,7 @@ from services.video_processor.service import VideoProcessorService
 from services.transcriber.providers.whisper_provider import WhisperTranscriber
 from services.transcriber.service import TranscriberService
 from services.translator.providers.m2m100_provider import M2M100Translator
+from services.translator.providers.libretranslate_provider import LibreTranslateTranslator
 from services.translator.service import TranslatorService
 from utils.file_handler import FileHandler
 from utils.logger import Logger
@@ -108,7 +109,7 @@ class MainWindow(ctk.CTk):
         ).pack(side="left", padx=10)
 
         self.translation_model = ctk.CTkOptionMenu(
-            trans_frame, values=["M2M100 418M", "M2M100 1.2B"], width=150
+            trans_frame, values=["M2M100 418M", "M2M100 1.2B", "API"], width=150
         )
         self.translation_model.set("M2M100 418M")
         self.translation_model.pack(side="right", padx=10)
@@ -224,8 +225,11 @@ class MainWindow(ctk.CTk):
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
-            m2m100_translator = M2M100Translator(M2M100Translator.Variant.SMALL)
-            translator_service = TranslatorService(m2m100_translator)
+            if self.translation_model.get() == "API":
+                translator = M2M100Translator(M2M100Translator.Variant.SMALL)
+            else:
+                translator = LibreTranslateTranslator()
+            translator_service = TranslatorService(translator)
 
             texts_en = [seg["text"] for seg in segments_en]
             texts_fa = translator_service.translate(texts_en, "en", "fa")
