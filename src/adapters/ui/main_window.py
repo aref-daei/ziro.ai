@@ -189,15 +189,6 @@ class MainWindow(ctk.CTk):
             messagebox.showwarning("Warning", "Please select a video file first")
             return
 
-        try:
-            from utils.validators import Validators
-
-            Validators.validate_video_file(self.video_path)
-            Validators.validate_file_size(self.video_path)
-        except (FileNotFoundError, ValueError, PermissionError) as e:
-            messagebox.showerror("Validation Error", str(e))
-            return
-
         self.processing = True
         self.process_btn.configure(state="disabled")
 
@@ -233,13 +224,11 @@ class MainWindow(ctk.CTk):
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
-            m2m100_translator = M2M100Translator(
-                M2M100Translator.Variant.SMALL, "en", "fa"
-            )
+            m2m100_translator = M2M100Translator(M2M100Translator.Variant.SMALL)
             translator_service = TranslatorService(m2m100_translator)
 
             texts_en = [seg["text"] for seg in segments_en]
-            texts_fa = translator_service.translate(texts_en)
+            texts_fa = translator_service.translate(texts_en, "en", "fa")
 
             # Creating Persian segments
             segments_fa = []
