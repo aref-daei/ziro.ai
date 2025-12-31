@@ -8,6 +8,8 @@ from ..schemas import Translator
 
 
 class M2M100Translator(Translator):
+    """Text translation with HuggingFace Transformers"""
+
     class Variant(Enum):
         SMALL = "418M"
         LARGE = "1.2B"

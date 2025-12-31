@@ -7,7 +7,5 @@ class TranslatorService:
         self.provider = provider
 
     def translate(self, texts: List[str]) -> List[str]:
-        if not texts:
-            raise ValueError("Empty input")
-
+        """Batch translation of texts"""
         return self.provider.translate(texts)

@@ -8,7 +8,7 @@ import torch
 from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
 from services.audio_extractor.service import AudioExtractorService
 from services.subtitle_generator.service import SubtitleGeneratorService
-from services.video_processor import VideoProcessor
+from services.video_processor.service import VideoProcessorService
 from services.transcriber.providers.whisper_provider import WhisperTranscriber
 from services.transcriber.service import TranscriberService
 from services.translator.providers.m2m100_provider import M2M100Translator
@@ -35,9 +35,6 @@ class MainWindow(ctk.CTk):
         # Variables
         self.video_path = ""
         self.processing = False
-
-        # Main components
-        self.video_processor = VideoProcessor()
 
         # Logger
         self.logger = Logger()
@@ -236,7 +233,9 @@ class MainWindow(ctk.CTk):
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
-            m2m100_translator = M2M100Translator(M2M100Translator.Variant.SMALL, "en", "fa")
+            m2m100_translator = M2M100Translator(
+                M2M100Translator.Variant.SMALL, "en", "fa"
+            )
             translator_service = TranslatorService(m2m100_translator)
 
             texts_en = [seg["text"] for seg in segments_en]
@@ -262,7 +261,8 @@ class MainWindow(ctk.CTk):
 
                 subtitle_paths = {"eng": str(srt_en_path), "per": str(srt_fa_path)}
 
-                output_video = self.video_processor.add_subtitles(
+                video_processor_service = VideoProcessorService()
+                output_video = video_processor_service.add_subtitles(
                     self.video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
                 )
 

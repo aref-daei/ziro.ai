@@ -7,6 +7,8 @@ from ..schemas import Transcriber
 
 
 class WhisperTranscriber(Transcriber):
+    """Speech to text conversion with OpenAI Whisper"""
+
     class Variant(Enum):
         TINY = "tiny"
         BASE = "base"
@@ -22,15 +24,18 @@ class WhisperTranscriber(Transcriber):
         self._model = whisper.load_model(self._model_name, device=self._device)
 
     def transcribe(self, audio_path: str, language: str) -> Dict:
-        result = self._model.transcribe(
-            audio_path,
-            language=language,
-            task="transcribe",
-            verbose=False,
-            word_timestamps=False,
-        )
+        try:
+            result = self._model.transcribe(
+                audio_path,
+                language=language,
+                task="transcribe",
+                verbose=False,
+                word_timestamps=False,
+            )
 
-        return result
+            return result
+        except Exception as e:
+            raise Exception(f"Transcription failed with error: {e}")
 
     def get_segments(self, transcription_result: Dict) -> List[Dict]:
         segments = []

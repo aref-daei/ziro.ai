@@ -6,7 +6,10 @@ from core.config import AUDIO_FORMAT, AUDIO_CODEC, AUDIO_RATE, TEMP_DIR
 
 
 class AudioExtractorService:
+    """Extract audio from video with ffmpeg"""
+
     def extract(self, video_path: str) -> str:
+        """Extract audio from video"""
         try:
             audio_path = TEMP_DIR / f"{Path(video_path).stem}_audio.{AUDIO_FORMAT}"
             audio_path = str(audio_path)
