@@ -3,7 +3,6 @@ from pathlib import Path
 import ffmpeg
 
 from core.config import AUDIO_FORMAT, AUDIO_CODEC, AUDIO_RATE, TEMP_DIR
-from exceptions.audio_extractor_exc import *
 
 
 class AudioExtractor:
@@ -31,7 +30,6 @@ class AudioExtractor:
 
         except ffmpeg.Error as e:
             error_message = e.stderr.decode() if e.stderr else str(e)
-            raise AudioExtractionError(f"Error extracting audio: {error_message}")
 
     @staticmethod
     def get_video_duration(video_path: str) -> float:
@@ -41,4 +39,4 @@ class AudioExtractor:
             duration = float(probe['format']['duration'])
             return duration
         except Exception as e:
-            raise VideoProbeError(f"Error reading video information: {e}")
+            pass

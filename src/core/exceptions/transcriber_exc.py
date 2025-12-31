@@ -1,2 +1,0 @@
-class TranscriptionError(RuntimeError):
-    pass

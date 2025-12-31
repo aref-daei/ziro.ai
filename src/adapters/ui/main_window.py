@@ -6,9 +6,9 @@ import customtkinter as ctk
 import torch
 
 from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
-from core.audio_extractor import AudioExtractor
-from core.subtitle_generator import SubtitleGenerator
-from core.video_processor import VideoProcessor
+from services.audio_extractor import AudioExtractor
+from services.subtitle_generator import SubtitleGenerator
+from services.video_processor import VideoProcessor
 from services.transcriber.providers.whisper_provider import WhisperTranscriber
 from services.transcriber.service import TranscriberService
 from services.translator.providers.m2m100_provider import M2M100Translator
