@@ -1,3 +1,4 @@
+import time
 from libretranslatepy import LibreTranslateAPI
 from core.config import BATCH_SIZE
 from utils.logger import Logger
@@ -47,6 +48,7 @@ class LibreTranslateTranslator(Translator):
                 return text
 
             result = self.translator.translate(text, src_lang, tgt_lang)
+            time.sleep(0.25)
             return result.text
 
         except Exception as e:
