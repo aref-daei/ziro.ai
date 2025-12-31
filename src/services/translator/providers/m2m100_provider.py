@@ -24,46 +24,58 @@ class M2M100Translator(Translator):
 
         self._tokenizer = M2M100Tokenizer.from_pretrained(self._model_name)
 
-    def translate(self, texts: List[str], src_lang: str, tgt_lang: str) -> List[str]:
+    def translate(self, texts: list[str], src_lang: str, tgt_lang: str) -> list[str]:
         translations = []
 
-        # Batch processing
         for i in range(0, len(texts), BATCH_SIZE):
             batch = texts[i : i + BATCH_SIZE]
 
-            # Remove empty text
-            non_empty_batch = [t for t in batch if t.strip()]
-
-            if not non_empty_batch:
+            non_empty = [t for t in batch if t.strip()]
+            if not non_empty:
                 translations.extend([""] * len(batch))
                 continue
 
-            # Tokenize
-            self._tokenizer.src_lang = src_lang
-            inputs = self._tokenizer(
-                non_empty_batch,
-                return_tensors="pt",
-                padding=True,
-                truncation=True,
-                max_length=MAX_TRANSLATION_LENGTH,
-            ).to(self._device)
+            # API path → one-to-one
+            # translated = [
+            #     self._translate_text(t, src_lang, tgt_lang) for t in non_empty
+            # ]
 
-            # Translation
-            with torch.no_grad():
-                translated = self._model.generate(
-                    **inputs,
-                    max_length=MAX_TRANSLATION_LENGTH,
-                    num_beams=4,
-                    early_stopping=True,
-                    forced_bos_token_id=self._tokenizer.get_lang_id(tgt_lang),
-                )
+            # Model path → actual batch
+            translated = self._translate_batch_model(non_empty, src_lang, tgt_lang)
 
-            # Decode
-            batch_translations = [
-                self._tokenizer.decode(t, skip_special_tokens=True).strip()
-                for t in translated
-            ]
-
-            translations.extend(batch_translations)
+            idx = 0
+            for t in batch:
+                if t.strip():
+                    translations.append(translated[idx])
+                    idx += 1
+                else:
+                    translations.append("")
 
         return translations
+
+    def _translate_batch_model(
+        self, texts: list[str], src_lang: str, tgt_lang: str
+    ) -> list[str]:
+
+        self._tokenizer.src_lang = src_lang
+
+        inputs = self._tokenizer(
+            texts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=MAX_TRANSLATION_LENGTH,
+        ).to(self._device)
+
+        with torch.no_grad():
+            outputs = self._model.generate(
+                **inputs,
+                max_length=MAX_TRANSLATION_LENGTH,
+                num_beams=4,
+                early_stopping=True,
+                forced_bos_token_id=self._tokenizer.get_lang_id(tgt_lang),
+            )
+
+        return [
+            self._tokenizer.decode(o, skip_special_tokens=True).strip() for o in outputs
+        ]
