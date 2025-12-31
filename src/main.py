@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Contact: aref.daei@outlook.com
 """
 
+import shutil
 import sys
 from pathlib import Path
 
@@ -31,7 +32,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from adapters.ui.main_window import MainWindow
 from utils.logger import Logger
-from utils.validators import Validators
 
 
 def check_requirements():
@@ -39,7 +39,7 @@ def check_requirements():
     logger = Logger()
 
     # Check ffmpeg
-    if not Validators.check_ffmpeg_installed():
+    if shutil.which("ffmpeg") is None:
         logger.error("ffmpeg is not installed!")
         print("\n" + "=" * 60)
         print("Error: ffmpeg not found!")
