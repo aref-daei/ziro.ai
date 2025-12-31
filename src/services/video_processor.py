@@ -3,7 +3,7 @@ from pathlib import Path
 import ffmpeg
 
 from exceptions.video_processor_exc import SubtitleAddError
-from settings import OUTPUT_DIR
+from core.config import OUTPUT_DIR
 
 
 class VideoProcessor:

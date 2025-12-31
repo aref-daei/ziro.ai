@@ -24,12 +24,12 @@ Contact: aref.daei@outlook.com
 import sys
 from pathlib import Path
 
-from settings import PROJECT_NAME
+from core.config import PROJECT_NAME
 
 # Add project path to PYTHON_PATH
 sys.path.insert(0, str(Path(__file__).parent))
 
-from ui.main_window import MainWindow
+from adapters.ui.main_window import MainWindow
 from utils.logger import Logger
 from utils.validators import Validators
 

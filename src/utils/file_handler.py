@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 from typing import Union, List
 
-from settings import TEMP_DIR
+from core.config import TEMP_DIR
 
 
 class FileHandler:

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import ffmpeg
 
-from settings import AUDIO_FORMAT, AUDIO_CODEC, AUDIO_RATE, TEMP_DIR
+from core.config import AUDIO_FORMAT, AUDIO_CODEC, AUDIO_RATE, TEMP_DIR
 from exceptions.audio_extractor_exc import *
 
 

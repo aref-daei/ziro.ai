@@ -3,13 +3,16 @@ from pathlib import Path
 from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
+import torch
 
-from settings import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
+from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
 from core.audio_extractor import AudioExtractor
 from core.subtitle_generator import SubtitleGenerator
-from core.transcriber import Transcriber
-from core.translator import Translator
 from core.video_processor import VideoProcessor
+from services.transcriber.providers.whisper_provider import WhisperTranscriber
+from services.transcriber.service import TranscriberService
+from services.translator.providers.m2m100_provider import M2M100Translator
+from services.translator.service import TranslatorService
 from utils.file_handler import FileHandler
 from utils.logger import Logger
 
@@ -35,8 +38,6 @@ class MainWindow(ctk.CTk):
 
         # Main components
         self.audio_extractor = AudioExtractor()
-        self.transcriber = Transcriber()
-        self.translator = Translator()
         self.subtitle_gen = SubtitleGenerator()
         self.video_processor = VideoProcessor()
 
@@ -50,9 +51,7 @@ class MainWindow(ctk.CTk):
 
         # Title
         title_label = ctk.CTkLabel(
-            self,
-            text=f"{PROJECT_NAME}",
-            font=ctk.CTkFont(size=24, weight="bold")
+            self, text=f"{PROJECT_NAME}", font=ctk.CTkFont(size=24, weight="bold")
         )
         title_label.pack(pady=20)
 
@@ -61,9 +60,7 @@ class MainWindow(ctk.CTk):
         file_frame.pack(pady=20, padx=30, fill="x")
 
         self.file_label = ctk.CTkLabel(
-            file_frame,
-            text="No files selected",
-            font=ctk.CTkFont(size=12)
+            file_frame, text="No files selected", font=ctk.CTkFont(size=12)
         )
         self.file_label.pack(pady=10)
 
@@ -72,7 +69,7 @@ class MainWindow(ctk.CTk):
             text="Video selection",
             command=self.select_video,
             width=200,
-            height=40
+            height=40,
         )
         self.select_btn.pack(pady=10)
 
@@ -81,16 +78,14 @@ class MainWindow(ctk.CTk):
         settings_frame.pack(pady=20, padx=30, fill="both", expand=True)
 
         settings_label = ctk.CTkLabel(
-            settings_frame,
-            text="Settings",
-            font=ctk.CTkFont(size=16, weight="bold")
+            settings_frame, text="Settings", font=ctk.CTkFont(size=16, weight="bold")
         )
         settings_label.pack(pady=10)
 
         ctk.CTkLabel(
             settings_frame,
-            text=f"Using device: {self.transcriber.device.upper()}",
-            font=ctk.CTkFont(size=12)
+            text=f"Using device: {"CUDA" if torch.cuda.is_available() else "CPU"}",
+            font=ctk.CTkFont(size=12),
         ).pack()
 
         # Choosing a Whisper model
@@ -98,15 +93,13 @@ class MainWindow(ctk.CTk):
         whisper_frame.pack(pady=10, padx=20, fill="x")
 
         ctk.CTkLabel(
-            whisper_frame,
-            text="Whisper model:",
-            font=ctk.CTkFont(size=12)
+            whisper_frame, text="Whisper model:", font=ctk.CTkFont(size=12)
         ).pack(side="left", padx=10)
 
         self.whisper_model = ctk.CTkOptionMenu(
             whisper_frame,
             values=["Tiny", "Base", "Small", "Medium", "Large"],
-            width=150
+            width=150,
         )
         self.whisper_model.set("Base")
         self.whisper_model.pack(side="right", padx=10)
@@ -116,18 +109,11 @@ class MainWindow(ctk.CTk):
         trans_frame.pack(pady=10, padx=20, fill="x")
 
         ctk.CTkLabel(
-            trans_frame,
-            text="Translation model:",
-            font=ctk.CTkFont(size=12)
+            trans_frame, text="Translation model:", font=ctk.CTkFont(size=12)
         ).pack(side="left", padx=10)
 
         self.translation_model = ctk.CTkOptionMenu(
-            trans_frame,
-            values=[
-                "M2M100 418M",
-                "M2M100 1.2B"
-            ],
-            width=150
+            trans_frame, values=["M2M100 418M", "M2M100 1.2B"], width=150
         )
         self.translation_model.set("M2M100 418M")
         self.translation_model.pack(side="right", padx=10)
@@ -140,14 +126,12 @@ class MainWindow(ctk.CTk):
             options_frame,
             text="Create bilingual subtitles",
             font=ctk.CTkFont(size=12),
-            state="disabled"
+            state="disabled",
         )
         self.create_bilingual.pack(pady=5)
 
         self.embed_subtitles = ctk.CTkCheckBox(
-            options_frame,
-            text="Add subtitles to video",
-            font=ctk.CTkFont(size=12)
+            options_frame, text="Add subtitles to video", font=ctk.CTkFont(size=12)
         )
         self.embed_subtitles.pack(pady=5)
         self.embed_subtitles.select()
@@ -158,10 +142,7 @@ class MainWindow(ctk.CTk):
         self.progress_bar.set(0)
 
         self.status_label = ctk.CTkLabel(
-            self,
-            text="Ready",
-            wraplength=250,
-            font=ctk.CTkFont(size=12)
+            self, text="Ready", wraplength=250, font=ctk.CTkFont(size=12)
         )
         self.status_label.pack(pady=5)
 
@@ -173,7 +154,7 @@ class MainWindow(ctk.CTk):
             width=300,
             height=50,
             font=ctk.CTkFont(size=16, weight="bold"),
-            state="disabled"
+            state="disabled",
         )
         self.process_btn.pack(pady=16)
 
@@ -181,7 +162,7 @@ class MainWindow(ctk.CTk):
         ctk.CTkLabel(
             self,
             text=f"{PROJECT_LICENSE}\nSource code: {PROJECT_URL}\n",
-            font=ctk.CTkFont(size=10)
+            font=ctk.CTkFont(size=10),
         ).pack()
 
     def select_video(self):
@@ -190,8 +171,8 @@ class MainWindow(ctk.CTk):
             title="Video selection",
             filetypes=[
                 ("Video files", "*.mp4 *.avi *.mkv *.mov *.flv"),
-                ("All files", "*.*")
-            ]
+                ("All files", "*.*"),
+            ],
         )
 
         if file_path:
@@ -223,6 +204,7 @@ class MainWindow(ctk.CTk):
 
         try:
             from utils.validators import Validators
+
             Validators.validate_video_file(self.video_path)
             Validators.validate_file_size(self.video_path)
         except (FileNotFoundError, ValueError, PermissionError) as e:
@@ -250,9 +232,10 @@ class MainWindow(ctk.CTk):
 
             # 2. Transcription (20-50%)
             self.update_status("Converting speech to text ...", 0.2)
-            self.transcriber.model_name = self.whisper_model.get().lower()
-            transcription = self.transcriber.transcribe(audio_path)
-            segments_en = self.transcriber.get_segments(transcription)
+            whisper_transcriber = WhisperTranscriber(WhisperTranscriber.Variant.BASE)
+            transcriber_service = TranscriberService(whisper_transcriber)
+            transcription = transcriber_service.transcribe(audio_path, "en")
+            segments_en = transcriber_service.get_segments(transcription)
             self.update_status("Transcription completed", 0.5)
 
             # 3. Save English subtitles
@@ -261,20 +244,18 @@ class MainWindow(ctk.CTk):
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
-            model_name_parts = self.translation_model.get().split()
-            self.translator.model_name = f"{model_name_parts[0].lower()}_{model_name_parts[1]}"
+            m2m100_translator = M2M100Translator(M2M100Translator.Variant.SMALL, "en", "fa")
+            translator_service = TranslatorService(m2m100_translator)
 
-            texts_en = [seg['text'] for seg in segments_en]
-            texts_fa = self.translator.translate_batch(texts_en)
+            texts_en = [seg["text"] for seg in segments_en]
+            texts_fa = translator_service.translate(texts_en)
 
             # Creating Persian segments
             segments_fa = []
             for seg_en, text_fa in zip(segments_en, texts_fa):
-                segments_fa.append({
-                    'text': text_fa,
-                    'start': seg_en['start'],
-                    'end': seg_en['end']
-                })
+                segments_fa.append(
+                    {"text": text_fa, "start": seg_en["start"], "end": seg_en["end"]}
+                )
 
             self.update_status("Translation completed", 0.8)
 
@@ -286,9 +267,7 @@ class MainWindow(ctk.CTk):
             if self.create_bilingual.get():
                 srt_bilingual_path = TEMP_DIR / f"{video_name}_bilingual.srt"
                 self.subtitle_gen.create_bilingual_srt(
-                    segments_en,
-                    segments_fa,
-                    str(srt_bilingual_path)
+                    segments_en, segments_fa, str(srt_bilingual_path)
                 )
 
             # 7. Add subtitles to the video (80-100%)
@@ -296,21 +275,18 @@ class MainWindow(ctk.CTk):
             if self.embed_subtitles.get():
                 self.update_status("Adding subtitles to video ...", 0.8)
 
-                subtitle_paths = {
-                    'eng': str(srt_en_path),
-                    'per': str(srt_fa_path)
-                }
+                subtitle_paths = {"eng": str(srt_en_path), "per": str(srt_fa_path)}
 
                 output_video = self.video_processor.add_subtitles(
-                    self.video_path,
-                    subtitle_paths,
-                    f"{video_name}_subtitled.mkv"
+                    self.video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
                 )
 
             self.update_status("Processing complete! ✓", 1.0)
 
             # Show success message
-            self.after(100, self._show_success, srt_en_path, srt_fa_path, Path(output_video))
+            self.after(
+                100, self._show_success, srt_en_path, srt_fa_path, Path(output_video)
+            )
 
         except RuntimeError as e:
             self.update_status(f"Error: Please try again", 0.0)
@@ -342,20 +318,24 @@ class MainWindow(ctk.CTk):
             self.select_btn,
             self.whisper_model,
             self.translation_model,
-            self.embed_subtitles
+            self.embed_subtitles,
         ]
 
         for control in controls:
             control.configure(state=state)
 
     def _show_success(self, en: Path, fa: Path, ov: Path):
-        message = f"Processing complete!" \
-                  f"{"\n\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
+        message = (
+            f"Processing complete!"
+            f"{"\n\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
+        )
         if DEBUG or not self.embed_subtitles.get():
-            message = f"Processing complete!\n\n" \
-                      f"English subtitles: {en.name}\n" \
-                      f"Persian subtitles: {fa.name}" \
-                      f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
+            message = (
+                f"Processing complete!\n\n"
+                f"English subtitles: {en.name}\n"
+                f"Persian subtitles: {fa.name}"
+                f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
+            )
         messagebox.showinfo("Success", message)
         FileHandler.open_path(ov.parent if self.embed_subtitles.get() else TEMP_DIR)
 
