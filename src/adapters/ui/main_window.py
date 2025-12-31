@@ -6,7 +6,7 @@ import customtkinter as ctk
 import torch
 
 from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
-from services.audio_extractor import AudioExtractor
+from services.audio_extractor.service import AudioExtractorService
 from services.subtitle_generator import SubtitleGenerator
 from services.video_processor import VideoProcessor
 from services.transcriber.providers.whisper_provider import WhisperTranscriber
@@ -37,7 +37,6 @@ class MainWindow(ctk.CTk):
         self.processing = False
 
         # Main components
-        self.audio_extractor = AudioExtractor()
         self.subtitle_gen = SubtitleGenerator()
         self.video_processor = VideoProcessor()
 
@@ -227,7 +226,8 @@ class MainWindow(ctk.CTk):
 
             # 1. Sound extraction (0-20%)
             self.update_status("Extracting audio ...", 0.0)
-            audio_path = self.audio_extractor.extract(self.video_path)
+            audio_extractor_service = AudioExtractorService()
+            audio_path = audio_extractor_service.extract(self.video_path)
             self.update_status("Audio extracted", 0.2)
 
             # 2. Transcription (20-50%)

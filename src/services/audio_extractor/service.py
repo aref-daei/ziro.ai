@@ -5,12 +5,8 @@ import ffmpeg
 from core.config import AUDIO_FORMAT, AUDIO_CODEC, AUDIO_RATE, TEMP_DIR
 
 
-class AudioExtractor:
-    """Extract audio from video with ffmpeg"""
-
-    @staticmethod
-    def extract(video_path: str) -> str:
-        """Extract audio from video"""
+class AudioExtractorService:
+    def extract(self, video_path: str) -> str:
         try:
             audio_path = TEMP_DIR / f"{Path(video_path).stem}_audio.{AUDIO_FORMAT}"
             audio_path = str(audio_path)
@@ -22,7 +18,7 @@ class AudioExtractor:
                 acodec=AUDIO_CODEC,
                 ac=1,  # Convert to mono
                 ar=AUDIO_RATE,
-                loglevel="error"
+                loglevel="error",
             )
             ffmpeg.run(stream, overwrite_output=True, capture_stderr=True)
 
@@ -30,13 +26,4 @@ class AudioExtractor:
 
         except ffmpeg.Error as e:
             error_message = e.stderr.decode() if e.stderr else str(e)
-
-    @staticmethod
-    def get_video_duration(video_path: str) -> float:
-        """Get video length in seconds"""
-        try:
-            probe = ffmpeg.probe(video_path)
-            duration = float(probe['format']['duration'])
-            return duration
-        except Exception as e:
-            pass
+            raise Exception(f"Error extracting audio: {error_message}")
