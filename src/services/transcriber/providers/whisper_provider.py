@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Dict, List
 
 import torch
 import whisper
@@ -23,7 +22,7 @@ class WhisperTranscriber(Transcriber):
 
         self._model = whisper.load_model(self._model_name, device=self._device)
 
-    def transcribe(self, audio_path: str, language: str) -> Dict:
+    def transcribe(self, audio_path: str, language: str) -> dict:
         try:
             result = self._model.transcribe(
                 audio_path,
@@ -37,7 +36,7 @@ class WhisperTranscriber(Transcriber):
         except Exception as e:
             raise Exception(f"Transcription failed with error: {e}")
 
-    def get_segments(self, transcription_result: Dict) -> List[Dict]:
+    def get_segments(self, transcription_result: dict) -> list[dict]:
         segments = []
 
         for segment in transcription_result["segments"]:

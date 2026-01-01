@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Dict, List
 
 from core.config import SRT_ENCODING
 
@@ -7,7 +6,7 @@ from core.config import SRT_ENCODING
 class SubtitleGeneratorService:
     """Generating SRT files"""
 
-    def generate_srt(self, segments: List[Dict], output_path: str) -> str:
+    def generate_srt(self, segments: list[dict], output_path: str) -> str:
         """Generate SRT file"""
         rtl, end = "\u202b", "\u202c"
 
