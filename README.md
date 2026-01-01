@@ -2,7 +2,7 @@
 
 **Automatically add Persian & English subtitles to your English videos.**
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0_RC-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-green.svg)
 ![License](https://img.shields.io/badge/license-AGPL-orange.svg)
 
@@ -69,7 +69,6 @@ self.model = M2M100ForConditionalGeneration.from_pretrained("./models/m2m100", l
 
 ## Future Development
 
-- Quantize the multilingual translation model to reduce model size
 - Upgrade to PyQt 6 and UI improvements
 
 ## License

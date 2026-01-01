@@ -2,7 +2,7 @@
 
 **افزودن خودکار زیرنویس فارسی و انگلیسی به ویدیوهای انگلیسی شما.**
 
-![نسخه](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![نسخه](https://img.shields.io/badge/version-1.1.0_RC-blue.svg)
 ![پایتون](https://img.shields.io/badge/python-3.11+-green.svg)
 ![مجوز](https://img.shields.io/badge/license-AGPL-orange.svg)
 
@@ -69,7 +69,6 @@ self.model = M2M100ForConditionalGeneration.from_pretrained("./models/m2m100", l
 
 ## توسعه آینده
 
-- Quantize کردن مدل ترجمه چندزبانه برای کاهش حجم مدل
 - ارتقا به PyQt 6 و بهبود رابط کاربری
 
 ## مجوز

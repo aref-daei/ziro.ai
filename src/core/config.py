@@ -3,7 +3,7 @@ from pathlib import Path
 # Project info
 PROJECT_NAME = "Ziro.ai"
 PROJECT_DESCRIPTION = "Automated Subtitle Generation Application"
-PROJECT_VERSION = "1.0.0"
+PROJECT_VERSION = "1.1.0-RC"
 PROJECT_LICENSE = "Copyright (C) 2025  Aref Daei - AGPL-3.0"
 PROJECT_AUTHOR = "Aref Daei"
 PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"
@@ -17,10 +17,6 @@ TEMP_DIR = OUTPUT_DIR / ".temp"
 
 # If DEBUG is False, disable logging completely
 DEBUG = True
-
-# Whisper settings
-WHISPER_MODEL = "base"  # tiny, base, small, medium, large
-WHISPER_LANGUAGE = "en"
 
 # Translate settings
 TRANSLATION_MODEL = "facebook/m2m100_418M"
