@@ -94,10 +94,10 @@ class MainWindow(ctk.CTk):
 
         self.whisper_model = ctk.CTkOptionMenu(
             whisper_frame,
-            values=["Tiny", "Base", "Small", "Medium", "Large"],
+            values=[var.name.title() for var in WhisperTranscriber.Variant],
             width=150,
         )
-        self.whisper_model.set("Base")
+        self.whisper_model.set(WhisperTranscriber.Variant.BASE.name.title())
         self.whisper_model.pack(side="right", padx=10)
 
         # Choosing a translation model
@@ -109,7 +109,9 @@ class MainWindow(ctk.CTk):
         ).pack(side="left", padx=10)
 
         self.translation_model = ctk.CTkOptionMenu(
-            trans_frame, values=["M2M100 418M", "M2M100 1.2B", "API"], width=150
+            trans_frame,
+            values=["M2M100 418M", "M2M100 1.2B", "LibreTranslate (Online)"],
+            width=150,
         )
         self.translation_model.set("M2M100 418M")
         self.translation_model.pack(side="right", padx=10)
@@ -212,7 +214,7 @@ class MainWindow(ctk.CTk):
 
             # 2. Transcription (20-50%)
             self.update_status("Converting speech to text ...", 0.2)
-            whisper_transcriber = WhisperTranscriber(WhisperTranscriber.Variant.BASE)
+            whisper_transcriber = WhisperTranscriber(WhisperTranscriber.Variant[self.whisper_model.get().upper()])
             transcriber_service = TranscriberService(whisper_transcriber)
             transcription = transcriber_service.transcribe(audio_path, "en")
             segments_en = transcriber_service.get_segments(transcription)
@@ -225,10 +227,10 @@ class MainWindow(ctk.CTk):
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
-            if self.translation_model.get() == "API":
-                translator = M2M100Translator(M2M100Translator.Variant.SMALL)
-            else:
+            if "LibreTranslate" in self.translation_model.get():
                 translator = LibreTranslateTranslator()
+            else:
+                translator = M2M100Translator(M2M100Translator.Variant.SMALL)
             translator_service = TranslatorService(translator)
 
             texts_en = [seg["text"] for seg in segments_en]
