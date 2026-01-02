@@ -18,9 +18,7 @@ from utils.file_handler import FileHandler
 from utils.logger import Logger
 
 
-class MainWindow(ctk.CTk):
-    """Main program window"""
-
+class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 

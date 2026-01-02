@@ -30,7 +30,7 @@ from core.config import PROJECT_NAME
 # Add project path to PYTHON_PATH
 sys.path.insert(0, str(Path(__file__).parent))
 
-from adapters.ui.main_window import MainWindow
+from adapters.ui.app import App
 from utils.logger import Logger
 
 
@@ -94,7 +94,7 @@ def main():
 
     try:
         # Run application
-        app = MainWindow()
+        app = App()
         logger.info("User interface loaded")
         app.mainloop()
 
