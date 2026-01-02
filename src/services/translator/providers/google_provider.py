@@ -1,0 +1,29 @@
+import asyncio
+from googletrans import Translator
+from utils.logger import Logger
+from ..schemas import ApiTranslator
+
+
+class GoogleTranslator(ApiTranslator):
+    """Text translation with Google Translate API (Unofficial)"""
+
+    def __init__(self) -> None:
+        self.translator = Translator()
+        self.logger = Logger()
+
+    def _translate_text(self, text: str, src_lang: str, tgt_lang: str) -> str:
+        try:
+            text = text.strip()
+            if not text:
+                return text
+
+            return asyncio.run(self._translate_text_async(text, src_lang, tgt_lang))
+
+        except Exception as e:
+            self.logger.warning(f"Error translating '{text[:30]}...': {str(e)}")
+            return self._translate_text(text, src_lang, tgt_lang) # Replace text variable with this
+
+    async def _translate_text_async(self, text, src_lang, tgt_lang):
+        async with Translator() as translator:
+            result = await translator.translate(text, src=src_lang, dest=tgt_lang)
+            return result.text
