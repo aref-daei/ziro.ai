@@ -20,7 +20,7 @@ class GoogleTranslator(ApiTranslator):
 
         except Exception as e:
             if self.effort >= 3:
-                raise Exception(f"Error translating: {str(e)}")
+                raise RuntimeError(f"Error translating: {str(e)}")
             self.effort += 1
             return self._translate_text(text, src_lang, tgt_lang)
 

@@ -29,4 +29,4 @@ class AudioExtractorService:
 
         except ffmpeg.Error as e:
             error_message = e.stderr.decode() if e.stderr else str(e)
-            raise Exception(f"Error extracting audio: {error_message}")
+            raise RuntimeError(f"Error extracting audio: {error_message}")

@@ -34,7 +34,7 @@ class WhisperTranscriber(Transcriber):
 
             return result
         except Exception as e:
-            raise Exception(f"Transcription failed with error: {e}")
+            raise RuntimeError(f"Transcription failed with error: {e}")
 
     def get_segments(self, transcription_result: dict) -> list[dict]:
         segments = []

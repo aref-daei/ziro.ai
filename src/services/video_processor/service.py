@@ -62,4 +62,4 @@ class VideoProcessorService:
 
         except ffmpeg.Error as e:
             error_message = e.stderr.decode() if e.stderr else str(e)
-            raise Exception(f"Error adding subtitle: {error_message}")
+            raise RuntimeError(f"Error adding subtitle: {error_message}")
