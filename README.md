@@ -15,7 +15,7 @@ This tool uses advanced AI to handle the entire process, from transcription and 
 Our automated pipeline:
 
 1. **Transcribes** speech from your video using OpenAI's Whisper.
-2. **Translates** the text into Persian using the M2M100 model.
+2. **Translates** the text into Persian using the M2M100 model and the Google Translate.
 3. **Generates & syncs** perfectly timed bilingual subtitles.
 4. **Renders** the final video with subtitles burned in or as a separate file.
 
