@@ -3,6 +3,7 @@ from pathlib import Path
 from tkinter import filedialog, messagebox
 
 import customtkinter as ctk
+import requests
 import torch
 
 from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
@@ -25,10 +26,11 @@ class App(ctk.CTk):
         # Window settings
         self.title(f"{PROJECT_NAME}")
         self.iconbitmap(f"{Path(__file__).resolve().parent / "Ziro.ico"}")
-        self.geometry("400x700")
+        self.geometry("400x680+200+100")
+        self.minsize(400, 680)
 
         # Theme
-        ctk.set_appearance_mode("light")
+        ctk.set_appearance_mode("system")
         ctk.set_default_color_theme("green")
 
         # Variables
@@ -41,8 +43,6 @@ class App(ctk.CTk):
         self.setup_ui()
 
     def setup_ui(self):
-        """Building the user interface"""
-
         # Title
         title_label = ctk.CTkLabel(
             self, text=f"{PROJECT_NAME}", font=ctk.CTkFont(size=24, weight="bold")
@@ -108,7 +108,8 @@ class App(ctk.CTk):
 
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
-            values=["M2M100 418M", "M2M100 1.2B", "Google Translate (Online)"],
+            values=["M2M100 418M", "M2M100 1.2B", "Google Translate"],
+            command=lambda val : self.after(100, self._show_error, "You are offline!") if val == "Google Translate" and not self._check_internet() else None,
             width=150,
         )
         self.translation_model.set("M2M100 418M")
@@ -212,7 +213,9 @@ class App(ctk.CTk):
 
             # 2. Transcription (20-50%)
             self.update_status("Converting speech to text ...", 0.2)
-            whisper_transcriber = WhisperTranscriber(WhisperTranscriber.Variant[self.whisper_model.get().upper()])
+            whisper_transcriber = WhisperTranscriber(
+                WhisperTranscriber.Variant[self.whisper_model.get().upper()]
+            )
             transcriber_service = TranscriberService(whisper_transcriber)
             transcription = transcriber_service.transcribe(audio_path, "en")
             segments_en = transcriber_service.get_segments(transcription)
@@ -321,3 +324,10 @@ class App(ctk.CTk):
         """Show error"""
         message = f"Error processing:\n{e}"
         messagebox.showerror("Error", message)
+
+    def _check_internet(self):
+        try:
+            response = requests.get("https://www.google.com", timeout=3)
+            return response.status_code == 200
+        except requests.ConnectionError:
+            return False
