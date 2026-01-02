@@ -2,7 +2,7 @@
 
 **افزودن خودکار زیرنویس فارسی و انگلیسی به ویدیوهای انگلیسی شما.**
 
-![نسخه](https://img.shields.io/badge/version-1.1.0_RC-blue.svg)
+![نسخه](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![پایتون](https://img.shields.io/badge/python-3.11+-green.svg)
 ![مجوز](https://img.shields.io/badge/license-AGPL-orange.svg)
 
