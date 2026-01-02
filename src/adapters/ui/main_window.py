@@ -12,7 +12,7 @@ from services.video_processor.service import VideoProcessorService
 from services.transcriber.providers.whisper_provider import WhisperTranscriber
 from services.transcriber.service import TranscriberService
 from services.translator.providers.m2m100_provider import M2M100Translator
-from services.translator.providers.libretranslate_provider import LibreTranslateTranslator
+from services.translator.providers.google_provider import GoogleTranslator
 from services.translator.service import TranslatorService
 from utils.file_handler import FileHandler
 from utils.logger import Logger
@@ -110,7 +110,7 @@ class MainWindow(ctk.CTk):
 
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
-            values=["M2M100 418M", "M2M100 1.2B", "LibreTranslate (Online)"],
+            values=["M2M100 418M", "M2M100 1.2B", "Google Translate (Online)"],
             width=150,
         )
         self.translation_model.set("M2M100 418M")
@@ -227,8 +227,8 @@ class MainWindow(ctk.CTk):
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
-            if "LibreTranslate" in self.translation_model.get():
-                translator = LibreTranslateTranslator()
+            if "Google Translate" in self.translation_model.get():
+                translator = GoogleTranslator()
             else:
                 translator = M2M100Translator(M2M100Translator.Variant.SMALL)
             translator_service = TranslatorService(translator)
