@@ -7,7 +7,6 @@ class GoogleTranslator(ApiTranslator):
     """Text translation with Google Translate API (Unofficial)"""
 
     def __init__(self) -> None:
-        self.translator = Translator()
         self.effort = 1
 
     def _translate_text(self, text: str, src_lang: str, tgt_lang: str) -> str:
