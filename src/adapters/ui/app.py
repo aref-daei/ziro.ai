@@ -14,6 +14,7 @@ from services.transcriber.providers.whisper_provider import WhisperTranscriber
 from services.transcriber.service import TranscriberService
 from services.translator.providers.m2m100_provider import M2M100Translator
 from services.translator.providers.google_provider import GoogleTranslator
+from services.translator.providers.deepl_provider import DeepLTranslator
 from services.translator.service import TranslatorService
 from utils.file_handler import FileHandler
 from utils.logger import Logger
@@ -108,12 +109,32 @@ class App(ctk.CTk):
 
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
-            values=["M2M100 418M", "M2M100 1.2B", "Google Translate"],
-            command=lambda val : self.after(100, self._show_error, "You are offline!") if val == "Google Translate" and not self._check_internet() else None,
+            values=["M2M100 418M", "M2M100 1.2B", "Google Translate", "DeepL"],
+            command=lambda val: (
+                self.after(100, self._show_error, "You are offline!")
+                if val in ("Google Translate", "DeepL") and not self._check_internet()
+                else None
+            ),
             width=150,
         )
         self.translation_model.set("M2M100 418M")
         self.translation_model.pack(side="right", padx=10)
+
+        # Choosing a translation model
+        auth_key_frame = ctk.CTkFrame(settings_frame)
+        auth_key_frame.pack(pady=10, padx=20, fill="x")
+
+        ctk.CTkLabel(
+            auth_key_frame, text="Auth key for DeepL:", font=ctk.CTkFont(size=12)
+        ).pack(side="left", padx=10)
+
+        self.auth_key = ctk.CTkEntry(
+            auth_key_frame,
+            placeholder_text="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            width=150,
+            border_width=0,
+        )
+        self.auth_key.pack(side="right", padx=10)
 
         # Checkboxes
         options_frame = ctk.CTkFrame(settings_frame)
@@ -228,8 +249,10 @@ class App(ctk.CTk):
 
             # 4. Translation (50-80%)
             self.update_status("Translating into Persian ...", 0.5)
-            if "Google Translate" in self.translation_model.get():
+            if self.translation_model.get() == "Google Translate":
                 translator = GoogleTranslator()
+            elif self.translation_model.get() == "DeepL":
+                translator = DeepLTranslator(self.auth_key.get())
             else:
                 translator = M2M100Translator(M2M100Translator.Variant.SMALL)
             translator_service = TranslatorService(translator)
@@ -299,6 +322,7 @@ class App(ctk.CTk):
             self.select_btn,
             self.whisper_model,
             self.translation_model,
+            self.auth_key,
             self.embed_subtitles,
         ]
 
