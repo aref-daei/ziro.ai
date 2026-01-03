@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 
 # Project info
 PROJECT_NAME = "Ziro.ai"
@@ -15,6 +16,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 OUTPUT_DIR = BASE_DIR / "output"
 TEMP_DIR = BASE_DIR / ".temp"
 LOGS_DIR = BASE_DIR / "logs"
+
+# Project icon path
+if sys.platform == "win32":
+    PROJECT_ICON = PROJECT_ROOT / "assets" / "Ziro.ico"
+elif sys.platform == "darwin":
+    PROJECT_ICON = PROJECT_ROOT / "assets" / "Ziro.icns"
+else:
+    PROJECT_ICON = PROJECT_ROOT / "assets" / "Ziro.png"
 
 # If DEBUG is False, disable logging completely
 DEBUG = True
