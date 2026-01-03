@@ -66,8 +66,8 @@ def main():
 
         splash.loading_modules(modules)
 
-        logger.info(f"Starting {PROJECT_NAME} application")
-        splash.status_label.configure(text=f"Starting {PROJECT_NAME} application")
+        logger.info(f"Starting application")
+        splash.status_label.configure(text=f"Starting application")
         splash.update()
 
         from adapters.ui.app import App
@@ -101,6 +101,9 @@ def main():
             f"General error: {e}",
         )
         sys.exit(1)
+
+    finally:
+        logger.info("Application closed")
 
 
 if __name__ == "__main__":
