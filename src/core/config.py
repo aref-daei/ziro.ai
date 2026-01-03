@@ -3,7 +3,7 @@ from pathlib import Path
 # Project info
 PROJECT_NAME = "Ziro.ai"
 PROJECT_DESCRIPTION = "Automated Subtitle Generation Application"
-PROJECT_VERSION = "1.1.0"
+PROJECT_VERSION = "1.2.0"
 PROJECT_LICENSE = "Copyright (C) 2025  Aref Daei - AGPL-3.0"
 PROJECT_AUTHOR = "Aref Daei"
 PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"

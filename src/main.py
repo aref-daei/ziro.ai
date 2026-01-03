@@ -2,7 +2,7 @@
 
 """
 Ziro.ai - Automated Subtitle Generation Application
-Version 1.1.0
+Version 1.2.0
 Copyright (C) 2025  Aref Daei
 
 This program is free software: you can redistribute it and/or modify
