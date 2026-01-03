@@ -1,4 +1,22 @@
-.idea
-.vscode
-.venv
-output
+# compiled output
+/dist
+/build
+*.spec
+
+# Logs
+/logs
+*.log
+
+# IDEs and editors
+/.idea
+/.vscode
+
+# environment
+/.venv
+
+# output directory
+/output
+
+# temp directory
+/.temp
+/.tmp
