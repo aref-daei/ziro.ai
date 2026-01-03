@@ -1,7 +1,6 @@
 import os, platform, subprocess
 import shutil
 from pathlib import Path
-from typing import Union, List
 
 from core.config import TEMP_DIR
 
@@ -21,7 +20,7 @@ class FileHandler:
             subprocess.Popen(["xdg-open", path])
 
     @staticmethod
-    def get_file_size(file_path: Union[str, Path]) -> int:
+    def get_file_size(file_path: str | Path) -> int:
         """Get file size in bytes"""
         path = Path(file_path)
         if not path.exists():
@@ -65,7 +64,7 @@ class FileHandler:
         return deleted_count
 
     @staticmethod
-    def ensure_directory(path: Union[str, Path]) -> Path:
+    def ensure_directory(path: str | Path) -> Path:
         """Ensure directory exists, create if it doesn't"""
         path_obj = Path(path)
         path_obj.mkdir(parents=True, exist_ok=True)
@@ -89,7 +88,7 @@ class FileHandler:
         return filename
 
     @staticmethod
-    def list_files(directory: Union[str, Path], pattern: str = "*") -> List[Path]:
+    def list_files(directory: str | Path, pattern: str = "*") -> list[Path]:
         """List files in directory matching pattern"""
         dir_path = Path(directory)
         if not dir_path.exists():
@@ -98,7 +97,7 @@ class FileHandler:
         return list(dir_path.glob(pattern))
 
     @staticmethod
-    def copy_with_safe_name(source: Union[str, Path], destination_dir: Union[str, Path]) -> Path:
+    def copy_with_safe_name(source: str | Path, destination_dir: str | Path) -> Path:
         """Copy file to destination with safe filename"""
         source_path = Path(source)
         dest_dir = Path(destination_dir)
