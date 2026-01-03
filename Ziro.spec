@@ -2,14 +2,12 @@
 
 import sys
 from PyInstaller.utils.hooks import collect_submodules
-from src.core.config import PROJECT_NAME, PROJECT_VERSION, PROJECT_AUTHOR, PROJECT_ICON
 
 block_cipher = None
 
-app_name = PROJECT_NAME
-version = PROJECT_VERSION
-author = PROJECT_AUTHOR
-icon_file = str(PROJECT_ICON)
+app_name = "Ziro"
+version = "1.2.0"
+author = "Aref Daei"
 
 # -----------------------------
 # Hidden imports (CustomTkinter)
@@ -59,7 +57,7 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=False,  # GUI-only
-    icon=icon_file,
+    icon="src/assets/Ziro.ico" if sys.platform == "win32" else "src/assets/Ziro.png",
 )
 
 # -----------------------------
@@ -68,7 +66,7 @@ exe = EXE(
 app = BUNDLE(
     exe,
     name=f"{app_name}.app",
-    icon=icon_file,
+    icon="src/assets/Ziro.icns",
     bundle_identifier="com.arefdaei.ziro",
     info_plist={
         "CFBundleName": app_name,
