@@ -26,7 +26,6 @@ from pathlib import Path
 from tkinter import messagebox
 
 from adapters.ui.splash import Splash
-from core.config import PROJECT_NAME
 from utils.logger import Logger
 
 # Add project path to PYTHON_PATH
