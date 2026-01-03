@@ -6,7 +6,7 @@ from tkinter import filedialog, messagebox
 import torch
 import customtkinter as ctk
 
-from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, BASE_DIR, TEMP_DIR, DEBUG
+from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, PROJECT_ROOT, TEMP_DIR, DEBUG
 from services.audio_extractor.service import AudioExtractorService
 from services.subtitle_generator.service import SubtitleGeneratorService
 from services.video_processor.service import VideoProcessorService
@@ -26,7 +26,7 @@ class App(ctk.CTk):
 
         # Window settings
         self.title(f"{PROJECT_NAME}")
-        self.iconbitmap(f"{BASE_DIR / "assets" / "Ziro.ico"}")
+        self.iconbitmap(f"{PROJECT_ROOT / "assets" / "Ziro.ico"}")
         width, height = 400, 720
         scaling = ctk.ScalingTracker.get_window_scaling(self)
         x = (self.winfo_screenwidth() - width) * scaling / 2

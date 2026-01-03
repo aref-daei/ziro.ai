@@ -8,12 +8,13 @@ PROJECT_LICENSE = "Copyright (C) 2025  Aref Daei - AGPL-3.0"
 PROJECT_AUTHOR = "Aref Daei"
 PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"
 PROJECT_URL = "https://github.com/aref-daei/ziro.ai"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 # Project paths
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 OUTPUT_DIR = BASE_DIR / "output"
-LOGS_DIR = OUTPUT_DIR / ".logs"
-TEMP_DIR = OUTPUT_DIR / ".temp"
+TEMP_DIR = BASE_DIR / ".temp"
+LOGS_DIR = BASE_DIR / "logs"
 
 # If DEBUG is False, disable logging completely
 DEBUG = True
@@ -34,5 +35,5 @@ MAX_SUBTITLE_LENGTH = 42  # Maximum character in a line
 
 # Create directories
 OUTPUT_DIR.mkdir(exist_ok=True)
-LOGS_DIR.mkdir(exist_ok=True)
 TEMP_DIR.mkdir(exist_ok=True)
+LOGS_DIR.mkdir(exist_ok=True)

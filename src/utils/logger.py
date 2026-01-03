@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from core.config import PROJECT_NAME, OUTPUT_DIR, LOGS_DIR, DEBUG
+from core.config import PROJECT_NAME, LOGS_DIR, DEBUG
 
 
 class Logger:
