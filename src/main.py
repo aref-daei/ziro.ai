@@ -46,7 +46,6 @@ def main():
             "FFmpeg is not installed!\n\nPlease install FFmpeg and then run the program again.",
         )
         sys.exit(1)
-    logger.info("FFmpeg found ✓")
     time.sleep(1)
 
     try:
