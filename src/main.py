@@ -25,8 +25,7 @@ import sys, shutil, time
 from pathlib import Path
 from tkinter import messagebox
 
-import customtkinter as ctk
-
+from adapters.ui.splash import Splash
 from core.config import PROJECT_NAME
 from utils.logger import Logger
 
@@ -34,50 +33,16 @@ from utils.logger import Logger
 sys.path.insert(0, str(Path(__file__).parent))
 
 
-def show_startup_splash():
-    splash = ctk.CTk()
-    splash.overrideredirect(True)
-
-    # Window settings
-    width, height = 300, 120
-    scaling = ctk.ScalingTracker.get_window_scaling(splash)
-    x = (splash.winfo_screenwidth() - width) * scaling / 2
-    y = (splash.winfo_screenheight() - height) * scaling / 2
-    splash.geometry(f"{width}x{height}+{int(x)}+{int(y)}")
-
-    # Theme
-    ctk.set_appearance_mode("system")
-    ctk.set_default_color_theme("green")
-
-    splash.update_idletasks()
-
-    ctk.CTkLabel(
-        splash, text=f"{PROJECT_NAME}", font=ctk.CTkFont(size=24, weight="bold")
-    ).pack(pady=20)
-
-    status_label = ctk.CTkLabel(
-        splash, text="Start loading...", wraplength=250, font=ctk.CTkFont(size=12)
-    )
-    status_label.pack(pady=2)
-
-    progress = ctk.CTkProgressBar(splash, width=250)
-    progress.pack(pady=2)
-    progress.set(0)
-
-    splash.update()
-    return splash, status_label, progress
-
-
 def main():
     logger = Logger()
 
-    splash, status_label, progress = show_startup_splash()
+    splash = Splash()
 
     # Check FFmpeg
     if shutil.which("ffmpeg") is None:
         logger.error("FFmpeg not found!")
         messagebox.showerror(
-            "Error",
+            "Error FFmpeg",
             "FFmpeg is not installed!\n\nPlease install FFmpeg and then run the program again.",
         )
         sys.exit(1)
@@ -85,7 +50,7 @@ def main():
     time.sleep(1)
 
     try:
-        # Check Python modules
+        # Loading modules
         modules = [
             "torch",
             "torchvision",
@@ -100,24 +65,10 @@ def main():
             "ffmpeg",
         ]
 
-        for i, module in enumerate(modules):
-            try:
-                status_label.configure(text=f"Module {module} is loading...")
-                splash.update()
-                __import__(module)
-                logger.info(f"Module {module} found ✓")
-                progress.set((i + 1) / len(modules))
-                splash.update()
-            except ImportError:
-                logger.error(f"Module {module} not found!")
-                messagebox.showerror(
-                    "Error",
-                    f"Error loading module {module}",
-                )
-                sys.exit(1)
+        splash.loading_modules(modules)
 
         logger.info(f"Starting {PROJECT_NAME} application")
-        status_label.configure(text=f"Starting {PROJECT_NAME} application")
+        splash.status_label.configure(text=f"Starting {PROJECT_NAME} application")
         splash.update()
 
         from adapters.ui.app import App
@@ -128,12 +79,23 @@ def main():
         logger.info("User interface loaded")
         app.mainloop()
 
+    except ImportError as e:
+        try:
+            splash.destroy()
+        except Exception:
+            pass
+        logger.error(f"Error loading: {e}")
+        messagebox.showerror(
+            "Error loading",
+            str(e),
+        )
+        sys.exit(1)
+
     except Exception as e:
         try:
             splash.destroy()
         except Exception:
             pass
-
         logger.error(f"General error: {e}")
         messagebox.showerror(
             "Error",
