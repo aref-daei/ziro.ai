@@ -21,91 +21,124 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Contact: aref.daei@outlook.com
 """
 
-import shutil
-import sys
 from pathlib import Path
+import sys, shutil, time
+import customtkinter as ctk
+from tkinter import messagebox
 
 from core.config import PROJECT_NAME
+from utils.logger import Logger
 
 # Add project path to PYTHON_PATH
 sys.path.insert(0, str(Path(__file__).parent))
 
-from adapters.ui.app import App
-from utils.logger import Logger
 
+def show_startup_splash():
+    splash = ctk.CTk()
+    splash.overrideredirect(True)
 
-def check_requirements():
-    """Check requirements"""
-    logger = Logger()
+    # Window settings
+    width, height = 300, 120
+    scaling = ctk.ScalingTracker.get_window_scaling(splash)
+    x = (splash.winfo_screenwidth() - width) * scaling / 2
+    y = (splash.winfo_screenheight() - height) * scaling / 2
+    splash.geometry(f"{width}x{height}+{int(x)}+{int(y)}")
 
-    # Check ffmpeg
-    if shutil.which("ffmpeg") is None:
-        logger.error("ffmpeg is not installed!")
-        print("\n" + "=" * 60)
-        print("Error: ffmpeg not found!")
-        print("Please install ffmpeg:")
-        print("  Windows: https://ffmpeg.org/download.html")
-        print("  Linux: sudo apt install ffmpeg")
-        print("  macOS: brew install ffmpeg")
-        print("=" * 60 + "\n")
-        return False
+    # Theme
+    ctk.set_appearance_mode("system")
+    ctk.set_default_color_theme("green")
 
-    logger.info("ffmpeg found ✓")
+    splash.update_idletasks()
 
-    # Check Python modules
-    required_modules = [
-        'whisper',
-        'transformers',
-        'customtkinter',
-        'torch',
-        'ffmpeg'
-    ]
+    ctk.CTkLabel(
+        splash, text=f"{PROJECT_NAME}", font=ctk.CTkFont(size=24, weight="bold")
+    ).pack(pady=20)
 
-    missing = []
-    for module in required_modules:
-        try:
-            __import__(module)
-            logger.info(f"Module {module} found ✓")
-        except ImportError:
-            missing.append(module)
-            logger.error(f"Module {module} not found!")
+    status_label = ctk.CTkLabel(
+        splash, text="Start loading...", wraplength=250, font=ctk.CTkFont(size=12)
+    )
+    status_label.pack(pady=2)
 
-    if missing:
-        print("\n" + "=" * 60)
-        print("Error: Some Python modules were not found:")
-        print("Please install with the following command:")
-        print(f"  pip install {' '.join(missing)}")
-        print("=" * 60 + "\n")
-        return False
+    progress = ctk.CTkProgressBar(splash, width=250)
+    progress.pack(pady=2)
+    progress.set(0)
 
-    return True
+    splash.update()
+    return splash, status_label, progress
 
 
 def main():
-    """Main function"""
     logger = Logger()
-    logger.info(f"Starting {PROJECT_NAME} application")
 
-    # Check requirements
-    if not check_requirements():
-        logger.error("Requirements not met")
-        input("\nPress Enter to exit ...")
+    splash, status_label, progress = show_startup_splash()
+
+    # Check FFmpeg
+    if shutil.which("ffmpeg") is None:
+        logger.error("FFmpeg not found!")
+        messagebox.showerror(
+            "Error",
+            "FFmpeg is not installed!\n\nPlease install FFmpeg and then run the program again.",
+        )
         sys.exit(1)
+    logger.info("FFmpeg found ✓")
+    time.sleep(1)
 
     try:
-        # Run application
+        # Check Python modules
+        modules = [
+            "torch",
+            "torchvision",
+            "whisper",
+            "transformers",
+            "customtkinter",
+            "sentencepiece",
+            "huggingface_hub",
+            "hf_xet",
+            "googletrans",
+            "deepl",
+            "ffmpeg",
+        ]
+
+        for i, module in enumerate(modules):
+            try:
+                status_label.configure(text=f"Module {module} is loading...")
+                splash.update()
+                __import__(module)
+                logger.info(f"Module {module} found ✓")
+                progress.set((i + 1) / len(modules))
+                splash.update()
+            except ImportError:
+                logger.error(f"Module {module} not found!")
+                messagebox.showerror(
+                    "Error",
+                    f"Error loading module {module}",
+                )
+                sys.exit(1)
+
+        logger.info(f"Starting {PROJECT_NAME} application")
+        status_label.configure(text=f"Starting {PROJECT_NAME} application")
+        splash.update()
+
+        from adapters.ui.app import App
+
+        splash.destroy()
+
         app = App()
         logger.info("User interface loaded")
         app.mainloop()
 
     except Exception as e:
-        logger.error(f"Unexpected error: {e}")
-        print(f"\nGeneral error: {e}")
-        input("\nPress Enter to exit...")
-        sys.exit(1)
+        try:
+            splash.destroy()
+        except Exception:
+            pass
 
-    finally:
-        logger.info("Application closed")
+        logger.error(f"General error: {e}")
+        messagebox.showerror(
+            "Error",
+            f"General error: {e}",
+        )
+        sys.exit(1)
 
 
 if __name__ == "__main__":
