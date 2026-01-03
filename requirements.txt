@@ -9,3 +9,4 @@ huggingface_hub==0.36.0
 hf_xet==1.2.0
 googletrans==4.0.2
 deepl==1.27.0
+pyinstaller==6.17.0
