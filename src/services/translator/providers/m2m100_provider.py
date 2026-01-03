@@ -2,8 +2,9 @@ from enum import Enum
 
 import torch
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
+
 from core.config import MAX_TRANSLATION_LENGTH
-from ..schemas import LocalTranslator
+from services.translator.schemas import LocalTranslator
 
 
 class M2M100Translator(LocalTranslator):

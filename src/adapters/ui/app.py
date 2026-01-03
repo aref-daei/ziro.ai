@@ -1,10 +1,10 @@
+import requests
 import threading
 from pathlib import Path
 from tkinter import filedialog, messagebox
 
-import customtkinter as ctk
-import requests
 import torch
+import customtkinter as ctk
 
 from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, TEMP_DIR, DEBUG
 from services.audio_extractor.service import AudioExtractorService

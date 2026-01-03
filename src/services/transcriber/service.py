@@ -1,4 +1,4 @@
-from .schemas import Transcriber
+from services.transcriber.schemas import Transcriber
 
 
 class TranscriberService:

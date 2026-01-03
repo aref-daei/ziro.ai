@@ -1,6 +1,8 @@
 import asyncio
+
 from googletrans import Translator
-from ..schemas import ApiTranslator
+
+from services.translator.schemas import ApiTranslator
 
 
 class GoogleTranslator(ApiTranslator):

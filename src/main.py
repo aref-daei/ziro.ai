@@ -21,10 +21,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Contact: aref.daei@outlook.com
 """
 
-from pathlib import Path
 import sys, shutil, time
-import customtkinter as ctk
+from pathlib import Path
 from tkinter import messagebox
+
+import customtkinter as ctk
 
 from core.config import PROJECT_NAME
 from utils.logger import Logger

@@ -2,7 +2,8 @@ from enum import Enum
 
 import torch
 import whisper
-from ..schemas import Transcriber
+
+from services.transcriber.schemas import Transcriber
 
 
 class WhisperTranscriber(Transcriber):

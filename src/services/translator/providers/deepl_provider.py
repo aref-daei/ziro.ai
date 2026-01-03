@@ -1,6 +1,6 @@
-import asyncio
 from deepl import DeepLClient
-from ..schemas import ApiTranslator
+
+from services.translator.schemas import ApiTranslator
 
 
 class DeepLTranslator(ApiTranslator):
@@ -18,7 +18,7 @@ class DeepLTranslator(ApiTranslator):
 
             return self.deepl_client.translate_text(
                 text, source_lang=src_lang.upper(), target_lang=tgt_lang.upper()
-            ).text # type: ignore
+            ).text  # type: ignore
 
         except Exception as e:
             if self.effort >= 3:
