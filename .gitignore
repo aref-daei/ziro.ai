@@ -1,11 +1,7 @@
 # compiled output
 /dist
 /build
-/releases
-
-# Logs
-/logs
-*.log
+/Releases
 
 # IDEs and editors
 /.idea
@@ -16,7 +12,4 @@
 
 # output directory
 /output
-
-# temp directory
-/.temp
-/.tmp
+/Data

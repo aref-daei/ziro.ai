@@ -2,7 +2,7 @@ import os, platform, subprocess
 import shutil
 from pathlib import Path
 
-from core.config import TEMP_DIR
+from core.paths import PATHS
 
 
 class FileHandler:
@@ -47,11 +47,11 @@ class FileHandler:
     @staticmethod
     def clean_temp_files() -> int:
         """Clear all temporary files and directories"""
-        if not TEMP_DIR.exists():
+        if not PATHS["temp"].exists():
             return 0
 
         deleted_count = 0
-        for item in TEMP_DIR.glob("*"):
+        for item in PATHS["temp"].glob("*"):
             try:
                 if item.is_file():
                     item.unlink()

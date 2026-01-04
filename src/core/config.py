@@ -1,6 +1,3 @@
-from pathlib import Path
-import sys
-
 # Project info
 PROJECT_NAME = "Ziro.ai"
 PROJECT_DESCRIPTION = "Automated Subtitle Generation Application"
@@ -9,24 +6,9 @@ PROJECT_LICENSE = "Copyright (C) 2025  Aref Daei - AGPL-3.0"
 PROJECT_AUTHOR = "Aref Daei"
 PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"
 PROJECT_URL = "https://github.com/aref-daei/ziro.ai"
-PROJECT_ROOT = Path(sys._MEIPASS) / "src" if hasattr(sys, "_MEIPASS") else Path("src").resolve()  # type: ignore
-
-# Project paths
-BASE_DIR = Path(".").resolve()
-OUTPUT_DIR = BASE_DIR / "output"
-TEMP_DIR = BASE_DIR / ".temp"
-LOGS_DIR = BASE_DIR / "logs"
-
-# Project icon path
-if sys.platform == "win32":
-    PROJECT_ICON = PROJECT_ROOT / "assets" / "Ziro.ico"
-elif sys.platform == "darwin":
-    PROJECT_ICON = PROJECT_ROOT / "assets" / "Ziro.icns"
-else:
-    PROJECT_ICON = PROJECT_ROOT / "assets" / "Ziro.png"
 
 # If DEBUG is False, disable logging completely
-DEBUG = True
+DEBUG = False
 
 # Translate settings
 TRANSLATION_MODEL = "facebook/m2m100_418M"
@@ -41,8 +23,3 @@ AUDIO_RATE = 16000
 # Subtitle settings
 SRT_ENCODING = "utf-8"
 MAX_SUBTITLE_LENGTH = 42  # Maximum character in a line
-
-# Create directories
-OUTPUT_DIR.mkdir(exist_ok=True)
-TEMP_DIR.mkdir(exist_ok=True)
-LOGS_DIR.mkdir(exist_ok=True)

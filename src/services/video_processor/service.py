@@ -2,7 +2,7 @@ from pathlib import Path
 
 import ffmpeg
 
-from core.config import OUTPUT_DIR
+from core.paths import PATHS
 
 
 class VideoProcessorService:
@@ -25,7 +25,7 @@ class VideoProcessorService:
         if output_name is None:
             output_name = f"{Path(video_path).stem}_subtitled.mkv"
 
-        output_path = OUTPUT_DIR / output_name
+        output_path = PATHS["output"] / output_name
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         try:

@@ -1,3 +1,4 @@
+import platform
 import requests
 import threading
 from pathlib import Path
@@ -6,7 +7,8 @@ from tkinter import filedialog, messagebox
 import torch
 import customtkinter as ctk
 
-from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, PROJECT_ICON, TEMP_DIR, DEBUG
+from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, DEBUG
+from core.paths import PATHS
 from services.audio_extractor.service import AudioExtractorService
 from services.subtitle_generator.service import SubtitleGeneratorService
 from services.video_processor.service import VideoProcessorService
@@ -26,7 +28,7 @@ class App(ctk.CTk):
 
         # Window settings
         self.title(f"{PROJECT_NAME}")
-        self.iconbitmap(f"{PROJECT_ICON}")
+        self.iconbitmap(f"{self._get_icon_path()}")
         width, height = 400, 720
         scaling = ctk.ScalingTracker.get_window_scaling(self)
         x = (self.winfo_screenwidth() - width) * scaling / 2
@@ -247,7 +249,7 @@ class App(ctk.CTk):
             self.update_status("Transcription completed", 0.5)
 
             # 3. Save English subtitles
-            srt_en_path = TEMP_DIR / f"{video_name}_en.srt"
+            srt_en_path = PATHS["temp"] / f"{video_name}_en.srt"
             subtitle_generator_service = SubtitleGeneratorService()
             subtitle_generator_service.generate_srt(segments_en, str(srt_en_path))
 
@@ -274,7 +276,7 @@ class App(ctk.CTk):
             self.update_status("Translation completed", 0.8)
 
             # 5. Save Persian subtitles
-            srt_fa_path = TEMP_DIR / f"{video_name}_fa.srt"
+            srt_fa_path = PATHS["temp"] / f"{video_name}_fa.srt"
             subtitle_generator_service.generate_srt(segments_fa, str(srt_fa_path))
 
             # 7. Add subtitles to the video (80-100%)
@@ -346,7 +348,7 @@ class App(ctk.CTk):
                 f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
             )
         messagebox.showinfo("Success", message)
-        FileHandler.open_path(ov.parent if self.embed_subtitles.get() else TEMP_DIR)
+        FileHandler.open_path(ov.parent if self.embed_subtitles.get() else PATHS["temp"])
 
     def _show_error(self, e):
         """Show error"""
@@ -359,3 +361,11 @@ class App(ctk.CTk):
             return response.status_code == 200
         except requests.ConnectionError:
             return False
+        
+    def _get_icon_path(self) -> Path:
+        if platform.system() == "Windows":
+            return PATHS["base"] / "src" / "assets" / "Ziro.ico"
+        elif platform.system() == "Darwin":
+            return PATHS["base"] / "src" / "assets" / "Ziro.icns"
+        else:
+            return PATHS["base"] / "src" / "assets" / "Ziro.png"

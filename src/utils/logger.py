@@ -1,7 +1,8 @@
 import logging
 from datetime import datetime
 
-from core.config import PROJECT_NAME, LOGS_DIR, DEBUG
+from core.config import PROJECT_NAME, DEBUG
+from core.paths import PATHS
 
 
 class Logger:
@@ -29,7 +30,7 @@ class Logger:
             self.logger.setLevel(logging.DEBUG)
 
             # Log file with date
-            log_file = LOGS_DIR / f"log_{datetime.now().strftime('%Y%m%d')}.log"
+            log_file = PATHS["logs"] / f"log_{datetime.now().strftime('%Y%m%d')}.log"
 
             # Format
             formatter = logging.Formatter(
