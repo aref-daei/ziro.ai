@@ -40,31 +40,46 @@ a = Analysis(
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 # -----------------------------
-# EXE (Windows / Linux)
+# EXE (The Loader)
 # -----------------------------
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
     [],
+    exclude_binaries=True,
     name=app_name,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    upx_exclude=[],
-    runtime_tmpdir=None,
-    console=False,  # GUI-only
+    console=False,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
     icon="src/assets/Ziro.ico" if sys.platform == "win32" else "src/assets/Ziro.png",
 )
 
 # -----------------------------
-# macOS App Bundle
+# COLLECT (Folder Generation)
+# -----------------------------
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name=app_name,
+)
+
+# -----------------------------
+# BUNDLE (macOS App Bundle)
 # -----------------------------
 app = BUNDLE(
-    exe,
+    coll,
     name=f"{app_name}.app",
     icon="src/assets/Ziro.icns",
     bundle_identifier="com.arefdaei.ziro",
@@ -73,23 +88,9 @@ app = BUNDLE(
         "CFBundleDisplayName": app_name,
         "CFBundleShortVersionString": version,
         "CFBundleVersion": version,
-        "NSHighResolutionCapable": True,
+        "NSHighResolutionCapable": "True",
         "NSAppTransportSecurity": {
             "NSAllowsArbitraryLoads": True
         },
     },
-)
-
-# -----------------------------
-# COLLECT (onedir)
-# -----------------------------
-coll = COLLECT(
-    exe if sys.platform != "darwin" else app,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name=app_name,
 )
