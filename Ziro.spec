@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 import sys
-from PyInstaller.utils.hooks import collect_submodules
+from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 
 block_cipher = None
 
@@ -10,9 +10,17 @@ version = "1.3.0-RC"
 author = "Aref Daei"
 
 # -----------------------------
-# Hidden imports (CustomTkinter)
+# Data files
 # -----------------------------
-hiddenimports = collect_submodules("customtkinter")
+datas = []
+datas += [("src/assets", "assets")]
+datas += collect_data_files("whisper")
+
+# -----------------------------
+# Hidden imports
+# -----------------------------
+hiddenimports = []
+hiddenimports += collect_submodules("customtkinter")
 
 # -----------------------------
 # Analysis
@@ -21,9 +29,7 @@ a = Analysis(
     ["src/main.py"],
     pathex=["src"],
     binaries=[],
-    datas=[
-        ("src/assets", "assets"),
-    ],
+    datas=datas,
     hiddenimports=hiddenimports,
     hookspath=[],
     runtime_hooks=[],
