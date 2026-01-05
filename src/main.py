@@ -51,7 +51,6 @@ def main():
         # Loading modules
         modules = [
             "torch",
-            "torchvision",
             "whisper",
             "transformers",
             "customtkinter",

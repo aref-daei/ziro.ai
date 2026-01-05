@@ -1,5 +1,4 @@
 torch==2.9.1
-torchvision==0.24.1
 openai-whisper==20250625
 transformers==4.57.2
 customtkinter==5.2.2
