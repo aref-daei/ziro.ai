@@ -2,13 +2,14 @@
 
 **Automatically add Persian & English subtitles to your English videos.**
 
-![Version](https://img.shields.io/badge/version-1.3.0_RC-blue.svg)
-![Python](https://img.shields.io/badge/python-3.11+-green.svg)
 ![License](https://img.shields.io/badge/license-AGPL-orange.svg)
+![Version](https://img.shields.io/badge/version-1.3.0_RC-blue.svg)
+![Python](https://img.shields.io/badge/python-3.11+-yellow.svg)
+![FFmpeg](https://img.shields.io/badge/ffmpeg-8.0-green.svg)
 
-[Persian](README.fa.md) | [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Quick Start](#quick-start) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
+[Persian](README.fa.md) | [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
 
-This tool uses advanced AI to handle the entire process, from transcription and translation to generating the final subtitled video.
+Ziro is an all-in-one subtitle automation tool powered by advanced AI. It seamlessly handles the entire workflow - from accurately transcribing speech in your English videos and translating it into Persian, to synchronizing the text and burning the final subtitles directly onto your video - delivering a ready-to-share, subtitled file in just a few clicks.
 
 ## How It Works
 
@@ -24,53 +25,78 @@ Our automated pipeline:
 Before you begin, make sure you have the following installed:
 
 - Python 3.11 or higher
-- FFmpeg
+- FFmpeg 8.0
 - 8GB RAM (16GB recommended)
 - GPU with CUDA support recommended for faster performance
 
-## Quick Start
+## Installation Guide
 
-1. Run `python main.py`
-2. Select video file
-3. Adjust options
-4. Click "Start Processing"
+Getting started with Ziro is quick and straightforward. Follow the steps below based on your operating system.
+
+### Windows Installation
+
+1. **Download the Installer**  
+   Download the latest version of Ziro (`.exe` file) from the [Releases](https://github.com/aref-daei/ziro.ai/releases) page.
+
+2. **Run as Administrator**  
+   Right-click the downloaded file and select **“Run as administrator”**.
+
+3. **Install for All Users**  
+   When prompted, choose **“Install for all users”** and proceed by clicking **Next** until the installation is complete.
+
+4. **Launch Ziro**  
+   After installation, Ziro will launch automatically.  
+   - If you already have **FFmpeg** installed, the app will start loading its modules.  
+   - If FFmpeg is not installed, you’ll see instructions to install it.  
+     Simply run the following command in **Command Prompt** or **PowerShell**:
+     ```bash
+     winget install "FFmpeg (Essentials Build)"
+     ```
+     Then restart Ziro.
+
+5. **You’re All Set!**  
+   Once the modules are loaded, you can start translating your English videos into Persian subtitles in just a few clicks.
+
+### Linux & macOS
+*Support for Linux and macOS is coming soon.*
+
+### Important Notes Before You Start
+
+⚠️ **Note 1: Internet Connection Required**  
+Ziro currently operates in **online mode only**. An active internet connection is required for processing. Interruptions may affect the workflow.
+
+⚠️ **Note 2: Model Selection & Download**  
+Before processing, please choose your preferred **Transcription** and **Translation** models carefully.  
+On your first run, the selected models will be downloaded **automatically in the background** when you start the processing. Their approximate sizes are:
+
+> **You won’t see a separate download progress bar** – instead, you’ll notice the processing time is longer for the first run as the models are being fetched and installed.
+
+| Transcription Model | Size (approx.) |
+| :-----------------: | :------------: |
+|        Tiny         |     70 MB      |
+|        Base         |     140 MB     |
+|        Small        |     460 MB     |
+|       Medium        |     1.4 GB     |
+|        Large        |     2.8 GB     |
+
+| Translation Model | Size (approx.) |
+| :---------------: | :------------: |
+|    M2M100 418M    |     1.4 GB     |
+|    M2M100 1.2B    |     4.7 GB     |
+| Google Translate  |     Online     |
+|       DeepL       |     Online     |
+
+✅ **Recommendation:** For translation, we suggest selecting **“Google Translate”** for faster results and lighter resource usage.
+
+⚠️ **Note 3: Completion & Output**  
+Once processing finishes, you’ll see a success message. Click **OK** to automatically open the folder containing your subtitled video.
 
 ## Offline Model Setup
-
-> **Warning:** The download size of the M2M100 (418M parameters) model exceeds **1.4 GB**. Please ensure you have enough storage space and a stable internet connection before starting the download.
-> _The M2M100 (1.2B parameters) model is over **4.7 GB**. [Learn more](model_sizes.md)_
-
-To run the translation models completely offline and prevent any connection attempts to HuggingFace servers, follow these steps:
-
-### 1. Download the model manually
-
-Run this command in your terminal:
-
-```
-huggingface-cli download facebook/m2m100_418M --local-dir ./models/m2m100 --local-dir-use-symlinks False
-```
-
-### 2. Disable online access in code
-
-Add these lines before loading your tokenizer or model:
-
-```
-import os
-os.environ["HF_HUB_OFFLINE"] = "1"
-os.environ["TRANSFORMERS_OFFLINE"] = "1"
-```
-
-### 3. Load models only from local files
-
-```
-self.tokenizer = M2M100Tokenizer.from_pretrained("./models/m2m100", local_files_only=True)
-self.model = M2M100ForConditionalGeneration.from_pretrained("./models/m2m100", local_files_only=True)
-```
+*Support for offline model setup is coming soon.*
 
 ## Future Development
 
 - Upgrade to PyQt 6 and UI improvements
 
 ## License
-
 This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE) file for details.
