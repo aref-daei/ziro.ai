@@ -27,7 +27,7 @@ def _get_app_paths():
     else:
         # Development mode
         base_dir = Path(__file__).parent.parent
-        app_data = base_dir / "Data"
+        app_data = base_dir.parent / "Data"
         is_portable = True
 
     paths = {
