@@ -102,12 +102,12 @@ class App(ctk.CTk):
             font=ctk.CTkFont(size=12),
         ).pack()
 
-        # Choosing a Whisper model
+        # Choosing a Transcription accuracy
         whisper_frame = ctk.CTkFrame(settings_frame)
         whisper_frame.pack(pady=10, padx=20, fill="x")
 
         ctk.CTkLabel(
-            whisper_frame, text="Whisper model:", font=ctk.CTkFont(size=12)
+            whisper_frame, text="Transcription accuracy:", font=ctk.CTkFont(size=12)
         ).pack(side="left", padx=10)
 
         self.whisper_model = ctk.CTkOptionMenu(
