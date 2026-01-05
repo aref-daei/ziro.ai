@@ -41,8 +41,8 @@ def main():
     if shutil.which("ffmpeg") is None:
         logger.error("FFmpeg not found!")
         messagebox.showerror(
-            "Error FFmpeg",
-            "FFmpeg is not installed!\n\nPlease install FFmpeg and then run the program again.",
+            "FFmpeg not found",
+            "Ziro requires FFmpeg to process audio files.\nPlease install FFmpeg and restart the application.",
         )
         sys.exit(1)
     time.sleep(1)
