@@ -9,7 +9,7 @@ from core.config import PROJECT_NAME
 def _get_app_paths():
     if getattr(sys, "frozen", False):
         # PyInstaller mode
-        base_dir = Path(sys.executable).parent
+        base_dir = Path(sys._MEIPASS) # type: ignore
         is_portable = False
 
         if "--portable" in sys.argv:
