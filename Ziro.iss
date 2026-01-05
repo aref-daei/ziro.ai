@@ -1,6 +1,8 @@
+#define AppVersion "1.2.0"
+
 [Setup]
 AppName=Ziro
-AppVersion=1.2.0
+AppVersion={#AppVersion}
 AppPublisher=Aref Daei
 
 DefaultDirName={commonpf}\Ziro
@@ -17,7 +19,7 @@ SolidCompression=yes
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 
-OutputBaseFilename=ZiroSetup
+OutputBaseFilename=ZiroSetup-x64-{#AppVersion}
 OutputDir=Releases
 PrivilegesRequired=admin
 PrivilegesRequiredOverridesAllowed=dialog
