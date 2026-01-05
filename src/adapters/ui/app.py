@@ -379,11 +379,11 @@ class App(ctk.CTk):
 
     def _get_icon_path(self) -> Path:
         if platform.system() == "Windows":
-            return PATHS["base"] / "src" / "assets" / "Ziro.ico"
+            return PATHS["base"] / "assets" / "Ziro.ico"
         elif platform.system() == "Darwin":
-            return PATHS["base"] / "src" / "assets" / "Ziro.icns"
+            return PATHS["base"] / "assets" / "Ziro.icns"
         else:
-            return PATHS["base"] / "src" / "assets" / "Ziro.png"
+            return PATHS["base"] / "assets" / "Ziro.png"
 
     def is_update_available(self, current_version: str) -> bool:
         try:
