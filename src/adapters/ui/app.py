@@ -2,12 +2,20 @@ import platform
 import requests
 import threading
 from pathlib import Path
+from packaging.version import Version
 from tkinter import filedialog, messagebox
 
 import torch
 import customtkinter as ctk
 
-from core.config import PROJECT_NAME, PROJECT_LICENSE, PROJECT_URL, DEBUG
+from core.config import (
+    PROJECT_NAME,
+    PROJECT_VERSION,
+    PROJECT_LICENSE,
+    PROJECT_URL,
+    PROJECT_LATEST_RELEASE_URL,
+    DEBUG,
+)
 from core.paths import PATHS
 from services.audio_extractor.service import AudioExtractorService
 from services.subtitle_generator.service import SubtitleGeneratorService
@@ -48,6 +56,11 @@ class App(ctk.CTk):
         self.logger = Logger()
 
         self.setup_ui()
+        if self.is_update_available(PROJECT_VERSION):
+            messagebox.showinfo(
+                "Update Available",
+                message="A new version of Ziro is available.\nPlease download the latest release from GitHub.",
+            )
 
     def setup_ui(self):
         # Title
@@ -348,7 +361,9 @@ class App(ctk.CTk):
                 f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
             )
         messagebox.showinfo("Success", message)
-        FileHandler.open_path(ov.parent if self.embed_subtitles.get() else PATHS["temp"])
+        FileHandler.open_path(
+            ov.parent if self.embed_subtitles.get() else PATHS["temp"]
+        )
 
     def _show_error(self, e):
         """Show error"""
@@ -361,7 +376,7 @@ class App(ctk.CTk):
             return response.status_code == 200
         except requests.ConnectionError:
             return False
-        
+
     def _get_icon_path(self) -> Path:
         if platform.system() == "Windows":
             return PATHS["base"] / "src" / "assets" / "Ziro.ico"
@@ -369,3 +384,16 @@ class App(ctk.CTk):
             return PATHS["base"] / "src" / "assets" / "Ziro.icns"
         else:
             return PATHS["base"] / "src" / "assets" / "Ziro.png"
+
+    def is_update_available(self, current_version: str) -> bool:
+        try:
+            response = requests.get(
+                PROJECT_LATEST_RELEASE_URL, allow_redirects=True, timeout=3
+            )
+            final_url = response.url
+            latest_tag = final_url.rstrip("/").split("/")[-1]
+            latest_version = latest_tag.lstrip("v")
+            return Version(latest_version) > Version(current_version.lstrip("v"))
+
+        except Exception:
+            return False

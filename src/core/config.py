@@ -6,6 +6,7 @@ PROJECT_LICENSE = "Copyright (C) 2025  Aref Daei - AGPL-3.0"
 PROJECT_AUTHOR = "Aref Daei"
 PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"
 PROJECT_URL = "https://github.com/aref-daei/ziro.ai"
+PROJECT_LATEST_RELEASE_URL = "https://github.com/aref-daei/ziro.ai/releases/latest"
 
 # If DEBUG is False, disable logging completely
 DEBUG = False
