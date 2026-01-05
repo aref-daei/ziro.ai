@@ -26,7 +26,7 @@ def _get_app_paths():
                 app_data = Path.home() / f".{PROJECT_NAME.lower()}"
     else:
         # Development mode
-        base_dir = Path(__file__).parent.parent.parent
+        base_dir = Path(__file__).parent.parent
         app_data = base_dir / "Data"
         is_portable = True
 
