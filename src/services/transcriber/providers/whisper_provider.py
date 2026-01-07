@@ -29,7 +29,6 @@ class WhisperTranscriber(Transcriber):
                 audio_path,
                 language=language,
                 task="transcribe",
-                verbose=False,
                 word_timestamps=False,
             )
 
