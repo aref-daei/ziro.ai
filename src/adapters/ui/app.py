@@ -56,10 +56,18 @@ class App(ctk.CTk):
         self.logger = Logger()
 
         self.setup_ui()
-        if self.is_update_available(PROJECT_VERSION):
+
+        self.is_online = self._check_internet()
+
+        if not self.is_online:
+            self.after(100, self._show_error, "You are offline!")
+        elif self.is_update_available(PROJECT_VERSION):
             messagebox.showinfo(
-                "Update Available",
-                message="A new version of Ziro is available.\nPlease download the latest release from GitHub.",
+                title="Update Available",
+                message=(
+                    "A new version of Ziro is available.\n"
+                    "Please download the latest release from GitHub."
+                ),
             )
 
     def setup_ui(self):
@@ -136,7 +144,7 @@ class App(ctk.CTk):
             ),
             width=150,
         )
-        self.translation_model.set("M2M100 418M")
+        self.translation_model.set("Google Translate")
         self.translation_model.pack(side="right", padx=10)
 
         # Choosing a translation model
