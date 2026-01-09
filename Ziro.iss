@@ -1,7 +1,7 @@
 [Setup]
 AppName=Ziro
 AppVersion=1.3.0
-AppVerName=Ziro 1.3.0-RC
+AppVerName=Ziro 1.3.0
 AppPublisher=Aref Daei
 AppPublisherURL=https://github.com/aref-daei/ziro.ai
 AppSupportURL=https://github.com/aref-daei/ziro.ai/issues
@@ -27,7 +27,7 @@ SolidCompression=yes
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 
-OutputBaseFilename=ZiroSetup-x64-1.3.0-RC
+OutputBaseFilename=ZiroSetup-x64-1.3.0
 OutputDir=Releases
 PrivilegesRequired=admin
 PrivilegesRequiredOverridesAllowed=dialog
