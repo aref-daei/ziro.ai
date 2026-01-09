@@ -57,18 +57,17 @@ class App(ctk.CTk):
 
         self.setup_ui()
 
-        self.is_online = self._check_internet()
-
-        if not self.is_online:
+        try:
+            if self.is_update_available(PROJECT_VERSION):
+                messagebox.showinfo(
+                    title="Update Available",
+                    message=(
+                        "A new version of Ziro is available.\n"
+                        "Please download the latest release from GitHub."
+                    ),
+                )
+        except:
             self.after(100, self._show_error, "You are offline!")
-        elif self.is_update_available(PROJECT_VERSION):
-            messagebox.showinfo(
-                title="Update Available",
-                message=(
-                    "A new version of Ziro is available.\n"
-                    "Please download the latest release from GitHub."
-                ),
-            )
 
     def setup_ui(self):
         # Title
@@ -394,14 +393,10 @@ class App(ctk.CTk):
             return PATHS["base"] / "assets" / "Ziro.png"
 
     def is_update_available(self, current_version: str) -> bool:
-        try:
-            response = requests.get(
-                PROJECT_LATEST_RELEASE_URL, allow_redirects=True, timeout=3
-            )
-            final_url = response.url
-            latest_tag = final_url.rstrip("/").split("/")[-1]
-            latest_version = latest_tag.lstrip("v")
-            return Version(latest_version) > Version(current_version.lstrip("v"))
-
-        except Exception:
-            return False
+        response = requests.get(
+            PROJECT_LATEST_RELEASE_URL, allow_redirects=True, timeout=3
+        )
+        final_url = response.url
+        latest_tag = final_url.rstrip("/").split("/")[-1]
+        latest_version = latest_tag.lstrip("v")
+        return Version(latest_version) > Version(current_version.lstrip("v"))
