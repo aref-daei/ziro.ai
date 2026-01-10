@@ -9,26 +9,18 @@ from core.config import PROJECT_NAME
 def _get_app_paths():
     if getattr(sys, "frozen", False):
         # PyInstaller mode
-        base_dir = Path(sys._MEIPASS) # type: ignore
-        is_portable = False
+        base_dir = Path(sys._MEIPASS)  # type: ignore
 
-        if "--portable" in sys.argv:
-            is_portable = True
-            app_data = base_dir / "Data"
-        else:
-            if platform.system() == "Windows":
-                app_data = Path(os.getenv("APPDATA")) / PROJECT_NAME  # type: ignore
-            elif platform.system() == "Darwin":  # macOS
-                app_data = (
-                    Path.home() / "Library" / "Application Support" / PROJECT_NAME
-                )
-            else:  # Linux/Unix
-                app_data = Path.home() / f".{PROJECT_NAME.lower()}"
+        if platform.system() == "Windows":
+            app_data = Path(os.getenv("APPDATA")) / PROJECT_NAME  # type: ignore
+        elif platform.system() == "Darwin":  # macOS
+            app_data = Path.home() / "Library" / "Application Support" / PROJECT_NAME
+        else:  # Linux/Unix
+            app_data = Path.home() / f".{PROJECT_NAME.lower()}"
     else:
         # Development mode
         base_dir = Path(__file__).parent.parent
         app_data = base_dir.parent / "Data"
-        is_portable = True
 
     paths = {
         "base": base_dir,
@@ -36,12 +28,9 @@ def _get_app_paths():
         "temp": app_data / "Temp",
         "logs": app_data / "Logs",
         "output": app_data / "Output",
-        "config": app_data / "Config",
-        "cache": app_data / "Cache",
-        "is_portable": is_portable,
     }
 
-    for key in ["temp", "logs", "output", "config", "cache"]:
+    for key in ["temp", "logs", "output"]:
         paths[key].mkdir(parents=True, exist_ok=True)
 
     return paths
