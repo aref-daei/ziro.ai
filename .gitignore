@@ -11,5 +11,5 @@
 /.venv
 
 # output directory
-/output
 /Data
+/src/models

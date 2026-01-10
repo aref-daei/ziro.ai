@@ -1,8 +1,11 @@
 from enum import Enum
+from urllib.error import URLError
 
 import torch
 import whisper
 
+from core.exceptions import ConnectionError
+from core.paths import PATHS
 from services.transcriber.schemas import Transcriber
 
 
@@ -21,7 +24,18 @@ class WhisperTranscriber(Transcriber):
 
         self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-        self._model = whisper.load_model(self._model_name, device=self._device)
+        model_dir_path = PATHS["base"] / "models" / "whisper"
+
+        try:
+            self._model = whisper.load_model(
+                self._model_name, device=self._device, download_root=f"{model_dir_path}"
+            )
+
+        except URLError as e:
+            raise ConnectionError(f"{e}")
+
+        except Exception as e:
+            raise RuntimeError(f"Error transcribing: {e}")
 
     def transcribe(self, audio_path: str, language: str) -> dict:
         try:
