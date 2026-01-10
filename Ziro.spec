@@ -14,6 +14,7 @@ author = "Aref Daei"
 # -----------------------------
 datas = []
 datas += [("src/assets", "assets")]
+datas += [("src/models/whisper", "models/whisper")]
 datas += collect_data_files("whisper")
 
 # -----------------------------
