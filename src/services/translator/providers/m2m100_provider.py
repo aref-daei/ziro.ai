@@ -2,8 +2,11 @@ from enum import Enum
 
 import torch
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
+from huggingface_hub.errors import HfHubHTTPError, HFValidationError
 
 from core.config import MAX_TRANSLATION_LENGTH
+from core.exceptions import ConnectionError
+from core.paths import PATHS
 from services.translator.schemas import LocalTranslator
 
 
@@ -15,14 +18,37 @@ class M2M100Translator(LocalTranslator):
         LARGE = "1.2B"
 
     def __init__(self, variant: Variant) -> None:
-        self._model_name = f"facebook/m2m100_{variant.value}"
-
         self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-        self._model = M2M100ForConditionalGeneration.from_pretrained(self._model_name)
-        self._model.to(self._device)  # type: ignore
+        model_dir_path = PATHS["base"] / "models" / "m2m100" / variant.value
 
-        self._tokenizer = M2M100Tokenizer.from_pretrained(self._model_name)
+        try:
+            self._model = M2M100ForConditionalGeneration.from_pretrained(
+                f"{model_dir_path}", local_files_only=True
+            )
+            self._tokenizer = M2M100Tokenizer.from_pretrained(
+                f"{model_dir_path}", local_files_only=True
+            )
+
+        except HFValidationError as e:
+            model_dir_path.mkdir(parents=True, exist_ok=True)
+
+            # huggingface-cli download facebook/m2m100_418M --local-dir ./models/m2m100/418M --local-dir-use-symlinks False
+
+            self._model = M2M100ForConditionalGeneration.from_pretrained(
+                f"{model_dir_path}", local_files_only=True
+            )
+            self._tokenizer = M2M100Tokenizer.from_pretrained(
+                f"{model_dir_path}", local_files_only=True
+            )
+        
+        except HfHubHTTPError as e:
+            raise ConnectionError(f"{e}")
+
+        except Exception as e:
+            raise RuntimeError(f"Error translating: {e}")
+
+        self._model.to(self._device)  # type: ignore
 
     def _translate_batch(
         self, texts: list[str], src_lang: str, tgt_lang: str
