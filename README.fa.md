@@ -81,8 +81,8 @@ Ziro در حال حاضر تنها در **حالت آنلاین** کار می‌
 
 | Translation Model | Size (approx.) |
 | :---------------: | :------------: |
-|    M2M100 418M    |     1.4 GB     |
-|    M2M100 1.2B    |     4.7 GB     |
+|M2M100 Small (418M)|     1.8 GB     |
+|M2M100 Large (1.2B)|     4.7 GB     |
 | Google Translate  |     Online     |
 |       DeepL       |     Online     |
 
