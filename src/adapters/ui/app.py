@@ -16,6 +16,7 @@ from core.config import (
     PROJECT_LATEST_RELEASE_URL,
     DEBUG,
 )
+from core.exceptions import ConnectionError
 from core.paths import PATHS
 from services.audio_extractor.service import AudioExtractorService
 from services.subtitle_generator.service import SubtitleGeneratorService
@@ -66,8 +67,10 @@ class App(ctk.CTk):
                         "Please download the latest release from GitHub."
                     ),
                 )
-        except:
-            self.after(100, self._show_error, "You are offline!")
+        except requests.ConnectionError:
+            self.after(100, self._show_error, "No Internet access")
+        except Exception:
+            pass
 
     def setup_ui(self):
         # Title
@@ -136,11 +139,6 @@ class App(ctk.CTk):
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
             values=["M2M100 418M", "M2M100 1.2B", "Google Translate", "DeepL"],
-            command=lambda val: (
-                self.after(100, self._show_error, "You are offline!")
-                if val in ("Google Translate", "DeepL") and not self._check_internet()
-                else None
-            ),
             width=150,
         )
         self.translation_model.set("Google Translate")
@@ -318,6 +316,12 @@ class App(ctk.CTk):
                 100, self._show_success, srt_en_path, srt_fa_path, Path(output_video)
             )
 
+        except ConnectionError as e:
+            self.update_status(f"Error: Please try again", 0.0)
+            self.title(f"{PROJECT_NAME} - Error")
+            self.after(100, self._show_error, "No Internet access")
+            self.logger.error(f"{type(e)}: {e}")
+
         except RuntimeError as e:
             self.update_status(f"Error: Please try again", 0.0)
             self.title(f"{PROJECT_NAME} - Error")
@@ -376,13 +380,6 @@ class App(ctk.CTk):
         """Show error"""
         message = f"Error processing:\n{e}"
         messagebox.showerror("Error", message)
-
-    def _check_internet(self):
-        try:
-            response = requests.get("https://www.google.com", timeout=3)
-            return response.status_code == 200
-        except requests.ConnectionError:
-            return False
 
     def _get_icon_path(self) -> Path:
         if platform.system() == "Windows":

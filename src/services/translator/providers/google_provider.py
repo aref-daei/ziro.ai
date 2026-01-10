@@ -1,7 +1,9 @@
 import asyncio
 
 from googletrans import Translator
+from httpx import ConnectError
 
+from core.exceptions import ConnectionError
 from services.translator.schemas import ApiTranslator
 
 
@@ -18,10 +20,16 @@ class GoogleTranslator(ApiTranslator):
                 return text
 
             return asyncio.run(self._translate_text_async(text, src_lang, tgt_lang))
-
+        
+        except ConnectError as e:
+            if self.effort >= 3:
+                raise ConnectionError(f"{e}")
+            self.effort += 1
+            return self._translate_text(text, src_lang, tgt_lang)
+        
         except Exception as e:
             if self.effort >= 3:
-                raise RuntimeError(f"Error translating: {str(e)}")
+                raise RuntimeError(f"Error translating: {e}")
             self.effort += 1
             return self._translate_text(text, src_lang, tgt_lang)
 
