@@ -13,21 +13,25 @@ def _get_app_paths():
 
         if platform.system() == "Windows":
             app_data = Path(os.getenv("APPDATA")) / PROJECT_NAME  # type: ignore
+            output = Path.home() / "Videos" / PROJECT_NAME
         elif platform.system() == "Darwin":  # macOS
             app_data = Path.home() / "Library" / "Application Support" / PROJECT_NAME
+            output = Path.home() / "Videos" / PROJECT_NAME
         else:  # Linux/Unix
             app_data = Path.home() / f".{PROJECT_NAME.lower()}"
+            output = Path.home() / "Videos" / PROJECT_NAME
     else:
         # Development mode
         base_dir = Path(__file__).parent.parent
         app_data = base_dir.parent / "Data"
+        output = app_data / "output"
 
     paths = {
         "base": base_dir,
         "app_data": app_data,
-        "temp": app_data / "Temp",
-        "logs": app_data / "Logs",
-        "output": app_data / "Output",
+        "output": output,
+        "logs": app_data / "logs",
+        "temp": app_data / "temp",
     }
 
     for key in ["temp", "logs", "output"]:
