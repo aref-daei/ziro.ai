@@ -10,7 +10,7 @@ class DeepLTranslator(ApiTranslator):
 
     def __init__(self, auth_key: str) -> None:
         self.deepl_client = DeepLClient(auth_key)
-        self.effort = 1
+        self._effort = 1
 
     def _translate_text(self, text: str, src_lang: str, tgt_lang: str) -> str:
         try:
@@ -23,13 +23,13 @@ class DeepLTranslator(ApiTranslator):
             ).text  # type: ignore
         
         except ConnectionException as e:
-            if self.effort >= 3:
+            if self._effort >= 3:
                 raise ConnectionError(f"{e}")
-            self.effort += 1
+            self._effort += 1
             return self._translate_text(text, src_lang, tgt_lang)
 
         except Exception as e:
-            if self.effort >= 3:
+            if self._effort >= 3:
                 raise RuntimeError(f"Error translating: {e}")
-            self.effort += 1
+            self._effort += 1
             return self._translate_text(text, src_lang, tgt_lang)
