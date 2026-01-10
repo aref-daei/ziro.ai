@@ -74,7 +74,7 @@ On your first run, the selected models will be downloaded **automatically in the
 | Transcription Model | Size (approx.) |
 | :-----------------: | :------------: |
 |        Tiny         |     70 MB      |
-|        Base         |     140 MB     |
+|        Base         |   *default*    |
 |        Small        |     460 MB     |
 |       Medium        |     1.4 GB     |
 |        Large        |     2.8 GB     |

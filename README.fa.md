@@ -74,7 +74,7 @@ Ziro در حال حاضر تنها در **حالت آنلاین** کار می‌
 | Transcription Model | Size (approx.) |
 | :-----------------: | :------------: |
 |        Tiny         |     70 MB      |
-|        Base         |     140 MB     |
+|        Base         |   *default*    |
 |        Small        |     460 MB     |
 |       Medium        |     1.4 GB     |
 |        Large        |     2.8 GB     |
@@ -83,8 +83,8 @@ Ziro در حال حاضر تنها در **حالت آنلاین** کار می‌
 | :---------------: | :------------: |
 |M2M100 Small (418M)|     1.8 GB     |
 |M2M100 Large (1.2B)|     4.7 GB     |
-| Google Translate  |     Online     |
-|       DeepL       |     Online     |
+| Google Translate  |    *Online*    |
+|       DeepL       |    *Online*    |
 
 ✅ **پیشنهاد:** برای ترجمه، انتخاب **"Google Translate"** را پیشنهاد می‌کنیم تا نتایج سریع‌تر و مصرف منابع کمتر باشد.
 
