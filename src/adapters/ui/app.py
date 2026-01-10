@@ -50,6 +50,8 @@ class App(ctk.CTk):
         ctk.set_default_color_theme("green")
 
         # Variables
+        self.is_online = True
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.video_path = ""
         self.processing = False
 
@@ -110,7 +112,7 @@ class App(ctk.CTk):
 
         ctk.CTkLabel(
             settings_frame,
-            text=f"Using device: {"CUDA" if torch.cuda.is_available() else "CPU"}",
+            text=f"Using device: {self.device.upper()}",
             font=ctk.CTkFont(size=12),
         ).pack()
 
@@ -261,7 +263,8 @@ class App(ctk.CTk):
             # 2. Transcription (20-50%)
             self.update_status("Converting speech to text ...", 0.2)
             whisper_transcriber = WhisperTranscriber(
-                WhisperTranscriber.Variant[self.whisper_model.get().upper()]
+                WhisperTranscriber.Variant[self.whisper_model.get().upper()],
+                self.device,
             )
             transcriber_service = TranscriberService(whisper_transcriber)
             transcription = transcriber_service.transcribe(audio_path, "en")
@@ -280,7 +283,9 @@ class App(ctk.CTk):
             elif self.translation_model.get() == "DeepL":
                 translator = DeepLTranslator(self.auth_key.get())
             else:
-                translator = M2M100Translator(M2M100Translator.Variant.SMALL)
+                translator = M2M100Translator(
+                    M2M100Translator.Variant.SMALL, self.device
+                )
             translator_service = TranslatorService(translator)
 
             texts_en = [seg["text"] for seg in segments_en]

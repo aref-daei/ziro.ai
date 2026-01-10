@@ -17,8 +17,8 @@ class M2M100Translator(LocalTranslator):
         SMALL = "418M"
         LARGE = "1.2B"
 
-    def __init__(self, variant: Variant) -> None:
-        self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    def __init__(self, variant: Variant, device: str = "cpu") -> None:
+        self._device = torch.device(device)
 
         model_dir_path = PATHS["base"] / "models" / "m2m100" / variant.value
 

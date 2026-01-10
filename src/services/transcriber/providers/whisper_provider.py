@@ -19,16 +19,14 @@ class WhisperTranscriber(Transcriber):
         MEDIUM = "medium"
         LARGE = "large"
 
-    def __init__(self, variant: Variant) -> None:
-        self._model_name = variant.value
-
-        self._device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    def __init__(self, variant: Variant, device: str = "cpu") -> None:
+        self._device = torch.device(device)
 
         model_dir_path = PATHS["base"] / "models" / "whisper"
 
         try:
             self._model = whisper.load_model(
-                self._model_name, device=self._device, download_root=f"{model_dir_path}"
+                variant.value, device=self._device, download_root=f"{model_dir_path}"
             )
 
         except URLError as e:
