@@ -142,7 +142,7 @@ class App(ctk.CTk):
 
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
-            values=["M2M100 418M", "M2M100 1.2B", "Google Translate", "DeepL"],
+            values=["M2M100 Small", "M2M100 Large", "Google Translate", "DeepL"],
             width=150,
         )
         self.translation_model.set("Google Translate")
@@ -284,7 +284,10 @@ class App(ctk.CTk):
                 translator = DeepLTranslator(self.auth_key.get())
             else:
                 translator = M2M100Translator(
-                    M2M100Translator.Variant.SMALL, self.device
+                    M2M100Translator.Variant[
+                        self.translation_model.get().split()[1].upper()
+                    ],
+                    self.device,
                 )
             translator_service = TranslatorService(translator)
 
