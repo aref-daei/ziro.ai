@@ -60,15 +60,17 @@ class App(ctk.CTk):
 
         try:
             if self.is_update_available(PROJECT_VERSION):
-                messagebox.showinfo(
-                    title="Update Available",
-                    message=(
+                self.after(
+                    500,
+                    messagebox.showinfo,
+                    "Update Available",
+                    (
                         "A new version of Ziro is available.\n"
                         "Please download the latest release from GitHub."
                     ),
                 )
         except requests.ConnectionError:
-            self.after(100, self._show_error, "No Internet access")
+            self.after(500, messagebox.showwarning, "Warning", "No Internet access")
         except Exception:
             pass
 
@@ -319,19 +321,24 @@ class App(ctk.CTk):
         except ConnectionError as e:
             self.update_status(f"Error: Please try again", 0.0)
             self.title(f"{PROJECT_NAME} - Error")
-            self.after(100, self._show_error, "No Internet access")
+            self.after(
+                100,
+                messagebox.showerror,
+                "Error",
+                f"Error processing:\nNo Internet access",
+            )
             self.logger.error(f"{type(e)}: {e}")
 
         except RuntimeError as e:
             self.update_status(f"Error: Please try again", 0.0)
             self.title(f"{PROJECT_NAME} - Error")
-            self.after(100, self._show_error, e)
+            self.after(100, messagebox.showerror, "Error", f"Error processing:\n{e}")
             self.logger.error(f"{type(e)}: {e}")
 
         except Exception as e:
             self.update_status(f"Error: Close the app then open it again", 0.0)
             self.title(f"{PROJECT_NAME} - Error")
-            self.after(100, self._show_error, e)
+            self.after(100, messagebox.showerror, "Error", f"Error processing:\n{e}")
             self.logger.error(f"Unexpected error: {e}")
 
         finally:
@@ -375,11 +382,6 @@ class App(ctk.CTk):
         FileHandler.open_path(
             ov.parent if self.embed_subtitles.get() else PATHS["temp"]
         )
-
-    def _show_error(self, e):
-        """Show error"""
-        message = f"Error processing:\n{e}"
-        messagebox.showerror("Error", message)
 
     def _get_icon_path(self) -> Path:
         if platform.system() == "Windows":
