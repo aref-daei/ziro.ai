@@ -142,7 +142,7 @@ class App(ctk.CTk):
 
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
-            values=["Google Translate", "DeepL", "M2M100 Small", "M2M100 Large"],
+            values=["Google Translate", "DeepL Translate"],
             width=150,
         )
         self.translation_model.set("Google Translate")
@@ -280,7 +280,7 @@ class App(ctk.CTk):
             self.update_status("Translating into Persian ...", 0.5)
             if self.translation_model.get() == "Google Translate":
                 translator = GoogleTranslator()
-            elif self.translation_model.get() == "DeepL":
+            elif self.translation_model.get() == "DeepL Translate":
                 translator = DeepLTranslator(self.auth_key.get())
             else:
                 translator = M2M100Translator(

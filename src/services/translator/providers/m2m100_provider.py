@@ -23,6 +23,7 @@ class M2M100Translator(LocalTranslator):
         model_dir_path = PATHS["base"] / "models" / "m2m100" / variant.value
 
         try:
+            # FIXME: I Model directory path detect repo_id! I stupid!
             self._model = M2M100ForConditionalGeneration.from_pretrained(
                 f"{model_dir_path}", local_files_only=True
             )
