@@ -57,8 +57,6 @@ def main():
             "transformers",
             "customtkinter",
             "sentencepiece",
-            "huggingface_hub",
-            "hf_xet",
             "googletrans",
             "deepl",
             "ffmpeg",
