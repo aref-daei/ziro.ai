@@ -16,7 +16,7 @@ from core.config import (
     PROJECT_LATEST_RELEASE_URL,
     DEBUG,
 )
-from core.exceptions import ConnectionError
+from core.exceptions import ConnectionError, TranscriptionError, TranslationError
 from core.paths import PATHS
 from services.audio_extractor.service import AudioExtractorService
 from services.subtitle_generator.service import SubtitleGeneratorService
@@ -230,11 +230,15 @@ class App(ctk.CTk):
             return
 
         if not self.video_path:
-            messagebox.showwarning("Warning", "Please select a video file first")
+            messagebox.showwarning(
+                "No video selected", "Please select a video file first"
+            )
             return
-        
+
         if not self.is_internet_access():
-            messagebox.showerror("Error", "Start processing requires Internet access")
+            messagebox.showwarning(
+                "No internet access", "Start processing requires internet access"
+            )
             return
 
         self.processing = True
@@ -324,27 +328,54 @@ class App(ctk.CTk):
             )
 
         except ConnectionError as e:
-            self.update_status(f"Error: Please try again", 0.0)
-            self.title(f"{PROJECT_NAME} - Error")
+            self.update_status(f"Connection failed", 0.0)
+            self.logger.error(f"{e}")
             self.after(
                 100,
                 messagebox.showerror,
-                "Error",
-                f"Error processing:\nNo Internet access",
+                "Connection failed",
+                f"Try:\n  • Checking the network cables, modem, and router\n  • Reconnecting to Wi-Fi",
             )
-            self.logger.error(f"{type(e)}: {e}")
+
+        except TranscriptionError as e:
+            self.update_status(f"Transcription failed", 0.0)
+            self.logger.error(f"{e}")
+            self.after(
+                100,
+                messagebox.showerror,
+                "Transcription failed",
+                f"Try:\n  • Checking the network and internet\n  • Starting processing again\n  • Informing us of the problem",
+            )
+
+        except TranslationError as e:
+            self.update_status(f"Translation failed", 0.0)
+            self.logger.error(f"{e}")
+            self.after(
+                100,
+                messagebox.showerror,
+                "Translation failed",
+                f"Try:\n  • Checking the network and internet\n  • Starting processing again\n  • Informing us of the problem",
+            )
 
         except RuntimeError as e:
-            self.update_status(f"Error: Please try again", 0.0)
-            self.title(f"{PROJECT_NAME} - Error")
-            self.after(100, messagebox.showerror, "Error", f"Error processing:\n{e}")
-            self.logger.error(f"{type(e)}: {e}")
+            self.update_status(f"Processing failed", 0.0)
+            self.logger.error(f"{e}")
+            self.after(
+                100,
+                messagebox.showerror,
+                "Processing failed",
+                f"Try:\n  • Checking the video format\n  • Starting processing again\n  • Informing us of the problem",
+            )
 
         except Exception as e:
-            self.update_status(f"Error: Close the app then open it again", 0.0)
-            self.title(f"{PROJECT_NAME} - Error")
-            self.after(100, messagebox.showerror, "Error", f"Error processing:\n{e}")
-            self.logger.error(f"Unexpected error: {e}")
+            self.update_status(f"Unexpected error", 0.0)
+            self.logger.error(f"{e}")
+            self.after(
+                100,
+                messagebox.showerror,
+                "Unexpected error",
+                f"Try:\n  • Starting processing again\n  • Informing us of the problem!",
+            )
 
         finally:
             self.processing = False
@@ -372,18 +403,14 @@ class App(ctk.CTk):
             control.configure(state=state)
 
     def _show_success(self, en: Path, fa: Path, ov: Path):
-        message = (
-            f"Processing complete!"
-            f"{"\n\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
-        )
+        message = f"{"Video with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
         if DEBUG or not self.embed_subtitles.get():
             message = (
-                f"Processing complete!\n\n"
                 f"English subtitles: {en.name}\n"
                 f"Persian subtitles: {fa.name}"
                 f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
             )
-        messagebox.showinfo("Success", message)
+        messagebox.showinfo("Processing completed", message)
         FileHandler.open_path(
             ov.parent if self.embed_subtitles.get() else PATHS["temp"]
         )
