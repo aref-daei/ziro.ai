@@ -222,9 +222,7 @@ class App(ctk.CTk):
         self.status_label.configure(text=message)
         self.progress_bar.set(progress)
 
-        progress_percent = int(progress * 100)
-        self.title(f"{PROJECT_NAME} - {progress_percent}%")
-        self.logger.info(message)
+        self.title(f"{PROJECT_NAME} - {message}")
 
     def start_processing(self):
         """Start processing in a separate thread"""
