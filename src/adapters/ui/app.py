@@ -37,12 +37,12 @@ class App(ctk.CTk):
         # Window settings
         self.title(f"{PROJECT_NAME}")
         self.iconbitmap(f"{self._get_icon_path()}")
-        width, height = 400, 720
+        width, height = 400, 700
         scaling = ctk.ScalingTracker.get_window_scaling(self)
         x = (self.winfo_screenwidth() - width) * scaling / 2
         y = (self.winfo_screenheight() - height) * scaling / 2
         self.geometry(f"{width}x{height}+{int(x)}+{int(y)}")
-        self.minsize(width, height)
+        self.resizable(False, False)
 
         # Theme
         ctk.set_appearance_mode("system")
@@ -52,6 +52,11 @@ class App(ctk.CTk):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.video_path = ""
         self.processing = False
+        self.languages = {
+            "Persian": "fa",
+            "English": "en",
+            "French": "fr",
+        }
 
         # Logger
         self.logger = Logger()
@@ -78,30 +83,30 @@ class App(ctk.CTk):
 
         # File selection frame
         file_frame = ctk.CTkFrame(self)
-        file_frame.pack(pady=20, padx=30, fill="x")
+        file_frame.pack(pady=12, padx=24, fill="x")
 
         self.file_label = ctk.CTkLabel(
             file_frame, text="No files selected", font=ctk.CTkFont(size=12)
         )
-        self.file_label.pack(pady=10)
+        self.file_label.pack(pady=8)
 
         self.select_btn = ctk.CTkButton(
             file_frame,
             text="Video selection",
             command=self.select_video,
-            width=200,
+            width=220,
             height=40,
         )
-        self.select_btn.pack(pady=10)
+        self.select_btn.pack(pady=8)
 
         # Settings
         settings_frame = ctk.CTkFrame(self)
-        settings_frame.pack(pady=20, padx=30, fill="both", expand=True)
+        settings_frame.pack(pady=12, padx=24, fill="both", expand=True)
 
         settings_label = ctk.CTkLabel(
             settings_frame, text="Settings", font=ctk.CTkFont(size=16, weight="bold")
         )
-        settings_label.pack(pady=10)
+        settings_label.pack(pady=8)
 
         ctk.CTkLabel(
             settings_frame,
@@ -109,9 +114,34 @@ class App(ctk.CTk):
             font=ctk.CTkFont(size=12),
         ).pack()
 
+        # Choosing a languages
+        lang_frame = ctk.CTkFrame(settings_frame)
+        lang_frame.pack(pady=8, padx=16, fill="x")
+        lang_frame.grid_rowconfigure(0, weight=1)
+
+        self.src_language = ctk.CTkOptionMenu(
+            lang_frame,
+            values=["Auto"] + [*self.languages],
+            width=100,
+        )
+        self.src_language.set("Auto")
+        self.src_language.grid(row=0, column=0, pady=2, padx=10)
+
+        ctk.CTkLabel(lang_frame, text="lang  to  lang", font=ctk.CTkFont(size=12)).grid(
+            row=0, column=1, padx=6
+        )
+
+        self.tgt_language = ctk.CTkOptionMenu(
+            lang_frame,
+            values=[*self.languages],
+            width=100,
+        )
+        self.tgt_language.set("Persian")
+        self.tgt_language.grid(row=0, column=2, pady=2, padx=10)
+
         # Choosing a Transcription accuracy
         whisper_frame = ctk.CTkFrame(settings_frame)
-        whisper_frame.pack(pady=10, padx=20, fill="x")
+        whisper_frame.pack(pady=8, padx=16, fill="x")
 
         ctk.CTkLabel(
             whisper_frame, text="Transcription accuracy:", font=ctk.CTkFont(size=12)
@@ -123,11 +153,11 @@ class App(ctk.CTk):
             width=150,
         )
         self.whisper_model.set(WhisperTranscriber.Variant.BASE.name.title())
-        self.whisper_model.pack(side="right", padx=10)
+        self.whisper_model.pack(side="right", pady=2, padx=10)
 
         # Choosing a translation model
         trans_frame = ctk.CTkFrame(settings_frame)
-        trans_frame.pack(pady=10, padx=20, fill="x")
+        trans_frame.pack(pady=8, padx=16, fill="x")
 
         ctk.CTkLabel(
             trans_frame, text="Translation model:", font=ctk.CTkFont(size=12)
@@ -139,14 +169,14 @@ class App(ctk.CTk):
             width=150,
         )
         self.translation_model.set("Google Translate")
-        self.translation_model.pack(side="right", padx=10)
+        self.translation_model.pack(side="right", pady=2, padx=10)
 
-        # Choosing a translation model
+        # Entering Auth key for DeepL
         auth_key_frame = ctk.CTkFrame(settings_frame)
-        auth_key_frame.pack(pady=10, padx=20, fill="x")
+        auth_key_frame.pack(pady=8, padx=16, fill="x")
 
         ctk.CTkLabel(
-            auth_key_frame, text="DeepL auth key:", font=ctk.CTkFont(size=12)
+            auth_key_frame, text="Auth key for DeepL:", font=ctk.CTkFont(size=12)
         ).pack(side="left", padx=10)
 
         self.auth_key = ctk.CTkEntry(
@@ -155,39 +185,39 @@ class App(ctk.CTk):
             width=150,
             border_width=0,
         )
-        self.auth_key.pack(side="right", padx=10)
+        self.auth_key.pack(side="right", pady=2, padx=10)
 
         # Checkboxes
         options_frame = ctk.CTkFrame(settings_frame)
-        options_frame.pack(pady=10, padx=20, fill="x")
+        options_frame.pack(pady=8, padx=16, fill="x")
 
         self.embed_subtitles = ctk.CTkCheckBox(
             options_frame, text="Add subtitles to video", font=ctk.CTkFont(size=12)
         )
-        self.embed_subtitles.pack(pady=5)
+        self.embed_subtitles.pack(pady=4)
         self.embed_subtitles.select()
 
         # Progress bar
-        self.progress_bar = ctk.CTkProgressBar(self, width=260)
-        self.progress_bar.pack(pady=10)
-        self.progress_bar.set(0)
-
         self.status_label = ctk.CTkLabel(
             self, text="Ready", wraplength=250, font=ctk.CTkFont(size=12)
         )
-        self.status_label.pack(pady=5)
+        self.status_label.pack(pady=4)
+
+        self.progress_bar = ctk.CTkProgressBar(self, width=260)
+        self.progress_bar.pack(pady=4)
+        self.progress_bar.set(0)
 
         # Processing button
         self.process_btn = ctk.CTkButton(
             self,
             text="Start processing",
             command=self.start_processing,
-            width=300,
+            width=350,
             height=50,
             font=ctk.CTkFont(size=16, weight="bold"),
             state="disabled",
         )
-        self.process_btn.pack(pady=16)
+        self.process_btn.pack(pady=12)
 
         # Project info
         ctk.CTkLabel(
