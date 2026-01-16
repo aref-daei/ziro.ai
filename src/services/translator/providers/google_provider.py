@@ -20,13 +20,13 @@ class GoogleTranslator(ApiTranslator):
                 return text
 
             return asyncio.run(self._translate_text_async(text, src_lang, tgt_lang))
-        
+
         except ConnectError as e:
             if self._effort >= 3:
                 raise ConnectionError(f"{e}")
             self._effort += 1
             return self._translate_text(text, src_lang, tgt_lang)
-        
+
         except Exception as e:
             if self._effort >= 3:
                 raise TranslationError(f"Google Translate loading failed with error: {e}")

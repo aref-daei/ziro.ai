@@ -1,5 +1,5 @@
-from enum import Enum
 import subprocess
+from enum import Enum
 
 import torch
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer

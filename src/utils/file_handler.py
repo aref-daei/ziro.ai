@@ -1,5 +1,7 @@
-import os, platform, subprocess
+import os
+import platform
 import shutil
+import subprocess
 from pathlib import Path
 
 from core.paths import PATHS

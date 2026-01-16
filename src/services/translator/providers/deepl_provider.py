@@ -21,7 +21,7 @@ class DeepLTranslator(ApiTranslator):
             return self.deepl_client.translate_text(
                 text, source_lang=src_lang.upper(), target_lang=tgt_lang.upper()
             ).text  # type: ignore
-        
+
         except ConnectionException as e:
             if self._effort >= 3:
                 raise ConnectionError(f"{e}")

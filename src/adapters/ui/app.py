@@ -1,12 +1,12 @@
 import platform
-import requests
 import threading
 from pathlib import Path
-from packaging.version import Version
 from tkinter import filedialog, messagebox
 
-import torch
 import customtkinter as ctk
+import requests
+import torch
+from packaging.version import Version
 
 from core.config import (
     PROJECT_NAME,

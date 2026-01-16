@@ -21,7 +21,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Contact: aref.daei@outlook.com
 """
 
-import sys, shutil, time
+import shutil
+import sys
+import time
 from pathlib import Path
 from tkinter import messagebox
 
