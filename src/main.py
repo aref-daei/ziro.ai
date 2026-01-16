@@ -54,9 +54,7 @@ def main():
         modules = [
             "torch",
             "whisper",
-            "transformers",
             "customtkinter",
-            "sentencepiece",
             "googletrans",
             "deepl",
             "ffmpeg",
