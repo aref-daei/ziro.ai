@@ -114,30 +114,30 @@ class App(ctk.CTk):
             font=ctk.CTkFont(size=12),
         ).pack()
 
-        # Choosing a languages
+        # Choosing languages
         lang_frame = ctk.CTkFrame(settings_frame)
         lang_frame.pack(pady=8, padx=16, fill="x")
         lang_frame.grid_rowconfigure(0, weight=1)
 
-        self.src_language = ctk.CTkOptionMenu(
+        self.src_lang = ctk.CTkOptionMenu(
             lang_frame,
             values=["Auto"] + [*self.languages],
-            width=100,
+            width=120,
         )
-        self.src_language.set("Auto")
-        self.src_language.grid(row=0, column=0, pady=2, padx=10)
+        self.src_lang.set("Auto")
+        self.src_lang.grid(row=0, column=0, pady=2, padx=10)
 
-        ctk.CTkLabel(lang_frame, text="lang  to  lang", font=ctk.CTkFont(size=12)).grid(
-            row=0, column=1, padx=6
-        )
+        ctk.CTkLabel(
+            lang_frame, text="  →  ", font=ctk.CTkFont(size=12, weight="bold")
+        ).grid(row=0, column=1, padx=6)
 
-        self.tgt_language = ctk.CTkOptionMenu(
+        self.tgt_lang = ctk.CTkOptionMenu(
             lang_frame,
             values=[*self.languages],
-            width=100,
+            width=120,
         )
-        self.tgt_language.set("Persian")
-        self.tgt_language.grid(row=0, column=2, pady=2, padx=10)
+        self.tgt_lang.set("Persian")
+        self.tgt_lang.grid(row=0, column=2, pady=2, padx=10)
 
         # Choosing a Transcription accuracy
         whisper_frame = ctk.CTkFrame(settings_frame)
