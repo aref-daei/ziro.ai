@@ -16,7 +16,7 @@ Ziro is an all-in-one subtitle automation tool powered by advanced AI. It seamle
 Our automated pipeline:
 
 1. **Transcribes** speech from your video using OpenAI's Whisper.
-2. **Translates** the text into Persian using the M2M100 model, the Google Translate and the DeepL Translate.
+2. **Translates** the text into Persian using Google Translate and DeepL.
 3. **Generates & syncs** perfectly timed bilingual subtitles.
 4. **Renders** the final video with subtitles burned in or as a separate file.
 
@@ -84,19 +84,11 @@ On your first run, the selected models will be downloaded **automatically in the
 
 | Translation Model | Size (approx.) |
 | :---------------: | :------------: |
-|M2M100 Small (418M)|     1.8 GB     |
-|M2M100 Large (1.2B)|     4.7 GB     |
-| Google Translate  |     Online     |
-|       DeepL       |     Online     |
-
-✅ **Recommendation:** For translation, we suggest selecting **“Google Translate”** for faster results and lighter resource usage.
+| Google Translate  |    *online*    |
+|       DeepL       |    *online*    |
 
 ⚠️ **Note 3: Completion & Output**  
 Once processing finishes, you’ll see a success message. Click **OK** to automatically open the folder containing your subtitled video.
-
-## Offline Model Setup
-
-*Support for offline model setup is coming soon.*
 
 ## Future Development
 
