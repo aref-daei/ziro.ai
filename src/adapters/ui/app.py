@@ -50,7 +50,6 @@ class App(ctk.CTk):
         ctk.set_default_color_theme("green")
 
         # Variables
-        self.is_online = True
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.video_path = ""
         self.processing = False
@@ -60,7 +59,7 @@ class App(ctk.CTk):
 
         self.setup_ui()
 
-        if self.is_update_available(PROJECT_VERSION):
+        if self.is_update_available():
             self.after(
                 500,
                 messagebox.showinfo,
@@ -433,14 +432,14 @@ class App(ctk.CTk):
         except requests.ConnectionError:
             return False
 
-    def is_update_available(self, current_version: str) -> bool:
+    def is_update_available(self) -> bool:
         try:
             response = requests.get(
-                PROJECT_LATEST_RELEASE_URL, allow_redirects=True, timeout=3
+                PROJECT_LATEST_RELEASE_URL, allow_redirects=True, timeout=1
             )
             final_url = response.url
             latest_tag = final_url.rstrip("/").split("/")[-1]
             latest_version = latest_tag.lstrip("v")
-            return Version(latest_version) > Version(current_version.lstrip("v"))
+            return Version(latest_version) > Version(PROJECT_VERSION)
         except Exception:
             return False
