@@ -60,21 +60,16 @@ class App(ctk.CTk):
 
         self.setup_ui()
 
-        try:
-            if self.is_update_available(PROJECT_VERSION):
-                self.after(
-                    500,
-                    messagebox.showinfo,
-                    "Update Available",
-                    (
-                        "A new version of Ziro is available.\n"
-                        "Please download the latest release from GitHub."
-                    ),
-                )
-        except requests.ConnectionError:
-            self.after(500, messagebox.showwarning, "Warning", "No Internet access")
-        except Exception:
-            pass
+        if self.is_update_available(PROJECT_VERSION):
+            self.after(
+                500,
+                messagebox.showinfo,
+                "Update Available",
+                (
+                    f"A new version of {PROJECT_NAME} is available.\n"
+                    "Please download the latest release from GitHub."
+                ),
+            )
 
     def setup_ui(self):
         # Title
@@ -252,6 +247,9 @@ class App(ctk.CTk):
     def process_video(self):
         """Full video processing"""
         try:
+            if not self.is_internet_access():
+                raise ConnectionError("Start processing requires Internet access")
+
             video_name = Path(self.video_path).stem
 
             # 1. Sound extraction (0-20%)
@@ -399,11 +397,21 @@ class App(ctk.CTk):
         else:
             return PATHS["base"] / "assets" / "Ziro.png"
 
+    def is_internet_access(self) -> bool:
+        try:
+            response = requests.get("https://www.google.com", timeout=3)
+            return response.status_code == 200
+        except requests.ConnectionError:
+            return False
+
     def is_update_available(self, current_version: str) -> bool:
-        response = requests.get(
-            PROJECT_LATEST_RELEASE_URL, allow_redirects=True, timeout=3
-        )
-        final_url = response.url
-        latest_tag = final_url.rstrip("/").split("/")[-1]
-        latest_version = latest_tag.lstrip("v")
-        return Version(latest_version) > Version(current_version.lstrip("v"))
+        try:
+            response = requests.get(
+                PROJECT_LATEST_RELEASE_URL, allow_redirects=True, timeout=3
+            )
+            final_url = response.url
+            latest_tag = final_url.rstrip("/").split("/")[-1]
+            latest_version = latest_tag.lstrip("v")
+            return Version(latest_version) > Version(current_version.lstrip("v"))
+        except Exception:
+            return False
