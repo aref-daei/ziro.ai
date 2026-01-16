@@ -135,7 +135,7 @@ class App(ctk.CTk):
 
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
-            values=["Google Translate", "DeepL Translate"],
+            values=["Google Translate", "DeepL $"],
             width=150,
         )
         self.translation_model.set("Google Translate")
@@ -146,7 +146,7 @@ class App(ctk.CTk):
         auth_key_frame.pack(pady=10, padx=20, fill="x")
 
         ctk.CTkLabel(
-            auth_key_frame, text="Auth key for DeepL:", font=ctk.CTkFont(size=12)
+            auth_key_frame, text="DeepL auth key:", font=ctk.CTkFont(size=12)
         ).pack(side="left", padx=10)
 
         self.auth_key = ctk.CTkEntry(
@@ -312,7 +312,7 @@ class App(ctk.CTk):
                     self.video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
                 )
 
-            self.update_status("Processing complete! ✓", 1.0)
+            self.update_status("Processing complete!", 1.0)
 
             # Show success message
             self.after(
@@ -402,7 +402,7 @@ class App(ctk.CTk):
                 f"Persian subtitles: {fa.name}"
                 f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
             )
-        messagebox.showinfo("Processing completed", message)
+        messagebox.showinfo("Processing complete!", message)
         FileHandler.open_path(
             ov.parent if self.embed_subtitles.get() else PATHS["temp"]
         )
