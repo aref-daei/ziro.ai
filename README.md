@@ -49,15 +49,18 @@ Getting started with Ziro is quick and straightforward. Follow the steps below b
    - If you already have **FFmpeg** installed, the app will start loading its modules.  
    - If FFmpeg is not installed, you’ll see instructions to install it.  
      Simply run the following command in **Command Prompt** or **PowerShell**:
+
      ```bash
      winget install "FFmpeg (Essentials Build)"
      ```
+
      Then restart Ziro.
 
 5. **You’re All Set!**  
    Once the modules are loaded, you can start translating your English videos into Persian subtitles in just a few clicks.
 
 ### Linux & macOS
+
 *Support for Linux and macOS is coming soon.*
 
 ### Important Notes Before You Start
@@ -92,6 +95,7 @@ On your first run, the selected models will be downloaded **automatically in the
 Once processing finishes, you’ll see a success message. Click **OK** to automatically open the folder containing your subtitled video.
 
 ## Offline Model Setup
+
 *Support for offline model setup is coming soon.*
 
 ## Future Development
@@ -99,4 +103,5 @@ Once processing finishes, you’ll see a success message. Click **OK** to automa
 - Upgrade to PyQt 6 and UI improvements
 
 ## License
+
 This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE) file for details.
