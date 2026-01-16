@@ -10,7 +10,7 @@ class Splash(ctk.CTk):
         self.overrideredirect(True)
 
         # Window settings
-        width, height = 300, 120
+        width, height = 320, 140
         scaling = ctk.ScalingTracker.get_window_scaling(self)
         x = (self.winfo_screenwidth() - width) * scaling / 2
         y = (self.winfo_screenheight() - height) * scaling / 2
@@ -28,10 +28,10 @@ class Splash(ctk.CTk):
         self.status_label = ctk.CTkLabel(
             self, text="Start loading...", wraplength=250, font=ctk.CTkFont(size=12)
         )
-        self.status_label.pack(pady=2)
+        self.status_label.pack(pady=4)
 
-        self.progress = ctk.CTkProgressBar(self, width=250)
-        self.progress.pack(pady=2)
+        self.progress = ctk.CTkProgressBar(self, width=260)
+        self.progress.pack(pady=4)
         self.progress.set(0)
 
         self.update()
