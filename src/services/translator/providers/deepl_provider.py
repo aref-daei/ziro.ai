@@ -1,7 +1,7 @@
 from deepl import DeepLClient
 from deepl.exceptions import ConnectionException
 
-from core.exceptions import ConnectionError
+from core.exceptions import ConnectionError, TranslationError
 from services.translator.schemas import ApiTranslator
 
 
@@ -30,6 +30,6 @@ class DeepLTranslator(ApiTranslator):
 
         except Exception as e:
             if self._effort >= 3:
-                raise RuntimeError(f"Error translating: {e}")
+                raise TranslationError(f"DeepL loading failed with error: {e}")
             self._effort += 1
             return self._translate_text(text, src_lang, tgt_lang)

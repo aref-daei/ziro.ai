@@ -3,7 +3,7 @@ import asyncio
 from googletrans import Translator
 from httpx import ConnectError
 
-from core.exceptions import ConnectionError
+from core.exceptions import ConnectionError, TranslationError
 from services.translator.schemas import ApiTranslator
 
 
@@ -29,7 +29,7 @@ class GoogleTranslator(ApiTranslator):
         
         except Exception as e:
             if self._effort >= 3:
-                raise RuntimeError(f"Error translating: {e}")
+                raise TranslationError(f"Google Translate loading failed with error: {e}")
             self._effort += 1
             return self._translate_text(text, src_lang, tgt_lang)
 

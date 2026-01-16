@@ -5,7 +5,7 @@ import torch
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 
 from core.config import MAX_TRANSLATION_LENGTH
-from core.exceptions import ConnectionError
+from core.exceptions import ConnectionError, TranslationError
 from core.paths import PATHS
 from services.translator.schemas import LocalTranslator
 
@@ -63,10 +63,10 @@ class M2M100Translator(LocalTranslator):
                 raise ConnectionError(f"{e}")
 
             except Exception as e:
-                raise RuntimeError(f"Error translating: {e}")
+                raise TranslationError(f"M2M100 loading failed with error: {e}")
 
         except Exception as e:
-            raise RuntimeError(f"Error translating: {e}")
+            raise TranslationError(f"M2M100 loading failed with error: {e}")
 
         self._model.to(self._device)  # type: ignore
 

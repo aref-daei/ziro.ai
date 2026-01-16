@@ -4,7 +4,7 @@ from urllib.error import URLError
 import torch
 import whisper
 
-from core.exceptions import ConnectionError
+from core.exceptions import ConnectionError, TranscriptionError
 from core.paths import PATHS
 from services.transcriber.schemas import Transcriber
 
@@ -33,7 +33,7 @@ class WhisperTranscriber(Transcriber):
             raise ConnectionError(f"{e}")
 
         except Exception as e:
-            raise RuntimeError(f"Error transcribing: {e}")
+            raise TranscriptionError(f"Whisper loading failed with error: {e}")
 
     def transcribe(self, audio_path: str, language: str) -> dict:
         try:
@@ -46,7 +46,7 @@ class WhisperTranscriber(Transcriber):
 
             return result
         except Exception as e:
-            raise RuntimeError(f"Transcription failed with error: {e}")
+            raise TranscriptionError(f"Transcription failed with error: {e}")
 
     def get_segments(self, transcription_result: dict) -> list[dict]:
         segments = []
