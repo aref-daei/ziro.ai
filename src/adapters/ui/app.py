@@ -23,7 +23,6 @@ from services.subtitle_generator.service import SubtitleGeneratorService
 from services.video_processor.service import VideoProcessorService
 from services.transcriber.providers.whisper_provider import WhisperTranscriber
 from services.transcriber.service import TranscriberService
-from services.translator.providers.m2m100_provider import M2M100Translator
 from services.translator.providers.google_provider import GoogleTranslator
 from services.translator.providers.deepl_provider import DeepLTranslator
 from services.translator.service import TranslatorService
@@ -281,15 +280,8 @@ class App(ctk.CTk):
             self.update_status("Translating into Persian ...", 0.5)
             if self.translation_model.get() == "Google Translate":
                 translator = GoogleTranslator()
-            elif self.translation_model.get() == "DeepL Translate":
-                translator = DeepLTranslator(self.auth_key.get())
             else:
-                translator = M2M100Translator(
-                    M2M100Translator.Variant[
-                        self.translation_model.get().split()[1].upper()
-                    ],
-                    self.device,
-                )
+                translator = DeepLTranslator(self.auth_key.get())
             translator_service = TranslatorService(translator)
 
             texts_en = [seg["text"] for seg in segments_en]

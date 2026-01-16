@@ -12,7 +12,6 @@ PROJECT_LATEST_RELEASE_URL = "https://github.com/aref-daei/ziro.ai/releases/late
 DEBUG = False
 
 # Translate settings
-TRANSLATION_MODEL = "facebook/m2m100_418M"
 MAX_TRANSLATION_LENGTH = 512
 BATCH_SIZE = 8
 
