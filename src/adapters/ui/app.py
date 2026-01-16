@@ -221,8 +221,6 @@ class App(ctk.CTk):
         self.status_label.configure(text=message)
         self.progress_bar.set(progress)
 
-        self.title(f"{PROJECT_NAME} - {message}")
-
     def start_processing(self):
         """Start processing in a separate thread"""
         if self.processing:
