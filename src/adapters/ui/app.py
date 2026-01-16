@@ -234,6 +234,10 @@ class App(ctk.CTk):
         if not self.video_path:
             messagebox.showwarning("Warning", "Please select a video file first")
             return
+        
+        if not self.is_internet_access():
+            messagebox.showerror("Error", "Start processing requires Internet access")
+            return
 
         self.processing = True
         self.process_btn.configure(state="disabled")
@@ -247,9 +251,6 @@ class App(ctk.CTk):
     def process_video(self):
         """Full video processing"""
         try:
-            if not self.is_internet_access():
-                raise ConnectionError("Start processing requires Internet access")
-
             video_name = Path(self.video_path).stem
 
             # 1. Sound extraction (0-20%)
