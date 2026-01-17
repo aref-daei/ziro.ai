@@ -1,14 +1,14 @@
 [Setup]
 AppName=Ziro
-AppVersion=1.3.0
-AppVerName=Ziro 1.3.0
+AppVersion=1.4.0
+AppVerName=Ziro 1.4.0
 AppPublisher=Aref Daei
 AppPublisherURL=https://github.com/aref-daei/ziro.ai
 AppSupportURL=https://github.com/aref-daei/ziro.ai/issues
 AppUpdatesURL=https://github.com/aref-daei/ziro.ai/releases
 AppCopyright=Copyright (C) 2025  Aref Daei - AGPL-3.0
 
-VersionInfoVersion=1.3.0.0
+VersionInfoVersion=1.4.0.0
 VersionInfoCompany=Aref Daei
 VersionInfoDescription=Automated Subtitle Generation Application
 VersionInfoCopyright=Copyright (C) 2025  Aref Daei - AGPL-3.0
@@ -27,7 +27,7 @@ SolidCompression=yes
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 
-OutputBaseFilename=ZiroSetup-x64-1.3.0
+OutputBaseFilename=ZiroSetup-x64-1.4.0
 OutputDir=Releases
 PrivilegesRequired=admin
 PrivilegesRequiredOverridesAllowed=dialog
