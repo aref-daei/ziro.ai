@@ -351,7 +351,9 @@ class App(ctk.CTk):
                     / f"{video_name}_{self.languages[self.tgt_lang.get()][0]}.srt"
                 )
                 subtitle_generator_service.generate_srt(
-                    segments_tgt_lang, srt_tgt_lang_path, self.languages[self.tgt_lang.get()][1]
+                    segments_tgt_lang,
+                    srt_tgt_lang_path,
+                    self.languages[self.tgt_lang.get()][1],
                 )
 
                 # 7. Add subtitles to the video (80-100%)
