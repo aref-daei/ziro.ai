@@ -165,7 +165,7 @@ class App(ctk.CTk):
 
         self.translation_model = ctk.CTkOptionMenu(
             trans_frame,
-            values=["Google Translate", "DeepL $"],
+            values=["Google Translate", "DeepL (by key)"],
             width=150,
         )
         self.translation_model.set("Google Translate")
