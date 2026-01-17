@@ -355,7 +355,7 @@ class App(ctk.CTk):
 
                 subtitle_paths = {
                     "eng": str(srt_en_path),
-                    "per": str(srt_tgt_lang_path),
+                    f"{self.tgt_lang.get().lower()[:3]}": str(srt_tgt_lang_path),
                 }
 
                 video_processor_service = VideoProcessorService()
