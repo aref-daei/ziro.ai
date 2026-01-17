@@ -474,6 +474,8 @@ class App(ctk.CTk):
 
         controls = [
             self.select_btn,
+            self.src_lang,
+            self.tgt_lang,
             self.whisper_model,
             self.translation_model,
             self.auth_key,
