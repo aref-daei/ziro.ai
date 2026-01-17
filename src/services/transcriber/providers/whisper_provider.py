@@ -34,16 +34,16 @@ class WhisperTranscriber(Transcriber):
 
     def transcribe(self, audio_path: str, language: str | None) -> dict:
         try:
-            if language != None:
+            if language is None:
                 result = self._model.transcribe(
                     audio_path,
-                    language=language,
                     task="translate",
                     word_timestamps=False,
                 )
             else:
                 result = self._model.transcribe(
                     audio_path,
+                    language=language,
                     task="translate",
                     word_timestamps=False,
                 )
