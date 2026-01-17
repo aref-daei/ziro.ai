@@ -1,4 +1,5 @@
 import platform
+import shutil
 import threading
 from pathlib import Path
 from tkinter import filedialog, messagebox
@@ -365,6 +366,11 @@ class App(ctk.CTk):
                     output_video = video_processor_service.add_subtitles(
                         self.video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
                     )
+                else:
+                    shutil.copy(srt_en_path, PATHS["output"] / srt_en_path.name)
+                    shutil.copy(
+                        srt_tgt_lang_path, PATHS["output"] / srt_tgt_lang_path.name
+                    )
 
                 self.update_status("Processing complete!", 1.0)
 
@@ -376,7 +382,7 @@ class App(ctk.CTk):
                     srt_en_path,
                     srt_tgt_lang_path,
                 )
-            
+
             else:
                 # 4. Add subtitle to the video (50-100%)
                 output_video = ""
@@ -389,6 +395,8 @@ class App(ctk.CTk):
                     output_video = video_processor_service.add_subtitles(
                         self.video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
                     )
+                else:
+                    shutil.copy(srt_en_path, PATHS["output"] / srt_en_path.name)
 
                 self.update_status("Processing complete!", 1.0)
 
