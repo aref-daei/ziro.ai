@@ -37,12 +37,19 @@ class WhisperTranscriber(Transcriber):
 
     def transcribe(self, audio_path: str, language: str | None) -> dict:
         try:
-            result = self._model.transcribe(
-                audio_path,
-                language=language,
-                task="transcribe",
-                word_timestamps=False,
-            )
+            if language != None:
+                result = self._model.transcribe(
+                    audio_path,
+                    language=language,
+                    task="translate",
+                    word_timestamps=False,
+                )
+            else:
+                result = self._model.transcribe(
+                    audio_path,
+                    task="translate",
+                    word_timestamps=False,
+                )
 
             return result
         except Exception as e:
