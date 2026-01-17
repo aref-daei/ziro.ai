@@ -53,10 +53,12 @@ class App(ctk.CTk):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.video_path = ""
         self.processing = False
+
+        # languages: dict {"Language": ("lang_code", is_rtl: True/False)}
         self.languages = {
-            "Persian": "fa",
-            "English": "en",
-            "French": "fr",
+            "Persian": ("fa", True),
+            "English": ("en", False),
+            "French": ("fr", False),
         }
 
         # Logger
@@ -276,7 +278,7 @@ class App(ctk.CTk):
         try:
             is_need_translate = self.tgt_lang.get() != "English"
 
-            if not (self.is_internet_access() or DEBUG) and is_need_translate:
+            if is_need_translate and not (self.is_internet_access() or DEBUG):
                 messagebox.showwarning(
                     "No internet access", "Start processing requires internet access"
                 )
@@ -305,7 +307,7 @@ class App(ctk.CTk):
                 (
                     None
                     if self.src_lang.get() == "Auto"
-                    else self.languages[self.src_lang.get()]
+                    else self.languages[self.src_lang.get()][0]
                 ),
             )
             segments_en = transcriber_service.get_segments(transcription)
@@ -327,7 +329,7 @@ class App(ctk.CTk):
 
                 texts_en = [seg["text"] for seg in segments_en]
                 texts_tgt_lang = translator_service.translate(
-                    texts_en, "en", self.languages[self.tgt_lang.get()]
+                    texts_en, "en", self.languages[self.tgt_lang.get()][0]
                 )
 
                 # Creating target language segments
@@ -346,10 +348,10 @@ class App(ctk.CTk):
                 # 5. Save target language subtitles
                 srt_tgt_lang_path = (
                     PATHS["temp"]
-                    / f"{video_name}_{self.languages[self.tgt_lang.get()]}.srt"
+                    / f"{video_name}_{self.languages[self.tgt_lang.get()][0]}.srt"
                 )
                 subtitle_generator_service.generate_srt(
-                    segments_tgt_lang, srt_tgt_lang_path
+                    segments_tgt_lang, srt_tgt_lang_path, self.languages[self.tgt_lang.get()][1]
                 )
 
                 # 7. Add subtitles to the video (80-100%)
@@ -391,7 +393,7 @@ class App(ctk.CTk):
                     )
 
                     outputs.append(output_video)
-                    
+
                 else:
                     shutil.copy(srt_en_path, PATHS["output"] / srt_en_path.name)
                     outputs.append(PATHS["output"] / srt_en_path.name)

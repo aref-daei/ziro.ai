@@ -6,9 +6,14 @@ from core.config import SRT_ENCODING
 class SubtitleGeneratorService:
     """Generating SRT files"""
 
-    def generate_srt(self, segments: list[dict], output_path: Path) -> Path:
+    def generate_srt(
+        self, segments: list[dict], output_path: Path, rtl: bool = False
+    ) -> Path:
         """Generate SRT file"""
-        rtl, end = "\u202b", "\u202c"
+        rtl_s, rtl_e = "", ""
+        if rtl:
+            rtl_s = "\u202b"
+            rtl_e = "\u202c"
 
         srt_content = []
 
@@ -22,7 +27,7 @@ class SubtitleGeneratorService:
             srt_content.append(f"{start_time} --> {end_time}")
 
             # Text
-            srt_content.append(f"{rtl}{segment['text']}{end}")
+            srt_content.append(f"{rtl_s}{segment['text']}{rtl_e}")
 
             # Blank line between subtitles
             srt_content.append("")
