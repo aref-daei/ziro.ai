@@ -273,7 +273,7 @@ class App(ctk.CTk):
     def process_video(self):
         """Full video processing"""
         try:
-            if not self.is_internet_access():
+            if not (self.is_internet_access() or DEBUG):
                 messagebox.showwarning(
                     "No internet access", "Start processing requires internet access"
                 )
