@@ -304,7 +304,7 @@ class App(ctk.CTk):
             # 3. Save English subtitles
             srt_en_path = PATHS["temp"] / f"{video_name}_en.srt"
             subtitle_generator_service = SubtitleGeneratorService()
-            subtitle_generator_service.generate_srt(segments_en, str(srt_en_path))
+            subtitle_generator_service.generate_srt(segments_en, srt_en_path)
 
             # 4. Translation (50-80%)
             self.update_status(f"Translating into {self.tgt_lang.get()} ...", 0.5)
@@ -328,7 +328,7 @@ class App(ctk.CTk):
 
             # 5. Save Persian subtitles
             srt_tgt_lang_path = PATHS["temp"] / f"{video_name}_{self.languages[self.tgt_lang.get()]}.srt"
-            subtitle_generator_service.generate_srt(segments_tgt_lang, str(srt_tgt_lang_path))
+            subtitle_generator_service.generate_srt(segments_tgt_lang, srt_tgt_lang_path)
 
             # 7. Add subtitles to the video (80-100%)
             output_video = ""

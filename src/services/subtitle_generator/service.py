@@ -6,7 +6,7 @@ from core.config import SRT_ENCODING
 class SubtitleGeneratorService:
     """Generating SRT files"""
 
-    def generate_srt(self, segments: list[dict], output_path: str) -> str:
+    def generate_srt(self, segments: list[dict], output_path: Path) -> Path:
         """Generate SRT file"""
         rtl, end = "\u202b", "\u202c"
 
@@ -28,13 +28,10 @@ class SubtitleGeneratorService:
             srt_content.append("")
 
         # Writing a file
-        output_path = Path(output_path)  # type: ignore
-        output_path.parent.mkdir(parents=True, exist_ok=True)  # type: ignore
-
         with open(output_path, "w", encoding=SRT_ENCODING) as f:
             f.write("\n".join(srt_content))
 
-        return str(output_path)
+        return output_path
 
     def _format_timestamp(self, seconds: float) -> str:
         """Convert seconds to SRT format: 00:00:00,000"""
