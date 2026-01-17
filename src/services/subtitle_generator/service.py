@@ -33,8 +33,12 @@ class SubtitleGeneratorService:
             srt_content.append("")
 
         # Writing a file
-        with open(output_path, "w", encoding=SRT_ENCODING) as f:
-            f.write("\n".join(srt_content))
+        try:
+            with open(output_path, "w", encoding=SRT_ENCODING) as f:
+                f.write("\n".join(srt_content))
+        
+        except FileNotFoundError as e:
+            raise RuntimeError(f"Error creating subtitle file: {e}")
 
         return output_path
 
