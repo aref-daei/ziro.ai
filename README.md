@@ -1,6 +1,6 @@
 # Ziro.ai 🎬
 
-**Automatically add Persian & English subtitles to your English videos.**
+**Automatically add any language subtitles to your favorite videos.**
 
 ![License](https://img.shields.io/badge/license-AGPL-orange.svg)
 ![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)
@@ -9,7 +9,7 @@
 
 [Persian](README.fa.md) | [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
 
-Ziro is an all-in-one subtitle automation tool powered by advanced AI. It seamlessly handles the entire workflow - from accurately transcribing speech in your English videos and translating it into Persian, to synchronizing the text and burning the final subtitles directly onto your video - delivering a ready-to-share, subtitled file in just a few clicks.
+Ziro is an all-in-one subtitle automation tool powered by advanced AI. It seamlessly handles the entire workflow - from accurately transcribing speech in your favorite videos and translating it into any language, to synchronizing the text and burning the final subtitles directly onto your video - delivering a ready-to-share, subtitled file in just a few clicks.
 
 ## How It Works
 
@@ -17,14 +17,14 @@ Our automated pipeline:
 
 1. **Transcribes** speech from your video using OpenAI's Whisper.
 2. **Translates** the text into Persian using Google Translate and DeepL.
-3. **Generates & syncs** perfectly timed bilingual subtitles.
+3. **Generates & syncs** perfectly timed subtitles.
 4. **Renders** the final video with subtitles burned in or as a separate file.
 
 ## Prerequisites
 
 Before you begin, make sure you have the following installed:
 
-- Python 3.11 or higher
+- Python 3.11 or higher (for development)
 - FFmpeg 8.0
 - 8GB RAM (16GB recommended)
 - GPU with CUDA support recommended for faster performance
@@ -36,7 +36,7 @@ Getting started with Ziro is quick and straightforward. Follow the steps below b
 ### Windows Installation
 
 1. **Download the Installer**  
-   Download the latest version of Ziro (`.exe` file) from the [Releases](https://github.com/aref-daei/ziro.ai/releases) page.
+   Download the latest version of Ziro (`.exe` file) from the [Releases](https://github.com/aref-daei/ziro.ai/releases/latest) page.
 
 2. **Run as Administrator**  
    Right-click the downloaded file and select **“Run as administrator”**.
@@ -47,8 +47,7 @@ Getting started with Ziro is quick and straightforward. Follow the steps below b
 4. **Launch Ziro**  
    After installation, Ziro will launch automatically.  
    - If you already have **FFmpeg** installed, the app will start loading its modules.  
-   - If FFmpeg is not installed, you’ll see instructions to install it.  
-     Simply run the following command in **Command Prompt** or **PowerShell**:
+   - If FFmpeg is not installed, Simply run the following command in **Command Prompt** or **PowerShell**:
 
      ```bash
      winget install "FFmpeg (Essentials Build)"
@@ -57,7 +56,7 @@ Getting started with Ziro is quick and straightforward. Follow the steps below b
      Then restart Ziro.
 
 5. **You’re All Set!**  
-   Once the modules are loaded, you can start translating your English videos into Persian subtitles in just a few clicks.
+   Once the modules are loaded, you can start translating your favorite videos into any language subtitles in just a few clicks.
 
 ### Linux & macOS
 
