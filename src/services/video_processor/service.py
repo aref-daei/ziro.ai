@@ -10,7 +10,7 @@ class VideoProcessorService:
 
     def add_subtitles(
         self, video_path: str, subtitle_paths: dict, output_name: str
-    ) -> str:
+    ) -> Path:
         """
         Add subtitles to video (soft-sub)
 
@@ -58,7 +58,7 @@ class VideoProcessorService:
             # Execute command
             ffmpeg.run(stream, overwrite_output=True, capture_stderr=True)
 
-            return str(output_path)
+            return output_path
 
         except ffmpeg.Error as e:
             error_message = e.stderr.decode() if e.stderr else str(e)
