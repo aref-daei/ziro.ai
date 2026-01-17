@@ -1,7 +1,6 @@
 from enum import Enum
 from urllib.error import URLError
 
-import torch
 import whisper
 
 from core.exceptions import ConnectionError, TranscriptionError
@@ -20,13 +19,11 @@ class WhisperTranscriber(Transcriber):
         LARGE = "large"
 
     def __init__(self, variant: Variant, device: str = "cpu") -> None:
-        self._device = torch.device(device)
-
         model_dir_path = PATHS["base"] / "models" / "whisper"
 
         try:
             self._model = whisper.load_model(
-                variant.value, device=self._device, download_root=f"{model_dir_path}"
+                variant.value, device=device, download_root=f"{model_dir_path}"
             )
 
         except URLError as e:
