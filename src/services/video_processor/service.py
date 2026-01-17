@@ -16,7 +16,7 @@ class VideoProcessorService:
 
         Args:
             video_path: path to the original video
-            subtitle_paths: dictionary {'en': 'path/to/en.srt', 'fa': 'path/to/fa.srt'}
+            subtitle_paths: dictionary {'eng': 'path/to/en.srt', 'per': 'path/to/fa.srt'}
             output_name: output file name
 
         Returns:
