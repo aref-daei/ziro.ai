@@ -267,7 +267,7 @@ class App(ctk.CTk):
         self.processing = True
         self.process_btn.configure(state="disabled")
 
-        self.disable_controls(True)
+        self._disable_controls(True)
 
         # Run in a separate thread so that the UI does not freeze.
         thread = threading.Thread(target=self.process_video, daemon=True)
@@ -284,7 +284,7 @@ class App(ctk.CTk):
                 )
                 self.processing = False
                 self.process_btn.configure(state="normal")
-                self.disable_controls(False)
+                self._disable_controls(False)
                 return
 
             video_name = Path(self.video_path).stem
@@ -456,17 +456,23 @@ class App(ctk.CTk):
         finally:
             self.processing = False
             self.process_btn.configure(state="normal")
-            self.disable_controls(False)
+            self._disable_controls(False)
             if not DEBUG:
                 try:
                     FileHandler.clean_temp_files()
                 except RuntimeError as e:
                     self.logger.error(f"{e}")
 
-    def disable_controls(self, disabled: bool):
-        """Enable/disable UI controls during processing"""
-        state = "disabled" if disabled else "normal"
+    def _get_icon_path(self) -> Path:
+        if platform.system() == "Windows":
+            return PATHS["base"] / "assets" / "Ziro.ico"
+        elif platform.system() == "Darwin":
+            return PATHS["base"] / "assets" / "Ziro.icns"
+        else:
+            return PATHS["base"] / "assets" / "Ziro.png"
 
+    def _disable_controls(self, disabled: bool):
+        state = "disabled" if disabled else "normal"
         controls = [
             self.select_btn,
             self.src_lang,
@@ -476,7 +482,6 @@ class App(ctk.CTk):
             self.auth_key,
             self.embed_subtitles,
         ]
-
         for control in controls:
             control.configure(state=state)
 
@@ -486,14 +491,6 @@ class App(ctk.CTk):
             message += f"  • {output.name}"
         messagebox.showinfo("Processing complete!", message)
         FileHandler.open_path(PATHS["output"])
-
-    def _get_icon_path(self) -> Path:
-        if platform.system() == "Windows":
-            return PATHS["base"] / "assets" / "Ziro.ico"
-        elif platform.system() == "Darwin":
-            return PATHS["base"] / "assets" / "Ziro.icns"
-        else:
-            return PATHS["base"] / "assets" / "Ziro.png"
 
     def is_internet_access(self) -> bool:
         try:
