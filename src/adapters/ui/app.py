@@ -292,12 +292,12 @@ class App(ctk.CTk):
 
             # 2. Transcription (20-50%)
             self.update_status("Converting speech to text ...", 0.2)
-            whisper_transcriber = WhisperTranscriber(
+            transcriber = WhisperTranscriber(
                 WhisperTranscriber.Variant[self.whisper_model.get().upper()],
                 self.device,
             )
-            transcriber_service = TranscriberService(whisper_transcriber)
-            transcription = transcriber_service.transcribe(audio_path, "en")
+            transcriber_service = TranscriberService(transcriber)
+            transcription = transcriber_service.transcribe(audio_path, None if self.src_lang.get() == "Auto" else self.languages[self.src_lang.get()])
             segments_en = transcriber_service.get_segments(transcription)
             self.update_status("Transcription completed", 0.5)
 
@@ -307,7 +307,7 @@ class App(ctk.CTk):
             subtitle_generator_service.generate_srt(segments_en, str(srt_en_path))
 
             # 4. Translation (50-80%)
-            self.update_status("Translating into Persian ...", 0.5)
+            self.update_status(f"Translating into {self.tgt_lang.get()} ...", 0.5)
             if self.translation_model.get() == "Google Translate":
                 translator = GoogleTranslator()
             else:
@@ -315,27 +315,27 @@ class App(ctk.CTk):
             translator_service = TranslatorService(translator)
 
             texts_en = [seg["text"] for seg in segments_en]
-            texts_fa = translator_service.translate(texts_en, "en", "fa")
+            texts_tgt_lang = translator_service.translate(texts_en, "en", self.languages[self.tgt_lang.get()])
 
-            # Creating Persian segments
-            segments_fa = []
-            for seg_en, text_fa in zip(segments_en, texts_fa):
-                segments_fa.append(
-                    {"text": text_fa, "start": seg_en["start"], "end": seg_en["end"]}
+            # Creating target language segments
+            segments_tgt_lang = []
+            for seg_en, text_tgt_lang in zip(segments_en, texts_tgt_lang):
+                segments_tgt_lang.append(
+                    {"text": text_tgt_lang, "start": seg_en["start"], "end": seg_en["end"]}
                 )
 
             self.update_status("Translation completed", 0.8)
 
             # 5. Save Persian subtitles
-            srt_fa_path = PATHS["temp"] / f"{video_name}_fa.srt"
-            subtitle_generator_service.generate_srt(segments_fa, str(srt_fa_path))
+            srt_tgt_lang_path = PATHS["temp"] / f"{video_name}_{self.languages[self.tgt_lang.get()]}.srt"
+            subtitle_generator_service.generate_srt(segments_tgt_lang, str(srt_tgt_lang_path))
 
             # 7. Add subtitles to the video (80-100%)
             output_video = ""
             if self.embed_subtitles.get():
                 self.update_status("Adding subtitles to video ...", 0.8)
 
-                subtitle_paths = {"eng": str(srt_en_path), "per": str(srt_fa_path)}
+                subtitle_paths = {"eng": str(srt_en_path), "per": str(srt_tgt_lang_path)}
 
                 video_processor_service = VideoProcessorService()
                 output_video = video_processor_service.add_subtitles(
@@ -346,7 +346,7 @@ class App(ctk.CTk):
 
             # Show success message
             self.after(
-                100, self._show_success, srt_en_path, srt_fa_path, Path(output_video)
+                100, self._show_success, srt_en_path, srt_tgt_lang_path, Path(output_video)
             )
 
         except ConnectionError as e:
@@ -429,7 +429,7 @@ class App(ctk.CTk):
         if DEBUG or not self.embed_subtitles.get():
             message = (
                 f"English subtitles: {en.name}\n"
-                f"Persian subtitles: {fa.name}"
+                f"{self.tgt_lang.get()} subtitles: {fa.name}"
                 f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
             )
         messagebox.showinfo("Processing complete!", message)
