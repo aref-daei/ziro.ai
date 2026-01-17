@@ -35,7 +35,7 @@ class WhisperTranscriber(Transcriber):
         except Exception as e:
             raise TranscriptionError(f"Whisper loading failed with error: {e}")
 
-    def transcribe(self, audio_path: str, language: str) -> dict:
+    def transcribe(self, audio_path: str, language: str | None) -> dict:
         try:
             result = self._model.transcribe(
                 audio_path,

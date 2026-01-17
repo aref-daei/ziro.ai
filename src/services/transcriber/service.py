@@ -5,7 +5,7 @@ class TranscriberService:
     def __init__(self, provider: Transcriber):
         self.provider = provider
 
-    def transcribe(self, audio_path: str, language: str) -> dict:
+    def transcribe(self, audio_path: str, language: str | None) -> dict:
         """Convert voice to text"""
         return self.provider.transcribe(audio_path, language)
 
