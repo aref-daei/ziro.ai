@@ -273,7 +273,9 @@ class App(ctk.CTk):
     def process_video(self):
         """Full video processing"""
         try:
-            if not (self.is_internet_access() or DEBUG):
+            is_need_translate = self.tgt_lang.get() != "English"
+
+            if not (self.is_internet_access() or DEBUG) and is_need_translate:
                 messagebox.showwarning(
                     "No internet access", "Start processing requires internet access"
                 )
@@ -313,66 +315,90 @@ class App(ctk.CTk):
             subtitle_generator_service = SubtitleGeneratorService()
             subtitle_generator_service.generate_srt(segments_en, srt_en_path)
 
-            # 4. Translation (50-80%)
-            self.update_status(f"Translating into {self.tgt_lang.get()} ...", 0.5)
-            if self.translation_model.get() == "Google Translate":
-                translator = GoogleTranslator()
-            else:
-                translator = DeepLTranslator(self.auth_key.get())
-            translator_service = TranslatorService(translator)
+            if is_need_translate:
+                # 4. Translation (50-80%)
+                self.update_status(f"Translating into {self.tgt_lang.get()} ...", 0.5)
+                if self.translation_model.get() == "Google Translate":
+                    translator = GoogleTranslator()
+                else:
+                    translator = DeepLTranslator(self.auth_key.get())
+                translator_service = TranslatorService(translator)
 
-            texts_en = [seg["text"] for seg in segments_en]
-            texts_tgt_lang = translator_service.translate(
-                texts_en, "en", self.languages[self.tgt_lang.get()]
-            )
+                texts_en = [seg["text"] for seg in segments_en]
+                texts_tgt_lang = translator_service.translate(
+                    texts_en, "en", self.languages[self.tgt_lang.get()]
+                )
 
-            # Creating target language segments
-            segments_tgt_lang = []
-            for seg_en, text_tgt_lang in zip(segments_en, texts_tgt_lang):
-                segments_tgt_lang.append(
-                    {
-                        "text": text_tgt_lang,
-                        "start": seg_en["start"],
-                        "end": seg_en["end"],
+                # Creating target language segments
+                segments_tgt_lang = []
+                for seg_en, text_tgt_lang in zip(segments_en, texts_tgt_lang):
+                    segments_tgt_lang.append(
+                        {
+                            "text": text_tgt_lang,
+                            "start": seg_en["start"],
+                            "end": seg_en["end"],
+                        }
+                    )
+
+                self.update_status("Translation completed", 0.8)
+
+                # 5. Save target language subtitles
+                srt_tgt_lang_path = (
+                    PATHS["temp"]
+                    / f"{video_name}_{self.languages[self.tgt_lang.get()]}.srt"
+                )
+                subtitle_generator_service.generate_srt(
+                    segments_tgt_lang, srt_tgt_lang_path
+                )
+
+                # 7. Add subtitles to the video (80-100%)
+                output_video = ""
+                if self.embed_subtitles.get():
+                    self.update_status("Adding subtitles to video ...", 0.8)
+
+                    subtitle_paths = {
+                        "eng": str(srt_en_path),
+                        f"{self.tgt_lang.get().lower()[:3]}": str(srt_tgt_lang_path),
                     }
+
+                    video_processor_service = VideoProcessorService()
+                    output_video = video_processor_service.add_subtitles(
+                        self.video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
+                    )
+
+                self.update_status("Processing complete!", 1.0)
+
+                # Show success message
+                self.after(
+                    100,
+                    self._show_success,
+                    Path(output_video),
+                    srt_en_path,
+                    srt_tgt_lang_path,
                 )
+            
+            else:
+                # 4. Add subtitle to the video (50-100%)
+                output_video = ""
+                if self.embed_subtitles.get():
+                    self.update_status("Adding subtitles to video ...", 0.8)
 
-            self.update_status("Translation completed", 0.8)
+                    subtitle_paths = {"eng": str(srt_en_path)}
 
-            # 5. Save Persian subtitles
-            srt_tgt_lang_path = (
-                PATHS["temp"]
-                / f"{video_name}_{self.languages[self.tgt_lang.get()]}.srt"
-            )
-            subtitle_generator_service.generate_srt(
-                segments_tgt_lang, srt_tgt_lang_path
-            )
+                    video_processor_service = VideoProcessorService()
+                    output_video = video_processor_service.add_subtitles(
+                        self.video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
+                    )
 
-            # 7. Add subtitles to the video (80-100%)
-            output_video = ""
-            if self.embed_subtitles.get():
-                self.update_status("Adding subtitles to video ...", 0.8)
+                self.update_status("Processing complete!", 1.0)
 
-                subtitle_paths = {
-                    "eng": str(srt_en_path),
-                    f"{self.tgt_lang.get().lower()[:3]}": str(srt_tgt_lang_path),
-                }
-
-                video_processor_service = VideoProcessorService()
-                output_video = video_processor_service.add_subtitles(
-                    self.video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
+                # Show success message
+                self.after(
+                    100,
+                    self._show_success,
+                    Path(output_video),
+                    srt_en_path,
                 )
-
-            self.update_status("Processing complete!", 1.0)
-
-            # Show success message
-            self.after(
-                100,
-                self._show_success,
-                srt_en_path,
-                srt_tgt_lang_path,
-                Path(output_video),
-            )
 
         except ConnectionError as e:
             self.update_status(f"Connection failed", 0.0)
@@ -449,12 +475,11 @@ class App(ctk.CTk):
         for control in controls:
             control.configure(state=state)
 
-    def _show_success(self, en: Path, fa: Path, ov: Path):
+    def _show_success(self, ov: Path, en: Path, tl: Path | None = None):
         message = f"{"Video with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
         if DEBUG or not self.embed_subtitles.get():
             message = (
-                f"English subtitles: {en.name}\n"
-                f"{self.tgt_lang.get()} subtitles: {fa.name}"
+                f"English subtitles: {en.name}\n{(self.tgt_lang.get() + "subtitles: " + tl.name) if tl is not None else ""}"
                 f"{"\nVideo with subtitles: " + ov.name if self.embed_subtitles.get() else ""}"
             )
         messagebox.showinfo("Processing complete!", message)
