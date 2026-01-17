@@ -457,11 +457,11 @@ class App(ctk.CTk):
             self.processing = False
             self.process_btn.configure(state="normal")
             self.disable_controls(False)
-            if not DEBUG and self.embed_subtitles.get():
+            if not DEBUG:
                 try:
                     FileHandler.clean_temp_files()
                 except RuntimeError as e:
-                    self.logger.error(str(e))
+                    self.logger.error(f"{e}")
 
     def disable_controls(self, disabled: bool):
         """Enable/disable UI controls during processing"""
