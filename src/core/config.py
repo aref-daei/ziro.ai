@@ -2,7 +2,7 @@
 PROJECT_NAME = "Ziro.ai"
 PROJECT_DESCRIPTION = "Automated Subtitle Generation Application"
 PROJECT_VERSION = "1.4.0"
-PROJECT_LICENSE = "Copyright (C) 2025  Aref Daei - AGPL-3.0"
+PROJECT_LICENSE = "Copyright (C) 2025-2026  Aref Daei - AGPL-3.0"
 PROJECT_AUTHOR = "Aref Daei"
 PROJECT_AUTHOR_EMAIL = "aref.daei@outlook.com"
 PROJECT_URL = "https://github.com/aref-daei/ziro.ai"
