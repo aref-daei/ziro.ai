@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/python-3.11+-yellow.svg)
 ![FFmpeg](https://img.shields.io/badge/ffmpeg-8.0-green.svg)
 
-[Persian](README.fa.md) | [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
+[Persian](docs/README.fa.md) | [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
 
 Ziro is an all-in-one subtitle automation tool powered by advanced AI. It seamlessly handles the entire workflow - from accurately transcribing speech in your favorite videos and translating it into any language, to synchronizing the text and burning the final subtitles directly onto your video - delivering a ready-to-share, subtitled file in just a few clicks.
 
@@ -36,7 +36,7 @@ Getting started with Ziro is quick and straightforward. Follow the steps below b
 ### Windows Installation
 
 1. **Download the Installer**  
-   Download the latest version of Ziro (`.exe` file) from the [Releases](https://github.com/aref-daei/ziro.ai/releases/latest) page.
+   Download the latest version of Ziro (`.exe` file) from the [latest release](https://github.com/aref-daei/ziro.ai/releases/latest) page.
 
 2. **Run as Administrator**  
    Right-click the downloaded file and select **“Run as administrator”**.
