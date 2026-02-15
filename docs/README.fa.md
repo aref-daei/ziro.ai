@@ -98,3 +98,9 @@ Ziro در حال حاضر تنها در **حالت آنلاین** کار می‌
 ## مجوز
 
 این پروژه تحت لایسنس AGPL-3.0 منتشر شده است. برای اطلاعات بیشتر فایل [LICENSE](LICENSE) را مشاهده کنید.
+
+**مجوزهای شخص ثالث:**
+
+- **OpenAI Whisper**: تحت لایسنس [MIT](https://github.com/openai/whisper/blob/main/LICENSE)
+- **Google Translate**: مشمول [شرایط خدمات گوگل](https://policies.google.com/terms)
+- **DeepL**: مشمول [شرایط و ضوابط DeepL](https://www.deepl.com/en/pro-license)
