@@ -3,7 +3,7 @@
 **افزودن خودکار زیرنویس هر زبانی به ویدیوهای دلخواه شما.**
 
 ![License](https://img.shields.io/badge/license-AGPL-orange.svg)
-![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.4.1-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-yellow.svg)
 ![FFmpeg](https://img.shields.io/badge/ffmpeg-8.0-green.svg)
 
