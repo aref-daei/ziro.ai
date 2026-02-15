@@ -7,7 +7,7 @@
 ![Python](https://img.shields.io/badge/python-3.11+-yellow.svg)
 ![FFmpeg](https://img.shields.io/badge/ffmpeg-8.0-green.svg)
 
-[Persian](docs/README.fa.md)
+[Persian](/docs/README.fa.md)
 
 [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Future Development](#future-development) - [Contributing](#contributing) - [License](#license)
 
@@ -94,6 +94,7 @@ Once processing finishes, you’ll see a success message. Click **OK** to automa
 ## Future Development
 
 - Upgrade to PyQt 6 and UI improvements
+- Add support for offline translation
 
 ## Contributing
 
