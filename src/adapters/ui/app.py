@@ -225,7 +225,7 @@ class App(ctk.CTk):
         # Project info
         ctk.CTkLabel(
             self,
-            text=f"{PROJECT_LICENSE}\nSource code: {PROJECT_URL}\n",
+            text=f"{PROJECT_LICENSE}\nSource: {PROJECT_URL}\n",
             font=ctk.CTkFont(size=10),
         ).pack()
 
