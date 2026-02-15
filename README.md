@@ -9,7 +9,7 @@
 
 [Persian](docs/README.fa.md)
 
-[How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
+[How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Future Development](#future-development) - [Contributing](#contributing) - [License](#license)
 
 Ziro is an all-in-one subtitle automation tool powered by advanced AI. It seamlessly handles the entire workflow - from accurately transcribing speech in your favorite videos and translating it into any language, to synchronizing the text and burning the final subtitles directly onto your video - delivering a ready-to-share, subtitled file in just a few clicks.
 
@@ -95,9 +95,13 @@ Once processing finishes, you’ll see a success message. Click **OK** to automa
 
 - Upgrade to PyQt 6 and UI improvements
 
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guidelines](/CONTRIBUTING.md) to learn how you can help improve Ziro.ai.
+
 ## License
 
-This project is licensed under the AGPL-3.0 License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the AGPL-3.0 License - see the [LICENSE](/LICENSE) file for details.
 
 **Third-Party Licenses:**
 
