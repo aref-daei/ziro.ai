@@ -39,7 +39,7 @@ class Splash(ctk.CTk):
     def loading_modules(self, modules: list[str]):
         for i, module in enumerate(modules):
             try:
-                self.status_label.configure(text=f"Module {module} is loading...")
+                self.status_label.configure(text=f"Module {module.title()} is loading...")
                 self.update()
                 __import__(module)
                 self.progress.set((i + 1) / len(modules))
