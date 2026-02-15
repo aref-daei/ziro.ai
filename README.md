@@ -7,7 +7,9 @@
 ![Python](https://img.shields.io/badge/python-3.11+-yellow.svg)
 ![FFmpeg](https://img.shields.io/badge/ffmpeg-8.0-green.svg)
 
-[Persian](docs/README.fa.md) | [How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
+[Persian](docs/README.fa.md)
+
+[How It Works](#how-it-works) - [Prerequisites](#prerequisites) - [Installation Guide](#installation-guide) - [Offline Model Setup](#offline-model-setup) - [Future Development](#future-development) - [License](#license)
 
 Ziro is an all-in-one subtitle automation tool powered by advanced AI. It seamlessly handles the entire workflow - from accurately transcribing speech in your favorite videos and translating it into any language, to synchronizing the text and burning the final subtitles directly onto your video - delivering a ready-to-share, subtitled file in just a few clicks.
 
@@ -24,7 +26,7 @@ Our automated pipeline:
 
 Before you begin, make sure you have the following installed:
 
-- Python 3.11 or higher (for development)
+- Python 3.11 or higher **(for development)**
 - FFmpeg 8.0
 - 8GB RAM (16GB recommended)
 - GPU with CUDA support recommended for faster performance
