@@ -21,6 +21,10 @@ class WhisperTranscriber(Transcriber):
     def __init__(self, variant: Variant, device: str = "cpu") -> None:
         model_dir_path = PATHS["base"] / "models" / "whisper"
 
+        base_model_path = model_dir_path / f"{variant.value}.pt"
+        if not base_model_path.exists():
+            model_dir_path = PATHS["models"] / "whisper"
+
         try:
             self._model = whisper.load_model(
                 variant.value, device=device, download_root=f"{model_dir_path}"
