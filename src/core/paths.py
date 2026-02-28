@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 import platform
 
-from core.config import PROJECT_NAME
+from core.settings import PROJECT_NAME
 
 
 def _get_app_paths():

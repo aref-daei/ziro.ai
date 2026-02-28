@@ -2,7 +2,7 @@ from pathlib import Path
 
 import ffmpeg
 
-from core.config import AUDIO_FORMAT, AUDIO_CODEC, AUDIO_RATE
+from core.settings import AUDIO_FORMAT, AUDIO_CODEC, AUDIO_RATE
 from core.paths import PATHS
 
 

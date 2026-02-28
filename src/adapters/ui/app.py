@@ -9,7 +9,7 @@ import requests
 import torch
 from packaging.version import Version
 
-from core.config import (
+from core.settings import (
     PROJECT_NAME,
     PROJECT_VERSION,
     PROJECT_LICENSE,

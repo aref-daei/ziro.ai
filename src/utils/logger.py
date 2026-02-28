@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from core.config import PROJECT_NAME, DEBUG
+from core.settings import PROJECT_NAME, DEBUG
 from core.paths import PATHS
 
 

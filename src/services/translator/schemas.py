@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from core.config import BATCH_SIZE
+from core.settings import BATCH_SIZE
 
 
 class Translator(ABC):

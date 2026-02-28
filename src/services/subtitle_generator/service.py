@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from core.config import SRT_ENCODING
+from core.settings import SRT_ENCODING
 
 
 class SubtitleGeneratorService:

@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-from core.config import PROJECT_NAME
+from core.settings import PROJECT_NAME
 
 
 class Splash(ctk.CTk):
