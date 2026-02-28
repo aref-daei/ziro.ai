@@ -29,12 +29,14 @@ def _get_app_paths():
     paths = {
         "base": base_dir,
         "app_data": app_data,
-        "output": output,
+        "config": app_data / "config",
+        "models": app_data / "models",
         "logs": app_data / "logs",
         "temp": app_data / "temp",
+        "output": output,
     }
 
-    for key in ["temp", "logs", "output"]:
+    for key in ["config", "models", "logs", "temp", "output"]:
         paths[key].mkdir(parents=True, exist_ok=True)
 
     return paths
