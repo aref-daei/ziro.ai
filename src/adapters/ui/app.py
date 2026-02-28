@@ -59,6 +59,14 @@ class App(ctk.CTk):
             "Persian": ("fa", True),
             "English": ("en", False),
             "French": ("fr", False),
+            "Chinese": ("zh", False),
+            "Hindi": ("hi", False),
+            "Spanish": ("es", False),
+            "Arabic": ("ar", True),
+            "Bengali": ("bn", False),
+            "Portuguese": ("pt", False),
+            "Russian": ("ru", False),
+            "Japanese": ("ja", False)
         }
 
         # Logger
