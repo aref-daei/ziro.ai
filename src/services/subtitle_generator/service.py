@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from core.settings import SRT_ENCODING
-
 
 class SubtitleGeneratorService:
     """Generating SRT files"""
@@ -34,7 +32,7 @@ class SubtitleGeneratorService:
 
         # Writing a file
         try:
-            with open(output_path, "w", encoding=SRT_ENCODING) as f:
+            with open(output_path, "w", encoding="utf-8") as f:
                 f.write("\n".join(srt_content))
 
         except FileNotFoundError as e:

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import ffmpeg
 
-from core.settings import AUDIO_FORMAT, AUDIO_CODEC, AUDIO_RATE
+from core.settings import AUDIO_FORMAT, AUDIO_RATE
 from core.paths import PATHS
 
 
@@ -19,7 +19,7 @@ class AudioExtractorService:
             stream = ffmpeg.output(
                 stream,
                 audio_path,
-                acodec=AUDIO_CODEC,
+                acodec="pcm_s16le",
                 ac=1,  # Convert to mono
                 ar=AUDIO_RATE,
                 loglevel="error",
