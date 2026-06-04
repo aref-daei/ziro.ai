@@ -3,7 +3,7 @@
 **Automatically add any language subtitles to your favorite videos.**
 
 ![License](https://img.shields.io/badge/license-AGPL-orange.svg)
-![Version](https://img.shields.io/badge/version-1.4.1-blue.svg)
+![Version](https://img.shields.io/badge/version-1.4.2-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-yellow.svg)
 ![FFmpeg](https://img.shields.io/badge/ffmpeg-8.0-green.svg)
 
