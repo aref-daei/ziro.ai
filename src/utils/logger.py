@@ -5,69 +5,72 @@ from core.settings import PROJECT_NAME, DEBUG
 from core.paths import PATHS
 
 
+def _build_logger(name: str) -> logging.Logger:
+    """Create and configure the underlying logger instance."""
+    logger = logging.getLogger(name)
+
+    if not DEBUG:
+        logger.disabled = True
+        return logger
+
+    if logger.handlers:
+        return logger
+
+    logger.setLevel(logging.DEBUG)
+    logger.propagate = False
+
+    log_file = PATHS["logs"] / f"log_{datetime.now().strftime('%Y%m%d')}.log"
+
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+    file_handler = logging.FileHandler(log_file, encoding="utf-8")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    return logger
+
+
 class Logger:
-    """Logging system"""
+    """
+    Thin wrapper around Python's standard logger.
 
-    _instances = {}
+    Usage:
+        log = Logger()          # default project logger
+        log = Logger("module")  # named module logger
+    """
 
-    def __new__(cls, name: str = PROJECT_NAME):
+    _instances: dict[str, "Logger"] = {}
+    _logger: logging.Logger
+
+    def __new__(cls, name: str = PROJECT_NAME) -> "Logger":
         if name not in cls._instances:
-            cls._instances[name] = super().__new__(cls)
+            instance = super().__new__(cls)
+            instance._logger = _build_logger(name)
+            cls._instances[name] = instance
         return cls._instances[name]
 
-    def __init__(self, name: str = PROJECT_NAME):
-        if hasattr(self, '_initialized') and self._initialized:
-            return
+    # ------------------------------------------------------------------
+    # Public API
+    # ------------------------------------------------------------------
 
-        self.logger = logging.getLogger(name)
+    def info(self, message: str) -> None:
+        self._logger.info(message)
 
-        if not DEBUG:
-            self.logger.disabled = True
-            self._initialized = True
-            return
+    def error(self, message: str) -> None:
+        self._logger.error(message)
 
-        if not self.logger.handlers:
-            self.logger.setLevel(logging.DEBUG)
+    def warning(self, message: str) -> None:
+        self._logger.warning(message)
 
-            # Log file with date
-            log_file = PATHS["logs"] / f"log_{datetime.now().strftime('%Y%m%d')}.log"
-
-            # Format
-            formatter = logging.Formatter(
-                '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                datefmt='%Y-%m-%d %H:%M:%S'
-            )
-
-            # File Handler
-            file_handler = logging.FileHandler(log_file, encoding='utf-8')
-            file_handler.setLevel(logging.DEBUG)
-            file_handler.setFormatter(formatter)
-
-            # Console Handler
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
-            console_handler.setFormatter(formatter)
-
-            self.logger.addHandler(file_handler)
-            self.logger.addHandler(console_handler)
-
-            # Prevent propagation to root logger to avoid duplicate messages
-            self.logger.propagate = False
-
-        self._initialized = True
-
-    def info(self, message: str):
-        if DEBUG:
-            self.logger.info(message)
-
-    def error(self, message: str):
-        if DEBUG:
-            self.logger.error(message)
-
-    def warning(self, message: str):
-        if DEBUG:
-            self.logger.warning(message)
-
-    def debug(self, message: str):
-        if DEBUG:
-            self.logger.debug(message)
+    def debug(self, message: str) -> None:
+        self._logger.debug(message)
