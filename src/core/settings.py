@@ -24,7 +24,10 @@ config_path = PATHS["config"] / "config.yml"
 
 if config_path.exists():
     with open(config_path) as f:
-        data = yaml.safe_load(f) or {}
+        try:
+            data = yaml.safe_load(f)
+        except yaml.YAMLError:
+            data = {}
 
     DEBUG                  = data.get("DEBUG",                  DEBUG)
     MAX_TRANSLATION_LENGTH = data.get("MAX_TRANSLATION_LENGTH", MAX_TRANSLATION_LENGTH)
