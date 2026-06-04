@@ -3,9 +3,9 @@ import customtkinter as ctk
 from core.settings import PROJECT_NAME
 
 
-class Splash(ctk.CTk):
-    def __init__(self):
-        super().__init__()
+class Splash(ctk.CTkToplevel):
+    def __init__(self, master):
+        super().__init__(master)
 
         self.overrideredirect(True)
 
@@ -39,7 +39,9 @@ class Splash(ctk.CTk):
     def loading_modules(self, modules: list[str]):
         for i, module in enumerate(modules):
             try:
-                self.status_label.configure(text=f"Module {module.title()} is loading...")
+                self.status_label.configure(
+                    text=f"Module {module.title()} is loading..."
+                )
                 self.update()
                 __import__(module)
                 self.progress.set((i + 1) / len(modules))

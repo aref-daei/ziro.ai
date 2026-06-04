@@ -27,6 +27,8 @@ import time
 from pathlib import Path
 from tkinter import messagebox
 
+import customtkinter as ctk
+
 from adapters.ui.splash import Splash
 from core.settings import PROJECT_NAME
 from utils.logger import Logger
@@ -38,7 +40,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 def main():
     logger = Logger()
 
-    splash = Splash()
+    root = ctk.CTk()
+    root.withdraw()
+
+    splash = Splash(root)
 
     # Check FFmpeg
     if shutil.which("ffmpeg") is None:
@@ -55,7 +60,6 @@ def main():
         modules = [
             "torch",
             "whisper",
-            "customtkinter",
             "googletrans",
             "deepl",
             "ffmpeg",
@@ -69,9 +73,13 @@ def main():
 
         from adapters.ui.app import App
 
-        splash.destroy()
+        splash.withdraw()
 
         app = App()
+        app.protocol(
+            "WM_DELETE_WINDOW",
+            lambda: (splash.destroy(), app.destroy(), root.destroy()),
+        )
         logger.info("User interface loaded")
         app.mainloop()
 
