@@ -103,9 +103,3 @@ Contributions are welcome! Please read our [Contributing Guidelines](/CONTRIBUTI
 ## License
 
 This project is licensed under the AGPL-3.0 License - see the [LICENSE](/LICENSE) file for details.
-
-**Third-Party Licenses:**
-
-- **OpenAI Whisper**: Licensed under the [MIT License](https://github.com/openai/whisper/blob/main/LICENSE)
-- **Google Translate**: Subject to [Google's Terms of Service](https://policies.google.com/terms)
-- **DeepL**: Subject to [DeepL's Terms and Conditions](https://www.deepl.com/en/pro-license)
