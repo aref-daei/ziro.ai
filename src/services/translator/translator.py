@@ -1,4 +1,4 @@
-from services.translator.schemas import Translator
+from .interfaces import Translator
 
 
 class TranslatorService:

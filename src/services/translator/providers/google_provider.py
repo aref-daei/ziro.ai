@@ -4,7 +4,7 @@ from googletrans import Translator
 from httpx import ConnectError
 
 from core.exceptions import ConnectionError, TranslationError
-from services.translator.schemas import ApiTranslator
+from ..interfaces import ApiTranslator
 
 
 class GoogleTranslator(ApiTranslator):

@@ -2,7 +2,7 @@ from deepl import DeepLClient
 from deepl.exceptions import ConnectionException
 
 from core.exceptions import ConnectionError, TranslationError
-from services.translator.schemas import ApiTranslator
+from ..interfaces import ApiTranslator
 
 
 class DeepLTranslator(ApiTranslator):

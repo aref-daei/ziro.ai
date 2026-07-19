@@ -5,7 +5,7 @@ import whisper
 
 from core.exceptions import ConnectionError, TranscriptionError
 from core.paths import PATHS
-from services.transcriber.schemas import Transcriber
+from ..interfaces import Transcriber
 
 
 class WhisperTranscriber(Transcriber):
