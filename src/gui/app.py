@@ -19,16 +19,16 @@ from core.settings import (
 )
 from core.exceptions import ConnectionError, TranscriptionError, TranslationError
 from core.paths import PATHS
-from services.audio_extractor.service import AudioExtractorService
-from services.subtitle_generator.service import SubtitleGeneratorService
-from services.video_processor.service import VideoProcessorService
-from services.transcriber.providers.whisper_provider import WhisperTranscriber
-from services.transcriber.service import TranscriberService
-from services.translator.providers.google_provider import GoogleTranslator
-from services.translator.providers.deepl_provider import DeepLTranslator
-from services.translator.service import TranslatorService
-from utils.file_handler import FileHandler
-from utils.logger import Logger
+from services.audio_extractor import AudioExtractorService
+from services.subtitle_generator import SubtitleGeneratorService
+from services.video_processor import VideoProcessorService
+from services.transcriber.providers import WhisperTranscriber
+from services.transcriber import TranscriberService
+from services.translator.providers import GoogleTranslator
+from services.translator.providers import DeepLTranslator
+from services.translator import TranslatorService
+from filesystem import FileHandler
+from logger import Logger
 
 
 class App(ctk.CTk):

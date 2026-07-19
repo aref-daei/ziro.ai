@@ -1,0 +1,2 @@
+from .deepl_provider import DeepLTranslator
+from .google_provider import GoogleTranslator

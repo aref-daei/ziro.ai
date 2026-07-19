@@ -29,9 +29,9 @@ from tkinter import messagebox
 
 import customtkinter as ctk
 
-from adapters.ui.splash import Splash
+from gui import Splash
 from core.settings import PROJECT_NAME
-from utils.logger import Logger
+from logger import Logger
 
 # Add project path to PYTHON_PATH
 sys.path.insert(0, str(Path(__file__).parent))
@@ -71,7 +71,7 @@ def main():
         splash.status_label.configure(text=f"Starting application")
         splash.update()
 
-        from adapters.ui.app import App
+        from gui import App
 
         splash.withdraw()
 
