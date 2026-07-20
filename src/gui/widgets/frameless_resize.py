@@ -6,22 +6,6 @@ from PySide6.QtWidgets import QApplication, QWidget
 
 
 class FramelessResizeMixin:
-    """
-    قابلیت resize از لبه‌ها/گوشه‌ها را به یک پنجره‌ی frameless اضافه می‌کند.
-
-    از QWindow.startSystemResize استفاده می‌کند که در Qt6 (از نسخه‌ی 5.15
-    به بعد) به‌صورت native توسط سیستم‌عامل/window manager هندل می‌شود؛ یعنی
-    هم روی ویندوز، هم لینوکس (X11 و Wayland) و هم مک کار می‌کند و حس و
-    عملکردش دقیقاً مثل resize پنجره‌های عادی است (بدون نیاز به ctypes یا
-    کد مخصوص هر پلتفرم).
-
-    نحوه‌ی استفاده:
-        class MainWindow(FramelessResizeMixin, QMainWindow):
-            def __init__(self):
-                super().__init__()
-                ...
-                self.enable_frameless_resize()
-    """
 
     _RESIZE_BORDER = 6  # پهنای ناحیه‌ی فعال برای resize، بر حسب پیکسل
 

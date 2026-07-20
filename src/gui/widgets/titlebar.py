@@ -6,20 +6,6 @@ from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QFrame, QWidget,
 
 
 class TitleBar(QFrame):
-    """
-    یک TitleBar سفارشی برای جایگزینی نوار عنوان پیش‌فرض ویندوز در PySide6.
-
-    نکات کلیدی نسبت به نسخه اولیه:
-      - به‌جای ارجاع به متغیر سراسری/نامعلوم `window`، پنجره‌ی هدف به‌صورت
-        صریح در سازنده (constructor) دریافت می‌شود.
-      - قابلیت drag برای جابه‌جایی پنجره با ماوس پیاده‌سازی شده (چون با حذف
-        تایتل‌بار ویندوز، این قابلیت را باید خودمان بسازیم).
-      - دابل‌کلیک روی نوار عنوان هم مثل ویندوز، پنجره را maximize/restore می‌کند.
-      - toggle_maximize به‌درستی پیاده‌سازی و آیکن/متن دکمه‌ی max هماهنگ می‌شود.
-      - به‌جای اتصال مستقیم به منطق تم در همین کلاس، یک Signal برای تغییر تم
-        exposed می‌شود تا این ویجت از منطق برنامه اصلی decouple بماند.
-      - styling با QSS و objectName مجزا برای هر دکمه.
-    """
 
     theme_toggle_requested = Signal()
 
@@ -30,7 +16,7 @@ class TitleBar(QFrame):
         self._drag_pos: QPoint | None = None
 
         self.setObjectName("TitleBar")
-        self.setFixedHeight(48)
+        self.setFixedHeight(42)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         self._build_ui(title)

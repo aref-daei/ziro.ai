@@ -3,30 +3,20 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
     QFrame,
-    QLabel,
     QPushButton,
     QHBoxLayout,
     QVBoxLayout,
     QSplitter,
-    QSizePolicy,
 )
-from gui.widgets import TitleBar, FramelessResizeMixin
 
-
-class Panel(QFrame):
-    def __init__(self, title: str):
-        super().__init__()
-
-        self.setFrameShape(QFrame.StyledPanel)
-        self.setObjectName("panel")
-
-        layout = QVBoxLayout(self)
-
-        title_label = QLabel(title)
-        title_label.setObjectName("panelTitle")
-
-        layout.addWidget(title_label)
-        layout.addStretch()
+from .widgets import (
+    TitleBar,
+    FramelessResizeMixin,
+    SidebarPanel,
+    PreviewPanel,
+    InspectorPanel,
+    QueuePanel
+)
 
 
 class MainWindow(FramelessResizeMixin, QMainWindow):
@@ -34,8 +24,12 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Ziro.ai")
-        self.resize(1270, 720)
+        self.resize(1280, 720)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+
+        # =====================================================
+        # Stage
+        # =====================================================
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -44,58 +38,32 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         root_layout.setContentsMargins(0, 0, 0, 0)
         root_layout.setSpacing(0)
 
+        # -------- Title Bar --------
         self.title_bar = TitleBar(self)
         root_layout.addWidget(self.title_bar)
 
-        # محتوای اصلی در یک ویجت جدا با margin دلخواه
+        # =====================================================
+        # Main Area
+        # =====================================================
+
         content = QWidget()
         content_layout = QVBoxLayout(content)
         content_layout.setContentsMargins(8, 8, 8, 8)
         content_layout.setSpacing(8)
         root_layout.addWidget(content)
 
-        # =====================================================
-        # Toolbar
-        # =====================================================
-
-        # toolbar = QFrame()
-        # toolbar.setFixedHeight(52)
-
-        # toolbar_layout = QHBoxLayout(toolbar)
-
-        # toolbar_layout.addWidget(QPushButton("Open"))
-        # toolbar_layout.addWidget(QPushButton("Add Files"))
-        # toolbar_layout.addWidget(QPushButton("Clear Queue"))
-
-        # toolbar_layout.addStretch()
-
-        # toolbar_layout.addWidget(QPushButton("Settings"))
-
-        # content_layout.addWidget(toolbar)
-
-        # =====================================================
-        # Main Area
-        # =====================================================
-
-        splitter = QSplitter(Qt.Horizontal)
+        splitter = QSplitter(Qt.Orientation.Horizontal)
 
         # ---------- Left ----------
-        sidebar = Panel("Files")
-
-        sidebar.setMinimumWidth(260)
-        sidebar.setMaximumWidth(350)
+        sidebar = SidebarPanel("Files", 260, 360)
+        splitter.addWidget(sidebar)
 
         # ---------- Center ----------
-        center = Panel("Preview")
+        preview = PreviewPanel("Preview")
+        splitter.addWidget(preview)
 
         # ---------- Right ----------
-        inspector = Panel("Properties")
-
-        inspector.setMinimumWidth(320)
-        inspector.setMaximumWidth(420)
-
-        splitter.addWidget(sidebar)
-        splitter.addWidget(center)
+        inspector = InspectorPanel("Properties", 320, 420)
         splitter.addWidget(inspector)
 
         splitter.setStretchFactor(0, 0)
@@ -108,8 +76,8 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         # Bottom Queue
         # =====================================================
 
-        queue = Panel("Queue / Progress")
-        queue.setFixedHeight(180)
+        queue = QueuePanel("Queue / Progress")
+        queue.setFixedHeight(160)
 
         content_layout.addWidget(queue)
 
@@ -118,7 +86,7 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         # =====================================================
 
         bottom = QFrame()
-        bottom.setFixedHeight(55)
+        bottom.setFixedHeight(50)
 
         bottom_layout = QHBoxLayout(bottom)
 
@@ -165,21 +133,7 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
             QPushButton:hover {
                 background: #4f8ef7;
             }
+            QSplitter::handle {
+                background: transparent;
+            }
         """)
-
-
-"""
-┌─────────────────────────────────────────────────────────────────────┐
-│ Toolbar                                                     ⚙ Theme │
-├───────────────┬──────────────────────────────┬──────────────────────┤
-│               │                              │                      │
-│   Sidebar     │          Preview             │      Inspector       │
-│   Files       │                              │   Whisper Model      │
-│   Queue       │                              │   Device             │
-│               │                              │   Languages          │
-├───────────────┴──────────────────────────────┴──────────────────────┤
-│ Queue / Progress                                                75% │
-├─────────────────────────────────────────────────────────────────────┤
-│ Convert      Stop      Open Output      Logs                        │
-└─────────────────────────────────────────────────────────────────────┘
-"""
