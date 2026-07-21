@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QFrame, QWidget
 
 from src.core.paths import PATHS
 
-ICONS_COLOR = "#f0f2f0"
+ICONS_COLOR = "#F0F2F0"
 
 
 class TitleBar(QFrame):
@@ -28,8 +28,8 @@ class TitleBar(QFrame):
 
     def _build_ui(self) -> None:
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(12, 0, 8, 0)
-        layout.setSpacing(8)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         self.logo_label = QLabel()
         self.logo_label.setObjectName("LogoLabel")
@@ -57,7 +57,7 @@ class TitleBar(QFrame):
 
         # دکمه‌های کنترل پنجره اندازه ثابت دارند، دکمه‌ی تم می‌تواند متن‌محور بماند
         for btn in (self.min_btn, self.max_btn, self.close_btn):
-            btn.setFixedSize(40, 32)
+            btn.setFixedSize(48, 42)
 
         self.min_btn.clicked.connect(self._window.showMinimized)
         self.max_btn.clicked.connect(self.toggle_maximize)

@@ -13,6 +13,7 @@ class SidebarPanel(Panel):
         title_label = QLabel(title)
         title_label.setObjectName("panelTitle")
         add_button = QPushButton("Add")
+        add_button.setObjectName("addButton")
 
         top_layout.addWidget(title_label)
         top_layout.addStretch()
