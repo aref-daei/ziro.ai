@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import qtawesome as qta
+import torch
 from PySide6.QtCore import Qt, QPoint
 from PySide6.QtGui import QMouseEvent, QPixmap
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QFrame, QWidget
 
+from src.core.checker import Checker
 from src.core.paths import PATHS
 
 ICONS_COLOR = "#F0F2F0"
@@ -39,6 +41,16 @@ class TitleBar(QFrame):
         self.menu_btn.setObjectName("MenuButton")
         self.menu_btn.setIcon(qta.icon("mdi6.menu", color=ICONS_COLOR))
 
+        self.exists_ffmpeg = Checker.exists_ffmpeg()
+        if not self.exists_ffmpeg:
+            self.notice_label = QLabel()
+            self.notice_label.setObjectName("Notice")
+            self.notice_label.setText("⚠ FFmpeg not found!")
+
+        self.device_label = QLabel()
+        self.device_label.setObjectName("DeviceLabel")
+        self.device_label.setText("Device: " + ("CUDA" if torch.cuda.is_available() else "CPU"))
+
         self.min_btn = QPushButton()
         self.min_btn.setObjectName("MinButton")
         self.min_btn.setIcon(qta.icon("mdi6.window-minimize", color=ICONS_COLOR))
@@ -66,6 +78,9 @@ class TitleBar(QFrame):
         layout.addWidget(self.logo_label)
         layout.addWidget(self.menu_btn)
         layout.addStretch()
+        if not self.exists_ffmpeg:
+            layout.addWidget(self.notice_label)
+        layout.addWidget(self.device_label)
         layout.addWidget(self.min_btn)
         layout.addWidget(self.max_btn)
         layout.addWidget(self.close_btn)
