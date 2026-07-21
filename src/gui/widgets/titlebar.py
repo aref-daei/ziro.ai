@@ -1,16 +1,16 @@
 from __future__ import annotations
 
 import qtawesome as qta
-
-from PySide6.QtCore import Qt, QPoint, Signal
+from PySide6.QtCore import Qt, QPoint
 from PySide6.QtGui import QMouseEvent, QPixmap
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QFrame, QWidget, QSizePolicy
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QFrame, QWidget
+
 from src.core.paths import PATHS
+
+ICONS_COLOR = "#f0f2f0"
 
 
 class TitleBar(QFrame):
-
-    theme_toggle_requested = Signal()
 
     def __init__(self, window: QWidget):
         super().__init__()
@@ -37,25 +37,21 @@ class TitleBar(QFrame):
 
         self.menu_btn = QPushButton()
         self.menu_btn.setObjectName("MenuButton")
-        self.menu_btn.setIcon(qta.icon("mdi6.menu", color="#eeeeee"))
-
-        self.theme_btn = QPushButton()
-        self.theme_btn.setObjectName("ThemeButton")
-        self.theme_btn.setIcon(qta.icon("mdi6.theme-light-dark", color="#eeeeee"))
+        self.menu_btn.setIcon(qta.icon("mdi6.menu", color=ICONS_COLOR))
 
         self.min_btn = QPushButton()
         self.min_btn.setObjectName("MinButton")
-        self.min_btn.setIcon(qta.icon("mdi6.translate", color="#eeeeee"))
+        self.min_btn.setIcon(qta.icon("mdi6.window-minimize", color=ICONS_COLOR))
 
         self.max_btn = QPushButton()
         self.max_btn.setObjectName("MaxButton")
-        self.max_btn.setIcon(qta.icon("mdi6.cog", color="#eeeeee"))
+        self.max_btn.setIcon(qta.icon("mdi6.window-maximize", color=ICONS_COLOR))
 
         self.close_btn = QPushButton()
         self.close_btn.setObjectName("CloseButton")
-        self.close_btn.setIcon(qta.icon("mdi6.close", color="#eeeeee"))
+        self.close_btn.setIcon(qta.icon("mdi6.close", color=ICONS_COLOR))
 
-        for btn in (self.theme_btn, self.min_btn, self.max_btn, self.close_btn):
+        for btn in (self.min_btn, self.max_btn, self.close_btn):
             btn.setCursor(Qt.CursorShape.PointingHandCursor)
             btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
@@ -63,17 +59,13 @@ class TitleBar(QFrame):
         for btn in (self.min_btn, self.max_btn, self.close_btn):
             btn.setFixedSize(40, 32)
 
-        self.theme_btn.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-
         self.min_btn.clicked.connect(self._window.showMinimized)
         self.max_btn.clicked.connect(self.toggle_maximize)
         self.close_btn.clicked.connect(self._window.close)
-        self.theme_btn.clicked.connect(self.theme_toggle_requested.emit)
 
         layout.addWidget(self.logo_label)
         layout.addWidget(self.menu_btn)
         layout.addStretch()
-        layout.addWidget(self.theme_btn)
         layout.addWidget(self.min_btn)
         layout.addWidget(self.max_btn)
         layout.addWidget(self.close_btn)
@@ -84,10 +76,10 @@ class TitleBar(QFrame):
         """بین حالت maximize و normal جابه‌جا می‌شود و آیکن دکمه را به‌روزرسانی می‌کند."""
         if self._window.isMaximized():
             self._window.showNormal()
-            self.max_btn.setText("□")
+            self.max_btn.setIcon(qta.icon("mdi6.window-maximize", color=ICONS_COLOR))
         else:
             self._window.showMaximized()
-            self.max_btn.setText("❐")
+            self.max_btn.setIcon(qta.icon("mdi6.window-restore", color=ICONS_COLOR))
 
     # -------------------------------------------------- جابه‌جایی با ماوس
 
@@ -114,4 +106,3 @@ class TitleBar(QFrame):
         if event.button() == Qt.MouseButton.LeftButton:
             self.toggle_maximize()
             event.accept()
-

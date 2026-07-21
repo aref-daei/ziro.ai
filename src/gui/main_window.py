@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QSplitter,
 )
 
-from .theme_manager import ThemeManager
+from src.core.paths import PATHS
 from .widgets import (
     TitleBar,
     FramelessResizeMixin,
@@ -42,13 +42,6 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         # -------- Title Bar --------
         self.title_bar = TitleBar(self)
         root_layout.addWidget(self.title_bar)
-
-        self.theme_manager = ThemeManager(self)
-        self.theme_manager.set_theme("dark")
-
-        self.title_bar.theme_toggle_requested.connect(
-            self.theme_manager.toggle_theme
-        )
 
         # =====================================================
         # Main Area
@@ -108,4 +101,13 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
 
         content_layout.addWidget(bottom)
 
+        self._apply_theme()
+
         self.enable_frameless_resize()
+
+    def _apply_theme(self) -> None:
+        with open(
+                PATHS["styles"] / f"dark.qss",
+                encoding="utf-8"
+        ) as f:
+            self.setStyleSheet(f.read())
