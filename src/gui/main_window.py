@@ -2,9 +2,6 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
-    QFrame,
-    QPushButton,
-    QHBoxLayout,
     QVBoxLayout,
     QSplitter,
 )
@@ -16,7 +13,8 @@ from .widgets import (
     SidebarPanel,
     PreviewPanel,
     InspectorPanel,
-    QueuePanel
+    QueuePanel,
+    BottomBar
 )
 
 
@@ -86,23 +84,14 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         # Bottom Toolbar
         # =====================================================
 
-        bottom = QFrame()
-        bottom.setFixedHeight(50)
-
-        bottom_layout = QHBoxLayout(bottom)
-
-        bottom_layout.addWidget(QPushButton("Convert"))
-        bottom_layout.addWidget(QPushButton("Stop"))
-        bottom_layout.addWidget(QPushButton("Open Output"))
-
-        bottom_layout.addStretch()
-
-        bottom_layout.addWidget(QPushButton("Logs"))
+        bottom = BottomBar()
 
         content_layout.addWidget(bottom)
 
+        # ------------------------------------ Apply StyleCheat
         self._apply_theme()
 
+        # ------------------------------------ Frameless Resize
         self.enable_frameless_resize()
 
     def _apply_theme(self) -> None:

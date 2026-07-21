@@ -1,3 +1,4 @@
+from .bottom_bar import BottomBar
 from .frameless_resize import FramelessResizeMixin
 from .inspector import InspectorPanel
 from .panel import Panel
