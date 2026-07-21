@@ -1,0 +1,73 @@
+QMainWindow {
+    background: #FFFFFF;
+}
+
+#TitleBar {
+    background-color: #F3F3F4;
+    border-bottom: 1px solid #EFEFF2;
+}
+
+#LogoLabel {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 16px;
+    padding-right: 4px;
+}
+
+#TitleLabel {
+    color: #d4d4d4;
+    font-size: 13px;
+}
+
+QPushButton {
+    background: transparent;
+    border: none;
+    color: #d4d4d4;
+    font-size: 13px;
+}
+
+#ThemeButton {
+    padding: 8px 6px;
+    border-radius: 4px;
+}
+
+#ThemeButton:hover {
+    background-color: #3a3a3a;
+}
+
+#MinButton:hover, #MaxButton:hover {
+    background-color: #3a3a3a;
+}
+
+#CloseButton:hover {
+    background-color: #e81123;
+    color: #ffffff;
+}
+
+QFrame#panel {
+    background: #2b2d31;
+    border: 1px solid #3b3d42;
+    border-radius: 8px;
+}
+
+QLabel#panelTitle {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/*QPushButton {*/
+/*    background: #3b82f6;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: 6px;*/
+/*    padding: 8px 16px;*/
+/*}*/
+
+/*QPushButton:hover {*/
+/*    background: #4f8ef7;*/
+/*}*/
+
+QSplitter::handle {
+    background: transparent;
+}

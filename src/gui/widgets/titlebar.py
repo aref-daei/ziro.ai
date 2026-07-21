@@ -1,16 +1,19 @@
 from __future__ import annotations
 
+import qtawesome as qta
+
 from PySide6.QtCore import Qt, QPoint, Signal
-from PySide6.QtGui import QMouseEvent
+from PySide6.QtGui import QMouseEvent, QPixmap
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QFrame, QWidget, QSizePolicy
+from src.core.paths import PATHS
 
 
 class TitleBar(QFrame):
 
     theme_toggle_requested = Signal()
 
-    def __init__(self, window: QWidget, title: str = "Ziro", parent: QWidget | None = None):
-        super().__init__(parent)
+    def __init__(self, window: QWidget):
+        super().__init__()
 
         self._window = window
         self._drag_pos: QPoint | None = None
@@ -19,33 +22,38 @@ class TitleBar(QFrame):
         self.setFixedHeight(42)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
-        self._build_ui(title)
-        self._apply_styles()
+        self._build_ui()
 
     # ------------------------------------------------------------------ UI
 
-    def _build_ui(self, title: str) -> None:
+    def _build_ui(self) -> None:
         layout = QHBoxLayout(self)
         layout.setContentsMargins(12, 0, 8, 0)
         layout.setSpacing(8)
 
-        self.logo_label = QLabel("Z")
+        self.logo_label = QLabel()
         self.logo_label.setObjectName("LogoLabel")
+        self.logo_label.setPixmap(QPixmap(str(PATHS["icons"] / "Ziro.ico")))
 
-        self.title_label = QLabel(title)
-        self.title_label.setObjectName("TitleLabel")
+        self.menu_btn = QPushButton()
+        self.menu_btn.setObjectName("MenuButton")
+        self.menu_btn.setIcon(qta.icon("mdi6.menu", color="#eeeeee"))
 
-        self.theme_btn = QPushButton("Theme")
+        self.theme_btn = QPushButton()
         self.theme_btn.setObjectName("ThemeButton")
+        self.theme_btn.setIcon(qta.icon("mdi6.theme-light-dark", color="#eeeeee"))
 
-        self.min_btn = QPushButton("─")
+        self.min_btn = QPushButton()
         self.min_btn.setObjectName("MinButton")
+        self.min_btn.setIcon(qta.icon("mdi6.translate", color="#eeeeee"))
 
-        self.max_btn = QPushButton("□")
+        self.max_btn = QPushButton()
         self.max_btn.setObjectName("MaxButton")
+        self.max_btn.setIcon(qta.icon("mdi6.cog", color="#eeeeee"))
 
-        self.close_btn = QPushButton("✕")
+        self.close_btn = QPushButton()
         self.close_btn.setObjectName("CloseButton")
+        self.close_btn.setIcon(qta.icon("mdi6.close", color="#eeeeee"))
 
         for btn in (self.theme_btn, self.min_btn, self.max_btn, self.close_btn):
             btn.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -63,52 +71,12 @@ class TitleBar(QFrame):
         self.theme_btn.clicked.connect(self.theme_toggle_requested.emit)
 
         layout.addWidget(self.logo_label)
-        layout.addWidget(self.title_label)
+        layout.addWidget(self.menu_btn)
         layout.addStretch()
         layout.addWidget(self.theme_btn)
         layout.addWidget(self.min_btn)
         layout.addWidget(self.max_btn)
         layout.addWidget(self.close_btn)
-
-    def _apply_styles(self) -> None:
-        self.setStyleSheet(
-            """
-            #TitleBar {
-                background-color: #1e1e1e;
-                border-bottom: 1px solid #2d2d2d;
-            }
-            #LogoLabel {
-                color: #ffffff;
-                font-weight: bold;
-                font-size: 16px;
-                padding-right: 4px;
-            }
-            #TitleLabel {
-                color: #d4d4d4;
-                font-size: 13px;
-            }
-            QPushButton {
-                background: transparent;
-                border: none;
-                color: #d4d4d4;
-                font-size: 13px;
-            }
-            #ThemeButton {
-                padding: 4px 10px;
-                border-radius: 4px;
-            }
-            #ThemeButton:hover {
-                background-color: #3a3a3a;
-            }
-            #MinButton:hover, #MaxButton:hover {
-                background-color: #3a3a3a;
-            }
-            #CloseButton:hover {
-                background-color: #e81123;
-                color: #ffffff;
-            }
-            """
-        )
 
     # ------------------------------------------------------------- رفتار
 

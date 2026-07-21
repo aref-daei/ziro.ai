@@ -28,6 +28,9 @@ def _get_app_paths():
 
     paths = {
         "base": base_dir,
+        "styles": base_dir/ "assets" / "styles",
+        "icons": base_dir/ "assets" / "icons",
+        "fonts": base_dir/ "assets" / "fonts",
         "app_data": app_data,
         "config": app_data / "config",
         "models": app_data / "models",
