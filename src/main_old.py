@@ -30,7 +30,7 @@ from tkinter import messagebox
 import customtkinter as ctk
 
 from gui_old import Splash
-from core.settings import PROJECT_NAME
+from core.constants import PROJECT_NAME
 from logger import Logger
 
 # Add project path to PYTHON_PATH

@@ -37,7 +37,7 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         root_layout.setContentsMargins(0, 0, 0, 0)
         root_layout.setSpacing(0)
 
-        # -------- Title Bar --------
+        # ------------------------------------------- Title Bar
         self.title_bar = TitleBar(self)
         root_layout.addWidget(self.title_bar)
 
@@ -100,3 +100,9 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
                 encoding="utf-8"
         ) as f:
             self.setStyleSheet(f.read())
+
+    def center_on_screen(self, screen_geometry) -> None:
+        self.move(
+            screen_geometry.center().x() - self.width() // 2,
+            screen_geometry.center().y() - self.height() // 2,
+        )

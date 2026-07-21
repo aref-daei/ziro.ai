@@ -1,7 +1,7 @@
 import yaml
 
-from core.constants import *
-from core.paths import PATHS
+from .constants import *
+from .paths import PATHS
 
 # Default settings
 DEBUG = False
