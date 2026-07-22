@@ -2,17 +2,38 @@ from __future__ import annotations
 
 import qtawesome as qta
 import torch
-from PySide6.QtCore import Qt, QPoint
+from PySide6.QtCore import Qt, QPoint, Signal
 from PySide6.QtGui import QMouseEvent, QPixmap
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QFrame, QWidget
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QFrame,
+    QWidget,
+    QMenu,
+    QFileDialog,
+    QMessageBox,
+)
 
 from src.core.checker import Checker
 from src.core.paths import PATHS
 
 ICONS_COLOR = "#F0F2F0"
+VIDEO_FILE_FILTER = "Video Files (*.mp4 *.mkv *.mov *.avi *.webm *.flv *.wmv)"
 
 
 class TitleBar(QFrame):
+
+    # File menu: emits the paths chosen via "Open File..." / "Open Folder..."
+    open_file_requested = Signal(list)
+    open_folder_requested = Signal(str)
+
+    # Edit menu: no real preferences system yet, just a hook for later
+    preferences_requested = Signal()
+
+    # Help menu: the actual update check needs network access, so it's left
+    # to whoever connects this signal (MainWindow / an update-checker module)
+    check_updates_requested = Signal()
 
     def __init__(self, window: QWidget):
         super().__init__()
@@ -37,9 +58,21 @@ class TitleBar(QFrame):
         self.logo_label.setObjectName("LogoLabel")
         self.logo_label.setPixmap(QPixmap(str(PATHS["icons"] / "Ziro.ico")))
 
-        self.menu_btn = QPushButton()
-        self.menu_btn.setObjectName("MenuButton")
-        self.menu_btn.setIcon(qta.icon("mdi6.menu", color=ICONS_COLOR))
+        self.file_menu_btn = QPushButton("File")
+        self.file_menu_btn.setObjectName("MenuButton")
+        self._build_file_menu()
+
+        self.edit_menu_btn = QPushButton("Edit")
+        self.edit_menu_btn.setObjectName("MenuButton")
+        self._build_edit_menu()
+
+        self.view_menu_btn = QPushButton("View")
+        self.view_menu_btn.setObjectName("MenuButton")
+        self._build_view_menu()
+
+        self.help_menu_btn = QPushButton("Help")
+        self.help_menu_btn.setObjectName("MenuButton")
+        self._build_help_menu()
 
         self.exists_ffmpeg = Checker.exists_ffmpeg()
         if not self.exists_ffmpeg:
@@ -76,7 +109,8 @@ class TitleBar(QFrame):
         self.close_btn.clicked.connect(self._window.close)
 
         layout.addWidget(self.logo_label)
-        layout.addWidget(self.menu_btn)
+        for btn in (self.file_menu_btn, self.edit_menu_btn, self.view_menu_btn, self.help_menu_btn):
+            layout.addWidget(btn)
         layout.addStretch()
         if not self.exists_ffmpeg:
             layout.addWidget(self.notice_label)
@@ -84,6 +118,57 @@ class TitleBar(QFrame):
         layout.addWidget(self.min_btn)
         layout.addWidget(self.max_btn)
         layout.addWidget(self.close_btn)
+
+    # ------------------------------------------------------------------ منوها
+
+    def _build_file_menu(self) -> None:
+        menu = QMenu(self)
+        menu.addAction("Open File...", self._on_open_file)
+        menu.addAction("Open Folder...", self._on_open_folder)
+        self.file_menu_btn.setMenu(menu)
+
+    def _build_edit_menu(self) -> None:
+        # فعلاً فقط یک گزینه، تا خالی نباشه؛ بعداً هرچی نیاز شد اضافه میشه
+        menu = QMenu(self)
+        menu.addAction("Preferences...", self.preferences_requested.emit)
+        self.edit_menu_btn.setMenu(menu)
+
+    def _build_view_menu(self) -> None:
+        # این یکی خودش مستقیم قابل انجامه، نیازی به وصل کردن بیرونی نداره
+        menu = QMenu(self)
+        menu.addAction("Toggle Fullscreen", self._toggle_fullscreen)
+        self.view_menu_btn.setMenu(menu)
+
+    def _build_help_menu(self) -> None:
+        menu = QMenu(self)
+        menu.addAction("Check for Updates...", self.check_updates_requested.emit)
+        menu.addAction("About", self._show_about_dialog)
+        self.help_menu_btn.setMenu(menu)
+
+    def _on_open_file(self) -> None:
+        file_paths, _ = QFileDialog.getOpenFileNames(
+            self, "Open Video Files", "", VIDEO_FILE_FILTER
+        )
+        if file_paths:
+            self.open_file_requested.emit(file_paths)
+
+    def _on_open_folder(self) -> None:
+        folder_path = QFileDialog.getExistingDirectory(self, "Open Folder")
+        if folder_path:
+            self.open_folder_requested.emit(folder_path)
+
+    def _toggle_fullscreen(self) -> None:
+        if self._window.isFullScreen():
+            self._window.showNormal()
+        else:
+            self._window.showFullScreen()
+
+    def _show_about_dialog(self) -> None:
+        QMessageBox.about(
+            self,
+            "About Ziro.ai",
+            "Ziro.ai\n\nAutomatic subtitle generation and translation for video.",
+        )
 
     # ------------------------------------------------------------- رفتار
 

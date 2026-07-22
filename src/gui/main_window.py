@@ -38,8 +38,12 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         root_layout.setSpacing(0)
 
         # ------------------------------------------- Title Bar
-        self.title_bar = TitleBar(self)
-        root_layout.addWidget(self.title_bar)
+        title_bar = TitleBar(self)
+        root_layout.addWidget(title_bar)
+
+        # title_bar.open_file_requested.connect(lambda paths: [sidebar._add_file(p) for p in paths])
+        # title_bar.open_folder_requested.connect(lambda folder: ...)  # اسکن پوشه برای ویدیوها
+        # title_bar.check_updates_requested.connect(Checker.is_update_available())
 
         # =====================================================
         # Main Area
@@ -64,6 +68,13 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         # ---------- Right ----------
         inspector = InspectorPanel("Properties", 320, 420)
         splitter.addWidget(inspector)
+
+        # Clicking a video row in the sidebar loads it into the preview player
+        sidebar.file_selected.connect(preview.load_video)
+
+        inspector.start_button.clicked.connect(
+            lambda: queue.start_queue(sidebar.selected_files())
+        )
 
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)

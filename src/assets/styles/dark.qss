@@ -26,7 +26,10 @@ QPushButton:hover {
 
 #MenuButton {
     background: transparent;
-    padding: 8px 8px;
+    color: #F0F2F0;
+    font-size: 13px;
+    border-radius: 0px;
+    padding: 12px 10px;
 }
 
 #Notice {
@@ -81,9 +84,9 @@ QSplitter::handle {
     background: transparent;
 }
 
-#Start {
-    padding-right: 70px;
-    padding-left: 70px;
+#Stop {
+    padding-right: 60px;
+    padding-left: 60px;
 }
 
 #OpenOutput {

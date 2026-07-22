@@ -111,6 +111,14 @@ class InspectorPanel(Panel):
 
         layout.addStretch()
 
+        # -------- Start Button --------
+        self.start_button = QPushButton("Start Processing")
+        self.start_button.setObjectName("InspectorStartButton")
+        self.start_button.setIcon(qta.icon("mdi6.play", color="#ffffff"))
+        self.start_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.start_button.setFixedHeight(42)
+        layout.addWidget(self.start_button)
+
         self._apply_style()
 
     def _make_row(self) -> QFrame:
@@ -213,6 +221,20 @@ class InspectorPanel(Panel):
             #InspectorCheckbox:checked {
                 background-color: #54C750;
                 border: none;
+            }
+            #InspectorStartButton {
+                background-color: #54C750;
+                color: #ffffff;
+                border: none;
+                border-radius: 10px;
+                font-size: 14px;
+                font-weight: 600;
+            }
+            #InspectorStartButton:hover {
+                background-color: #46b342;
+            }
+            #InspectorStartButton:pressed {
+                background-color: #3a9c38;
             }
             """
         )
