@@ -9,10 +9,16 @@ class BottomBar(QFrame):
 
         bottom_layout = QHBoxLayout(self)
 
-        bottom_layout.addWidget(QPushButton("Convert"))
-        bottom_layout.addWidget(QPushButton("Stop"))
-        bottom_layout.addWidget(QPushButton("Open Output"))
+        self.start_btn = QPushButton("Start")
+        self.start_btn.setObjectName("Start")
 
+        self.output_btn = QPushButton("Open Output")
+        self.output_btn.setObjectName("OpenOutput")
+
+        self.logs_btn = QPushButton("Logs")
+        self.logs_btn.setObjectName("Logs")
+
+        bottom_layout.addWidget(self.start_btn)
+        bottom_layout.addWidget(self.output_btn)
         bottom_layout.addStretch()
-
-        bottom_layout.addWidget(QPushButton("Logs"))
+        bottom_layout.addWidget(self.logs_btn)
