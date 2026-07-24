@@ -15,7 +15,6 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from src.core.checker import Checker
 from src.core.paths import PATHS
 
 ICONS_COLOR = "#F0F2F0"
@@ -66,19 +65,14 @@ class TitleBar(QFrame):
         self.edit_menu_btn.setObjectName("MenuButton")
         self._build_edit_menu()
 
-        self.view_menu_btn = QPushButton("View")
-        self.view_menu_btn.setObjectName("MenuButton")
-        self._build_view_menu()
-
         self.help_menu_btn = QPushButton("Help")
         self.help_menu_btn.setObjectName("MenuButton")
         self._build_help_menu()
 
-        self.exists_ffmpeg = Checker.exists_ffmpeg()
-        if not self.exists_ffmpeg:
-            self.notice_label = QLabel()
-            self.notice_label.setObjectName("Notice")
-            self.notice_label.setText("⚠ FFmpeg not found!")
+        self._window.notification.connect(self._on_notification)
+        self.notice_label = QLabel()
+        self.notice_label.setObjectName("Notice")
+        self.notice_label.hide()
 
         self.device_label = QLabel()
         self.device_label.setObjectName("DeviceLabel")
@@ -108,11 +102,10 @@ class TitleBar(QFrame):
         self.close_btn.clicked.connect(self._window.close)
 
         layout.addWidget(self.logo_label)
-        for btn in (self.file_menu_btn, self.edit_menu_btn, self.view_menu_btn, self.help_menu_btn):
+        for btn in (self.file_menu_btn, self.edit_menu_btn, self.help_menu_btn):
             layout.addWidget(btn)
         layout.addStretch()
-        if not self.exists_ffmpeg:
-            layout.addWidget(self.notice_label)
+        layout.addWidget(self.notice_label)
         layout.addWidget(self.device_label)
         layout.addWidget(self.min_btn)
         layout.addWidget(self.max_btn)
@@ -131,11 +124,6 @@ class TitleBar(QFrame):
         menu.addAction("Preferences...", self.preferences_requested.emit)
         self.edit_menu_btn.setMenu(menu)
 
-    def _build_view_menu(self) -> None:
-        menu = QMenu(self)
-        menu.addAction("Toggle Fullscreen", self._toggle_fullscreen)
-        self.view_menu_btn.setMenu(menu)
-
     def _build_help_menu(self) -> None:
         menu = QMenu(self)
         menu.addAction("Check for Updates...", self.check_updates_requested.emit)
@@ -153,12 +141,6 @@ class TitleBar(QFrame):
         folder_path = QFileDialog.getExistingDirectory(self, "Open Folder")
         if folder_path:
             self.open_folder_requested.emit(folder_path)
-
-    def _toggle_fullscreen(self) -> None:
-        if self._window.isFullScreen():
-            self._window.showNormal()
-        else:
-            self._window.showFullScreen()
 
     def _show_about_dialog(self) -> None:
         QMessageBox.about(
@@ -186,10 +168,8 @@ class TitleBar(QFrame):
 
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         if self._drag_pos is not None and event.buttons() & Qt.MouseButton.LeftButton:
-            # اگر پنجره maximize بود، قبل از drag آن را به حالت normal برگردان
             if self._window.isMaximized():
                 self.toggle_maximize()
-                # موقعیت drag را متناسب با اندازه‌ی جدید بازتنظیم کن
                 self._drag_pos = event.globalPosition().toPoint() - self._window.frameGeometry().topLeft()
             self._window.move(event.globalPosition().toPoint() - self._drag_pos)
             event.accept()
@@ -202,3 +182,7 @@ class TitleBar(QFrame):
         if event.button() == Qt.MouseButton.LeftButton:
             self.toggle_maximize()
             event.accept()
+
+    def _on_notification(self, notif: str) -> None:
+        self.notice_label.setText("⚠ " + notif)
+        self.notice_label.show()

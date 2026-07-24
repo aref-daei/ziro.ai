@@ -1,11 +1,14 @@
-from PySide6.QtCore import Qt
+from pathlib import Path
+
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
     QVBoxLayout,
-    QSplitter,
+    QSplitter, QMessageBox,
 )
 
+from src.core.app_checker import AppChecker
 from src.core.paths import PATHS
 from .widgets import (
     TitleBar,
@@ -19,6 +22,8 @@ from .widgets import (
 
 
 class MainWindow(FramelessResizeMixin, QMainWindow):
+    notification = Signal(str)
+
     def __init__(self):
         super().__init__()
 
@@ -37,13 +42,12 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         root_layout.setContentsMargins(0, 0, 0, 0)
         root_layout.setSpacing(0)
 
-        # ------------------------------------------- Title Bar
+        # =====================================================
+        # Title Bar
+        # =====================================================
+
         title_bar = TitleBar(self)
         root_layout.addWidget(title_bar)
-
-        # title_bar.open_file_requested.connect(lambda paths: [sidebar._add_file(p) for p in paths])
-        # title_bar.open_folder_requested.connect(lambda folder: ...)  # اسکن پوشه برای ویدیوها
-        # title_bar.check_updates_requested.connect(Checker.is_update_available())
 
         # =====================================================
         # Main Area
@@ -96,6 +100,23 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         # Connects
         # =====================================================
 
+        self.app_checker = AppChecker()
+
+        title_bar.open_file_requested.connect(lambda paths: [sidebar.add_file(p) for p in paths])
+
+        VIDEO_EXTENSIONS = (".mp4", ".mkv", ".mov", ".avi", ".webm", ".flv", ".wmv")
+        title_bar.open_folder_requested.connect(
+            lambda folder: [sidebar.add_file(str(p))
+                            for p in Path(folder).iterdir()
+                            if p.is_file() and p.suffix.lower() in VIDEO_EXTENSIONS]
+        )
+
+        title_bar.check_updates_requested.connect(self.app_checker.check_for_update)
+        self.app_checker.update_checked.connect(self._on_update_checked)
+
+        self.app_checker.ffmpeg_checked.connect(self._on_ffmpeg_checked)
+        self.app_checker.exists_ffmpeg()
+
         sidebar.file_selected.connect(preview.load_video)
 
         inspector.start_processing.connect(
@@ -127,3 +148,13 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
             screen_geometry.center().x() - self.width() // 2,
             screen_geometry.center().y() - self.height() // 2,
         )
+
+    def _on_update_checked(self, has_update: bool) -> None:
+        if has_update:
+            QMessageBox.information(self, "Update Available", "A new version is available!")
+        else:
+            QMessageBox.information(self, "No Update Available", "No update available.")
+
+    def _on_ffmpeg_checked(self, found: bool) -> None:
+        if found:
+            self.notification.emit("FFmpeg not found!")

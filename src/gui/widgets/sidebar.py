@@ -159,9 +159,9 @@ class SidebarPanel(Panel):
             VIDEO_FILE_FILTER,
         )
         for file_path in file_paths:
-            self._add_file(file_path)
+            self.add_file(file_path)
 
-    def _add_file(self, file_path: str) -> None:
+    def add_file(self, file_path: str) -> None:
         row = FileRow(file_path)
         row.remove_btn.clicked.connect(lambda: self._remove_file(row))
         row.preview_requested.connect(self._on_row_preview_requested)
