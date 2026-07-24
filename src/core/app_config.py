@@ -1,17 +1,18 @@
 from dataclasses import dataclass
 
 
+
 @dataclass
 class AppConfig:
 
-    transcriber: str
+    source_language: tuple[str, bool]
 
-    whisper_variant: str
+    target_language: tuple[str, bool]
 
-    translator: str
+    transcriber: tuple[str, str]
+
+    translator: tuple[str, str]
 
     device: str
 
-    source_language: str
-
-    target_language: str
+    subtitle_toggle: bool
