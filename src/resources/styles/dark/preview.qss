@@ -12,11 +12,17 @@
     border-radius: 16px;
 }
 #PreviewPlayButton:hover {
-    background-color: #46b342;
+    background: #6FD96C;
+}
+#PreviewPlayButton:disabled {
+    background-color: #58AD55;
 }
 #PreviewTimeLabel {
     color: #dddddd;
     font-size: 12px;
+}
+#PreviewSlider {
+    height: 14px;
 }
 #PreviewSlider::groove:horizontal {
     height: 4px;

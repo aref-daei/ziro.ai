@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-import os
-import sys
-from contextlib import contextmanager
-
 import qtawesome as qta
 from PySide6.QtCore import Qt, QUrl
 from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
@@ -18,28 +14,6 @@ from PySide6.QtWidgets import (
 )
 
 from .panel import Panel
-
-
-@contextmanager
-def _suppress_native_stderr():
-    """Temporarily redirect the process's real stderr (file descriptor 2)
-    to devnull.
-
-    Needed specifically because the FFmpeg backend behind QMediaPlayer calls
-    av_dump_format(), which writes straight to the OS-level stderr fd -
-    bypassing sys.stderr and Qt's own logging system entirely. Nothing short
-    of a raw fd redirect can silence it.
-    """
-    stderr_fd = sys.stderr.fileno()
-    saved_fd = os.dup(stderr_fd)
-    devnull_fd = os.open(os.devnull, os.O_WRONLY)
-    try:
-        os.dup2(devnull_fd, stderr_fd)
-        yield
-    finally:
-        os.dup2(saved_fd, stderr_fd)
-        os.close(devnull_fd)
-        os.close(saved_fd)
 
 
 def _format_ms(ms: int) -> str:
@@ -92,12 +66,13 @@ class PreviewPanel(Panel):
         self.play_btn.setFixedSize(32, 32)
         self.play_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.play_btn.clicked.connect(self._toggle_playback)
+        self.play_btn.setEnabled(False)
         self._set_play_icon(playing=False)
 
         self.position_slider = QSlider(Qt.Orientation.Horizontal)
         self.position_slider.setObjectName("PreviewSlider")
         self.position_slider.setRange(0, 0)
-        # setPosition only on release/drag, not continuously, to avoid fighting playback
+        self.position_slider.setEnabled(False)
         self.position_slider.sliderMoved.connect(self.player.setPosition)
 
         self.time_label = QLabel("00:00 / 00:00")
@@ -112,14 +87,12 @@ class PreviewPanel(Panel):
     # ------------------------------------------------------------ public API
 
     def load_video(self, file_path: str) -> None:
-        """Load the given file and start playing it. Meant to be connected
-        to SidebarPanel.file_selected."""
         self.empty_label.hide()
         self.video_widget.show()
 
-        with _suppress_native_stderr():
-            self.player.setSource(QUrl.fromLocalFile(file_path))
-            self.player.play()
+        self.player.setSource(QUrl.fromLocalFile(file_path))
+        self.play_btn.setEnabled(True)
+        self.position_slider.setEnabled(True)
 
     # ------------------------------------------------------------ playback control
 
@@ -139,7 +112,6 @@ class PreviewPanel(Panel):
     # ------------------------------------------------------------ slider/time sync
 
     def _on_position_changed(self, position: int) -> None:
-        # Don't override the slider's value while the user is dragging it themselves
         if not self.position_slider.isSliderDown():
             self.position_slider.setValue(position)
         self._update_time_label(position, self.player.duration())

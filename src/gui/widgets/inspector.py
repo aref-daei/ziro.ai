@@ -18,6 +18,7 @@ from PySide6.QtWidgets import (
 from src.core.app_config import AppConfig
 from .panel import Panel
 
+# LANGUAGES: dict {"Language": ("lang_code", is_rtl: True/False)}
 LANGUAGES = {
     "Persian": ("fa", True),
     "English": ("en", False),
@@ -122,18 +123,7 @@ class InspectorPanel(Panel):
         self.start_button.setFixedHeight(42)
         layout.addWidget(self.start_button)
 
-        app_config = AppConfig(
-            LANGUAGES[self.source_lang_combo.currentText()][0],
-            LANGUAGES[self.target_lang_combo.currentText()][0],
-            ("whisper", self.accuracy_combo.currentText().lower()),
-            (
-                self.translation_combo.currentText().lower().split()[0],
-                self.deepl_key_edit.text(),
-            ),
-            "cuda" if torch.cuda.is_available() else "cpu",
-            self.subtitle_toggle.isChecked(),
-        )
-        self.start_button.clicked.connect(self.start_processing.emit(app_config))
+        self.start_button.clicked.connect(self._on_start_clicked)
 
     def _make_row(self) -> QFrame:
         row = QFrame()
@@ -172,3 +162,20 @@ class InspectorPanel(Panel):
             )
         else:
             self.subtitle_toggle.setIcon(QIcon())
+
+    def _on_start_clicked(self):
+        app_config = AppConfig(
+            LANGUAGES[self.source_lang_combo.currentText()]
+            if self.source_lang_combo.currentText() != "Auto"
+            else ("", False),
+            LANGUAGES[self.target_lang_combo.currentText()],
+            ("whisper", self.accuracy_combo.currentText().lower()),
+            (
+                self.translation_combo.currentText().lower().split()[0],
+                self.deepl_key_edit.text(),
+            ),
+            "cuda" if torch.cuda.is_available() else "cpu",
+            self.subtitle_toggle.isChecked(),
+        )
+
+        self.start_processing.emit(app_config)

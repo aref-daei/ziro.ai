@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Contact: aref.daei@outlook.com
 """
 
+import os
 import sys
 
 from PySide6.QtWidgets import QApplication
@@ -37,6 +38,13 @@ LOADING_STEPS = [
     ("Loading DeepL module...", lambda: __import__("deepl")),
     ("Preparing UI...", lambda: None),
 ]
+
+os.environ["QT_LOGGING_RULES"] = (
+    "qt.multimedia.*=false;"
+    "qt.multimedia.ffmpeg=false;"
+)
+
+os.environ["QT_FFMPEG_DEBUG"] = "0"
 
 
 def main():
