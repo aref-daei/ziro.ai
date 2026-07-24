@@ -69,13 +69,6 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         inspector = InspectorPanel("Properties", 320, 420)
         splitter.addWidget(inspector)
 
-        # Clicking a video row in the sidebar loads it into the preview player
-        sidebar.file_selected.connect(preview.load_video)
-
-        inspector.start_button.clicked.connect(
-            lambda: queue.start_queue(sidebar.selected_files())
-        )
-
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)
         splitter.setStretchFactor(2, 0)
@@ -83,7 +76,7 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         content_layout.addWidget(splitter)
 
         # =====================================================
-        # Bottom Queue
+        # Queue / Progress
         # =====================================================
 
         queue = QueuePanel("Queue / Progress")
@@ -99,10 +92,21 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
 
         content_layout.addWidget(bottom)
 
-        # ------------------------------------ Apply StyleCheat
-        self._apply_theme()
+        # =====================================================
+        # Connects
+        # =====================================================
 
-        # ------------------------------------ Frameless Resize
+        sidebar.file_selected.connect(preview.load_video)
+
+        inspector.start_processing.connect(
+            lambda app_config: queue.start_queue(sidebar.selected_files())
+        )
+
+        # =====================================================
+        # Apply StyleCheat & Frameless Resize
+        # =====================================================
+
+        self._apply_theme()
         self.enable_frameless_resize()
 
     def _apply_theme(self, theme: str = "dark") -> None:

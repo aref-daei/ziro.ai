@@ -170,7 +170,6 @@ class TitleBar(QFrame):
     # ------------------------------------------------------------- رفتار
 
     def toggle_maximize(self) -> None:
-        """بین حالت maximize و normal جابه‌جا می‌شود و آیکن دکمه را به‌روزرسانی می‌کند."""
         if self._window.isMaximized():
             self._window.showNormal()
             self.max_btn.setIcon(qta.icon("mdi6.window-maximize", color=ICONS_COLOR))

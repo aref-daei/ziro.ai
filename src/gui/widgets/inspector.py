@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import qtawesome as qta
-from PySide6.QtCore import Qt
+import torch
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -14,6 +15,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
 )
 
+from src.core.app_config import AppConfig
 from .panel import Panel
 
 LANGUAGES = {
@@ -32,6 +34,8 @@ LANGUAGES = {
 
 
 class InspectorPanel(Panel):
+    start_processing = Signal(AppConfig)
+
     def __init__(self, title: str, min_width: int = None, max_width: int = None):
         Panel.__init__(self, title, min_width, max_width)
 
@@ -117,6 +121,19 @@ class InspectorPanel(Panel):
         self.start_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.start_button.setFixedHeight(42)
         layout.addWidget(self.start_button)
+
+        app_config = AppConfig(
+            LANGUAGES[self.source_lang_combo.currentText()][0],
+            LANGUAGES[self.target_lang_combo.currentText()][0],
+            ("whisper", self.accuracy_combo.currentText().lower()),
+            (
+                self.translation_combo.currentText().lower().split()[0],
+                self.deepl_key_edit.text(),
+            ),
+            "cuda" if torch.cuda.is_available() else "cpu",
+            self.subtitle_toggle.isChecked(),
+        )
+        self.start_button.clicked.connect(self.start_processing.emit(app_config))
 
     def _make_row(self) -> QFrame:
         row = QFrame()

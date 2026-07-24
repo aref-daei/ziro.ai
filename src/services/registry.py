@@ -1,4 +1,4 @@
-from core.app_config import AppConfig
+from src.core.app_config import AppConfig
 
 
 class ServiceRegistry:
