@@ -1,9 +1,9 @@
-import sys
 import os
-from pathlib import Path
 import platform
+import sys
+from pathlib import Path
 
-from core.settings import PROJECT_NAME
+from src.core.constants import PROJECT_NAME
 
 
 def _get_app_paths():
@@ -28,9 +28,9 @@ def _get_app_paths():
 
     paths = {
         "base": base_dir,
-        "styles": base_dir/ "assets" / "styles",
-        "icons": base_dir/ "assets" / "icons",
-        "fonts": base_dir/ "assets" / "fonts",
+        "styles": base_dir / "resources" / "styles",
+        "icons": base_dir / "resources" / "icons",
+        "fonts": base_dir / "resources" / "fonts",
         "app_data": app_data,
         "config": app_data / "config",
         "models": app_data / "models",

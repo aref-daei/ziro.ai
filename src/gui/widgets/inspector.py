@@ -39,7 +39,7 @@ class InspectorPanel(Panel):
         layout.setSpacing(10)
 
         title_label = QLabel(title)
-        title_label.setObjectName("panelTitle")
+        title_label.setObjectName("PanelTitle")
         layout.addWidget(title_label)
 
         # -------- Source/Destination Language Row --------
@@ -114,12 +114,9 @@ class InspectorPanel(Panel):
         # -------- Start Button --------
         self.start_button = QPushButton("Start Processing")
         self.start_button.setObjectName("InspectorStartButton")
-        self.start_button.setIcon(qta.icon("mdi6.play", color="#ffffff"))
         self.start_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.start_button.setFixedHeight(42)
         layout.addWidget(self.start_button)
-
-        self._apply_style()
 
     def _make_row(self) -> QFrame:
         row = QFrame()
@@ -158,83 +155,3 @@ class InspectorPanel(Panel):
             )
         else:
             self.subtitle_toggle.setIcon(QIcon())
-
-    def _apply_style(self) -> None:
-        self.setStyleSheet(
-            """
-            #InspectorRow {
-                background-color: #3E3F3E;
-                border-radius: 10px;
-            }
-            #InspectorLabel, #InspectorCheckboxLabel {
-                color: #dddddd;
-                font-size: 13px;
-            }
-            #InspectorArrow {
-                color: #888888;
-                font-size: 14px;
-            }
-            #InspectorPillCombo {
-                background-color: #f0f2f0;
-                color: #3E3F3E;
-                border: none;
-                border-radius: 12px;
-                padding: 6px 14px;
-                font-size: 13px;
-            }
-            #InspectorPillCombo::drop-down {
-                subcontrol-origin: padding;
-                subcontrol-position: right;
-                width: 28px;
-                border-top-right-radius: 12px;
-                border-bottom-right-radius: 12px;
-                background-color: #54C750;
-            }
-            #InspectorPillCombo::down-arrow {
-                width: 0;
-                height: 0;
-                border-left: 4px solid transparent;
-                border-right: 4px solid transparent;
-                border-top: 5px solid #ffffff;
-                margin-right: 6px;
-            }
-            #InspectorPillCombo QAbstractItemView {
-                background-color: #2a2a2a;
-                color: #eeeeee;
-                selection-background-color: #2ecc71;
-                border: 1px solid #3a3a3a;
-                outline: none;
-            }
-            #InspectorKeyInput {
-                background-color: #F0F2F0;
-                color: #1e1e1e;
-                border: none;
-                border-radius: 8px;
-                padding: 6px 10px;
-                min-width: 120px;
-            }
-            #InspectorCheckbox {
-                background-color: transparent;
-                border: 2px solid #54C750;
-                border-radius: 6px;
-            }
-            #InspectorCheckbox:checked {
-                background-color: #54C750;
-                border: none;
-            }
-            #InspectorStartButton {
-                background-color: #54C750;
-                color: #ffffff;
-                border: none;
-                border-radius: 10px;
-                font-size: 14px;
-                font-weight: 600;
-            }
-            #InspectorStartButton:hover {
-                background-color: #46b342;
-            }
-            #InspectorStartButton:pressed {
-                background-color: #3a9c38;
-            }
-            """
-        )

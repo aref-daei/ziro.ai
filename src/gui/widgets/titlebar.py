@@ -100,7 +100,6 @@ class TitleBar(QFrame):
             btn.setCursor(Qt.CursorShape.PointingHandCursor)
             btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
-        # دکمه‌های کنترل پنجره اندازه ثابت دارند، دکمه‌ی تم می‌تواند متن‌محور بماند
         for btn in (self.min_btn, self.max_btn, self.close_btn):
             btn.setFixedSize(48, 42)
 
@@ -119,7 +118,7 @@ class TitleBar(QFrame):
         layout.addWidget(self.max_btn)
         layout.addWidget(self.close_btn)
 
-    # ------------------------------------------------------------------ منوها
+    # ------------------------------------------------------------------ Menus
 
     def _build_file_menu(self) -> None:
         menu = QMenu(self)
@@ -128,13 +127,11 @@ class TitleBar(QFrame):
         self.file_menu_btn.setMenu(menu)
 
     def _build_edit_menu(self) -> None:
-        # فعلاً فقط یک گزینه، تا خالی نباشه؛ بعداً هرچی نیاز شد اضافه میشه
         menu = QMenu(self)
         menu.addAction("Preferences...", self.preferences_requested.emit)
         self.edit_menu_btn.setMenu(menu)
 
     def _build_view_menu(self) -> None:
-        # این یکی خودش مستقیم قابل انجامه، نیازی به وصل کردن بیرونی نداره
         menu = QMenu(self)
         menu.addAction("Toggle Fullscreen", self._toggle_fullscreen)
         self.view_menu_btn.setMenu(menu)

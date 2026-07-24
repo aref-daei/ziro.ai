@@ -118,9 +118,9 @@ class SidebarPanel(Panel):
         # -------- Header row: title + Add button --------
         top_layout = QHBoxLayout()
         title_label = QLabel(title)
-        title_label.setObjectName("panelTitle")
+        title_label.setObjectName("PanelTitle")
         add_button = QPushButton("Add")
-        add_button.setObjectName("addButton")
+        add_button.setObjectName("AddButton")
         add_button.setCursor(Qt.CursorShape.PointingHandCursor)
         add_button.clicked.connect(self._on_add_clicked)
 
@@ -148,8 +148,6 @@ class SidebarPanel(Panel):
         scroll_area.setWidget(self._list_container)
 
         layout.addWidget(scroll_area)
-
-        self._apply_style()
 
     # ------------------------------------------------------------ actions
 
@@ -206,49 +204,3 @@ class SidebarPanel(Panel):
     def all_files(self) -> list[str]:
         """Paths of every video in the list, regardless of selection state."""
         return [row.file_path for row in self.file_rows]
-
-    # ------------------------------------------------------------ styling
-
-    def _apply_style(self) -> None:
-        # Colors match InspectorPanel's palette (#3E3F3E rows, #54C750 accent,
-        # #f0f2f0 light text/icon) so the whole app reads as one consistent theme.
-        self.setStyleSheet(
-            """
-            QFrame#InspectorRow {
-                background-color: #3E3F3E;
-                border-radius: 10px;
-                border: 2px solid transparent;
-            }
-            QFrame#InspectorRow[active="true"] {
-                border: 2px solid #54C750;
-            }
-            #InspectorLabel {
-                color: #dddddd;
-                font-size: 13px;
-            }
-            #InspectorCheckbox {
-                background-color: transparent;
-                border: 2px solid #54C750;
-                border-radius: 6px;
-            }
-            #InspectorCheckbox:checked {
-                background-color: #54C750;
-                border: none;
-            }
-            #FileRemoveButton {
-                background-color: transparent;
-                border: none;
-                border-radius: 4px;
-            }
-            #FileRemoveButton:hover {
-                background-color: #4a4a4a;
-            }
-            #SidebarScrollArea {
-                background-color: transparent;
-                border: none;
-            }
-            #ListContainer {
-                background-color: transparent;
-            }
-            """
-        )

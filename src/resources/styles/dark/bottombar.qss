@@ -1,0 +1,22 @@
+#Stop {
+    padding-right: 60px;
+    padding-left: 60px;
+}
+
+#OpenOutput {
+    background: transparent;
+    color: #54C750;
+    border: 1px solid #54C750;
+}
+
+#OpenOutput:hover {
+    background: #193D18;
+}
+
+#Logs {
+    background: #F0F2F0;
+}
+
+#Logs:hover {
+    background: #ffffff;
+}

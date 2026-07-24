@@ -57,7 +57,7 @@ class PreviewPanel(Panel):
         layout.setSpacing(10)
 
         title_label = QLabel(title)
-        title_label.setObjectName("panelTitle")
+        title_label.setObjectName("PanelTitle")
         layout.addWidget(title_label)
 
         # -------- Video surface --------
@@ -109,8 +109,6 @@ class PreviewPanel(Panel):
 
         layout.addLayout(controls_row)
 
-        self._apply_style()
-
     # ------------------------------------------------------------ public API
 
     def load_video(self, file_path: str) -> None:
@@ -152,49 +150,3 @@ class PreviewPanel(Panel):
 
     def _update_time_label(self, position: int, duration: int) -> None:
         self.time_label.setText(f"{_format_ms(position)} / {_format_ms(duration)}")
-
-    # ------------------------------------------------------------ styling
-
-    def _apply_style(self) -> None:
-        # Same accent color (#54C750) and row background (#3E3F3E) as
-        # InspectorPanel/SidebarPanel, to keep the whole app visually consistent.
-        self.setStyleSheet(
-            """
-            #PreviewVideoWidget {
-                background-color: #000000;
-                border-radius: 8px;
-            }
-            #PreviewEmptyLabel {
-                color: #888888;
-                font-size: 13px;
-            }
-            #PreviewPlayButton {
-                background-color: #54C750;
-                border: none;
-                border-radius: 16px;
-            }
-            #PreviewPlayButton:hover {
-                background-color: #46b342;
-            }
-            #PreviewTimeLabel {
-                color: #dddddd;
-                font-size: 12px;
-            }
-            #PreviewSlider::groove:horizontal {
-                height: 4px;
-                background-color: #3E3F3E;
-                border-radius: 2px;
-            }
-            #PreviewSlider::sub-page:horizontal {
-                background-color: #54C750;
-                border-radius: 2px;
-            }
-            #PreviewSlider::handle:horizontal {
-                width: 12px;
-                height: 12px;
-                margin: -4px 0;
-                background-color: #f0f2f0;
-                border-radius: 6px;
-            }
-            """
-        )

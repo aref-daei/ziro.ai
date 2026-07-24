@@ -1,0 +1,108 @@
+#InspectorRow {
+    background-color: #3E3F3E;
+    border-radius: 10px;
+}
+#InspectorLabel, #InspectorCheckboxLabel {
+    color: #dddddd;
+    font-size: 13px;
+}
+#InspectorArrow {
+    color: #888888;
+    font-size: 14px;
+}
+QComboBox {
+    background-color: #f0f2f0;
+    color: #3E3F3E;
+    border: none;
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 13px;
+}
+
+QComboBox:hover {
+    background-color: #ffffff;
+}
+
+QComboBox:focus {
+    border: 1px solid #54C750;
+}
+
+QComboBox:disabled {
+    background-color: #cccccc;
+    color: #777777;
+}
+
+/* Arrow area */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: right center;
+    width: 28px;
+    border: none;
+    background: transparent;
+}
+
+/* Arrow icon */
+QComboBox::down-arrow {
+    image: url(:/icons/arrow-down.svg);
+    width: 10px;
+    height: 6px;
+}
+
+/* Popup */
+QComboBox QAbstractItemView {
+    background-color: #2a2a2a;
+    color: #eeeeee;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    outline: none;
+    padding: 6px;
+    selection-background-color: transparent;
+}
+
+/* Items */
+QComboBox QAbstractItemView::item {
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin: 1px 0;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background-color: #3a3a3a;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    background-color: #54C750;
+    color: white;
+}
+
+
+/* Hide scrollbar */
+QComboBox QAbstractItemView QScrollBar:vertical {
+    width: 0px;
+}
+
+#InspectorKeyInput {
+    background-color: #F0F2F0;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    min-width: 120px;
+}
+
+#InspectorCheckbox {
+    background-color: transparent;
+    border: 2px solid #54C750;
+    border-radius: 6px;
+}
+#InspectorCheckbox:checked {
+    background-color: #54C750;
+    border: none;
+}
+
+#InspectorStartButton {
+    color: #ffffff;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}

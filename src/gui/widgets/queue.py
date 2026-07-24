@@ -116,7 +116,7 @@ class QueuePanel(Panel):
         layout.setSpacing(8)
 
         title_label = QLabel(title)
-        title_label.setObjectName("panelTitle")
+        title_label.setObjectName("PanelTitle")
         layout.addWidget(title_label)
 
         self._list_container = QWidget()
@@ -136,8 +136,6 @@ class QueuePanel(Panel):
         scroll_area.setWidget(self._list_container)
 
         layout.addWidget(scroll_area)
-
-        self._apply_style()
 
     # ------------------------------------------------------------ public API
 
@@ -171,41 +169,3 @@ class QueuePanel(Panel):
         row = self._rows.get(file_path)
         if row is not None:
             row.set_status(status)
-
-    # ------------------------------------------------------------ styling
-
-    def _apply_style(self) -> None:
-        # Same palette as InspectorPanel/SidebarPanel/PreviewPanel
-        # (#3E3F3E rows, #54C750 accent) to keep the app visually consistent.
-        self.setStyleSheet(
-            """
-            QFrame#InspectorRow {
-                background-color: #3E3F3E;
-                border-radius: 10px;
-            }
-            #InspectorLabel {
-                color: #dddddd;
-                font-size: 12px;
-                font-weight: 600;
-            }
-            #QueueStatusLabel {
-                font-size: 11px;
-            }
-            #QueueProgressBar {
-                background-color: #2a2a2a;
-                border: none;
-                border-radius: 3px;
-            }
-            #QueueProgressBar::chunk {
-                background-color: #54C750;
-                border-radius: 3px;
-            }
-            #QueueScrollArea {
-                background-color: transparent;
-                border: none;
-            }
-            #ListContainer {
-                background-color: transparent;
-            }
-            """
-        )

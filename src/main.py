@@ -27,6 +27,7 @@ from PySide6.QtWidgets import QApplication
 
 from core.constants import PROJECT_NAME
 from gui import SplashScreen
+import resources.resources_rc
 
 LOADING_STEPS = [
     ("Loading Torch module...", lambda: __import__("torch")),

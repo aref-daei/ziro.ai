@@ -1,0 +1,13 @@
+#Panel {
+    background: #1E1E1E;
+    border: 1px solid #2D2D2D;
+    border-radius: 6px;
+}
+#PanelTitle {
+    color: #F0F2F0;
+    font-size: 15px;
+    font-weight: bold;
+}
+#AddButton {
+    padding: 4px 8px;
+}

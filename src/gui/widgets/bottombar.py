@@ -8,8 +8,6 @@ from src.core.paths import PATHS
 
 
 class BottomBar(QFrame):
-    # Emitted when the user clicks Stop. The actual worker/thread running the
-    # subtitle-generation process should connect to this and cancel itself.
     stop_requested = Signal()
 
     def __init__(self):
@@ -22,18 +20,22 @@ class BottomBar(QFrame):
         self.stop_btn = QPushButton("Stop")
         self.stop_btn.setObjectName("Stop")
         self.stop_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.stop_btn.setEnabled(False)  # nothing is running at startup
+        self.stop_btn.setEnabled(False)
         self.stop_btn.clicked.connect(self.stop_requested.emit)
 
         self.output_btn = QPushButton("Open Output")
         self.output_btn.setObjectName("OpenOutput")
         self.output_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.output_btn.clicked.connect(self._open_output_folder)
+        self.output_btn.clicked.connect(
+            lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(str(PATHS["output"])))
+        )
 
         self.logs_btn = QPushButton("Logs")
         self.logs_btn.setObjectName("Logs")
         self.logs_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.logs_btn.clicked.connect(self._open_logs_folder)
+        self.logs_btn.clicked.connect(
+            lambda: QDesktopServices.openUrl(QUrl.fromLocalFile(str(PATHS["logs"])))
+        )
 
         bottom_layout.addWidget(self.stop_btn)
         bottom_layout.addWidget(self.output_btn)
@@ -46,18 +48,3 @@ class BottomBar(QFrame):
         """Call this when the subtitle-generation process starts/stops, so
         Stop is only clickable while something is actually running."""
         self.stop_btn.setEnabled(is_processing)
-
-    # ------------------------------------------------------------ actions
-
-    def _open_output_folder(self) -> None:
-        # Uses the OS's native file explorer (Explorer/Finder/etc.) rather
-        # than a Windows-only call, so this keeps working if the app ever
-        # runs on macOS/Linux too.
-        output_dir = PATHS["output"]
-        output_dir.mkdir(parents=True, exist_ok=True)
-        QDesktopServices.openUrl(QUrl.fromLocalFile(str(output_dir)))
-
-    def _open_logs_folder(self) -> None:
-        logs_dir = PATHS["logs"]
-        logs_dir.mkdir(parents=True, exist_ok=True)
-        QDesktopServices.openUrl(QUrl.fromLocalFile(str(logs_dir)))

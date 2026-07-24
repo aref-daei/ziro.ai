@@ -1,18 +1,23 @@
-QMainWindow {
-    background: #060C06;
-    color: #F0F2F0;
+QMenu {
+    background-color: #2a2a2a;
+    color: #eeeeee;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 6px;
 }
 
-QPushButton {
-    background: #54C750;
-    color: #1E1E1E;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
+QMenu::item {
+    padding: 8px 20px;
+    border-radius: 4px;
 }
 
-QPushButton:hover {
-    background: #6FD96C;
+QMenu::item:selected {
+    background-color: #54C750;
+    color: white;
+}
+
+QMenu::icon {
+    width: 0px;
 }
 
 #TitleBar {
@@ -27,9 +32,14 @@ QPushButton:hover {
 #MenuButton {
     background: transparent;
     color: #F0F2F0;
-    font-size: 13px;
     border-radius: 0px;
     padding: 12px 10px;
+}
+
+#MenuButton::menu-indicator {
+    image: none;
+    width: 0px;
+    height: 0px;
 }
 
 #Notice {
@@ -62,47 +72,4 @@ QPushButton:hover {
 
 #CloseButton:hover {
     background-color: #E81123;
-}
-
-#panel {
-    background: #1E1E1E;
-    border: 1px solid #2D2D2D;
-    border-radius: 6px;
-}
-
-#panelTitle {
-    color: #F0F2F0;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-#addButton {
-    padding: 4px 8px;
-}
-
-QSplitter::handle {
-    background: transparent;
-}
-
-#Stop {
-    padding-right: 60px;
-    padding-left: 60px;
-}
-
-#OpenOutput {
-    background: transparent;
-    color: #54C750;
-    border: 1px solid #54C750;
-}
-
-#OpenOutput:hover {
-    background: #193D18;
-}
-
-#Logs {
-    background: #F0F2F0;
-}
-
-#Logs:hover {
-    background: #CBCECB;
 }

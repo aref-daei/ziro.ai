@@ -105,12 +105,18 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         # ------------------------------------ Frameless Resize
         self.enable_frameless_resize()
 
-    def _apply_theme(self) -> None:
-        with open(
-                PATHS["styles"] / f"dark.qss",
-                encoding="utf-8"
-        ) as f:
-            self.setStyleSheet(f.read())
+    def _apply_theme(self, theme: str = "dark") -> None:
+        theme_dir = PATHS["styles"] / theme
+        if not theme_dir.exists():
+            return
+
+        style_sheets = []
+        for stylesheet_path in theme_dir.glob("*.qss"):
+            with open(stylesheet_path, encoding="utf-8") as f:
+                style_sheets.append(f.read())
+
+        if style_sheets:
+            self.setStyleSheet("\n".join(style_sheets))
 
     def center_on_screen(self, screen_geometry) -> None:
         self.move(

@@ -6,7 +6,7 @@ class Panel(QFrame):
         super().__init__()
 
         self.setFrameShape(QFrame.Shape.StyledPanel)
-        self.setObjectName("panel")
+        self.setObjectName("Panel")
 
         if min_width is not None:
             self.setMinimumWidth(min_width)

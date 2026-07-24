@@ -13,7 +13,7 @@ author = "Aref Daei"
 # Data files
 # -----------------------------
 datas = []
-datas += [("src/assets", "assets")]
+datas += [("src/resources", "resources")]
 datas += [("src/models/whisper", "models/whisper")]
 datas += collect_data_files("whisper")
 
@@ -65,7 +65,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon="src/assets/Ziro.ico" if sys.platform == "win32" else "src/assets/Ziro.png",
+    icon="src/resources/Ziro.ico" if sys.platform == "win32" else "src/resources/Ziro.png",
 )
 
 # -----------------------------
@@ -88,7 +88,7 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name=f"{app_name}.app",
-    icon="src/assets/Ziro.icns",
+    icon="src/resources/Ziro.icns",
     bundle_identifier="com.arefdaei.ziro",
     info_plist={
         "CFBundleName": app_name,

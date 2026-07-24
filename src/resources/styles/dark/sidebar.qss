@@ -1,0 +1,44 @@
+QFrame#InspectorRow {
+    background-color: #3E3F3E;
+    border-radius: 10px;
+    border: 2px solid transparent;
+}
+
+QFrame#InspectorRow[active="true"] {
+    border: 2px solid #54C750;
+}
+
+#InspectorLabel {
+    color: #dddddd;
+    font-size: 13px;
+}
+
+#InspectorCheckbox {
+    background-color: transparent;
+    border: 2px solid #54C750;
+    border-radius: 6px;
+}
+
+#InspectorCheckbox:checked {
+    background-color: #54C750;
+    border: none;
+}
+
+#FileRemoveButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+}
+
+#FileRemoveButton:hover {
+    background-color: #4a4a4a;
+}
+
+#SidebarScrollArea {
+    background-color: transparent;
+    border: none;
+}
+
+#ListContainer {
+    background-color: transparent;
+}

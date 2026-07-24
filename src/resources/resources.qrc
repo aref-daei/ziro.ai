@@ -1,0 +1,7 @@
+<!--  pyside6-rcc resources.qrc -o resources_rc.py -->
+
+<RCC>
+    <qresource prefix="/">
+        <file>icons/arrow-down.svg</file>
+    </qresource>
+</RCC>
