@@ -18,7 +18,7 @@ class ServiceRegistry:
     def transcriber(self) -> TranscriberService | None:
         if self.config.transcriber[0] == "whisper":
             provider = WhisperTranscriber(
-                WhisperTranscriber.Variant[self.config.transcriber[1].lower()],
+                WhisperTranscriber.Variant[self.config.transcriber[1].upper()],
                 self.config.device,
             )
             return TranscriberService(provider)
