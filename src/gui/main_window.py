@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide6.QtCore import Qt, Signal, QThread
+from PySide6.QtCore import Qt, Signal, QThread, QTimer
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
@@ -118,17 +118,22 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         title_bar.check_updates_requested.connect(self.app_checker.check_for_update)
         self.app_checker.update_checked.connect(self._on_update_checked)
 
-        self.app_checker.ffmpeg_checked.connect(self._on_ffmpeg_checked)
-        self.app_checker.exists_ffmpeg()
-
         self.app_checker.internet_checked.connect(self._on_internet_checked)
-        self.has_internet_access = False
+        self.app_checker.ffmpeg_checked.connect(self._on_ffmpeg_checked)
 
         sidebar.file_selected.connect(preview.load_video)
 
         inspector.start_processing.connect(
             lambda app_config: self._on_start_processing(app_config, sidebar.selected_files())
         )
+
+        # Notification ========================================
+        self.is_there_problems = (False, "")
+        self.app_checker.check_for_ffmpeg()
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.app_checker.check_for_internet)
+        self.timer.start(1000)
 
         # =====================================================
         # Apply StyleCheat & Frameless Resize
@@ -164,16 +169,23 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
 
     def _on_ffmpeg_checked(self, found: bool) -> None:
         if not found:
-            self.notification.emit("FFmpeg not found!")
+            self.notification.emit("FFmpeg not found")
+            self.is_there_problems = (True, "FFmpeg not found")
 
     def _on_internet_checked(self, has_access: bool) -> None:
         if not has_access:
-            QMessageBox.information(self, "Access Denied", "Access denied!")
-            self.has_internet_access = False
+            self.notification.emit("No internet access")
+            self.is_there_problems = (True, "No internet access")
         else:
-            self.has_internet_access = True
+            if "FFmpeg" not in self.is_there_problems[1]:
+                self.notification.emit("")
+                self.is_there_problems = (False, "")
 
     def _on_start_processing(self, config: AppConfig, selected_files: list[str]) -> None:
+        if self.is_there_problems[0]:
+            QMessageBox.information(self, "There is a Problem!", self.is_there_problems[1] + ".")
+            return
+
         self.thread = QThread()
         self.worker = ProcessingWorker(config, selected_files)
         self.worker.moveToThread(self.thread)
