@@ -5,8 +5,12 @@ import requests
 from PySide6.QtCore import QObject, Signal, Slot
 
 from src.core.app_config import AppConfig
+from src.core.exceptions import *
 from src.core.paths import PATHS
 from src.core.queue_status import QueueStatus
+from src.core.settings import DEBUG
+from src.filesystem import FileHandler
+from src.logger import Logger
 from src.services import ServiceRegistry
 
 
@@ -31,6 +35,8 @@ class ProcessingWorker(QObject):
         super().__init__()
         self.config = config
         self.selected_files = selected_files
+
+        self.logger = Logger()
 
     @Slot()
     def run(self):
@@ -64,7 +70,7 @@ class ProcessingWorker(QObject):
                     audio_path,
                     (
                         None
-                        if config.source_language[0] == "auto"
+                        if config.source_language[0] == ""
                         else config.source_language[0]
                     )
                 )
@@ -146,13 +152,50 @@ class ProcessingWorker(QObject):
                 self.progress.emit(video_path, 100)
                 self.status.emit(video_path, QueueStatus.DONE)
 
-            except RuntimeError:
+            except ConnectionError as e:
                 self.status.emit(video_path, QueueStatus.FAILED)
+                self.logger.error(f"ConnectionError: {e}")
+                # UI Message:
+                # "Connection failed",
+                # f"Try:\n  • Checking the network cables, modem, and router\n  • Reconnecting to Wi-Fi"
+                break
+
+            except TranscriptionError as e:
+                self.status.emit(video_path, QueueStatus.FAILED)
+                self.logger.error(f"TranscriptionError: {e}")
+                # UI Message:
+                # "Transcription failed",
+                # f"Try:\n  • Checking the network and internet\n  • Starting processing again\n  • Informing us of the problem"
+                break
+
+            except TranslationError as e:
+                self.status.emit(video_path, QueueStatus.FAILED)
+                self.logger.error(f"TranslationError: {e}")
+                # UI Message:
+                # "Translation failed",
+                # f"Try:\n  • Checking the network and internet\n  • Starting processing again\n  • Informing us of the problem"
+                break
+
+            except RuntimeError as e:
+                self.status.emit(video_path, QueueStatus.FAILED)
+                self.logger.error(f"RuntimeError: {e}")
+                # UI Message:
+                # "Processing failed",
+                # f"Try:\n  • Checking the video format\n  • Starting processing again\n  • Informing us of the problem"
                 break
 
             except Exception as e:
-                # TODO: At this point, it should logs with the text e
                 self.status.emit(video_path, QueueStatus.FAILED)
+                self.logger.error(f"Error: {e}")
+                # UI Message:
+                # "Unexpected error",
+                # f"Try:\n  • Starting processing again\n  • Informing us of the problem!"
                 break
 
         self.process_finished.emit()
+
+        if not DEBUG:
+            try:
+                FileHandler.clean_temp_files()
+            except RuntimeError as e:
+                self.logger.error(f"{e}")
