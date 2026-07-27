@@ -6,7 +6,7 @@ from PySide6.QtCore import QObject, Signal, Slot
 
 from src.core.app_config import AppConfig
 from src.core.paths import PATHS
-from src.gui.widgets import QueueStatus
+from src.core.queue_status import QueueStatus
 from src.services import ServiceRegistry
 
 

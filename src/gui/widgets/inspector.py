@@ -16,7 +16,6 @@ from PySide6.QtWidgets import (
 )
 
 from src.core.app_config import AppConfig
-from src.workers.processing_worker import MainProcessWorker
 from .panel import Panel
 
 # LANGUAGES: dict {"Language": ("lang_code", is_rtl: True/False)}

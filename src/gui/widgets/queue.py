@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from enum import Enum
 
 import qtawesome as qta
 from PySide6.QtCore import Qt
@@ -15,14 +14,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from src.core.queue_status import QueueStatus
 from .panel import Panel
-
-
-class QueueStatus(str, Enum):
-    QUEUED = "queued"
-    PROCESSING = "processing"
-    DONE = "done"
-    FAILED = "failed"
 
 
 class QueueRow(QFrame):
