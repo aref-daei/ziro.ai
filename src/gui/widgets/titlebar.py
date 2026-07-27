@@ -183,6 +183,9 @@ class TitleBar(QFrame):
             self.toggle_maximize()
             event.accept()
 
-    def _on_notification(self, notif: str) -> None:
-        self.notice_label.setText("⚠ " + notif)
-        self.notice_label.show()
+    def _on_notification(self, message: str) -> None:
+        if message != "":
+            self.notice_label.setText("⚠ " + message)
+            self.notice_label.show()
+        else:
+            self.notice_label.hide()
