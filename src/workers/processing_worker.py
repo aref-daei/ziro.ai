@@ -54,95 +54,105 @@ class ProcessingWorker(QObject):
 
             video_name = Path(video_path).stem
 
-            # 1. Sound extraction (0-10%)
-            audio_path = registry.audio_extractor().extract(video_path)
-            self.progress.emit(video_path, 10)
+            try:
+                # 1. Sound extraction (0-10%)
+                audio_path = registry.audio_extractor().extract(video_path)
+                self.progress.emit(video_path, 10)
 
-            # 2. Transcription (10-40%)
-            transcription = registry.transcriber().transcribe(
-                audio_path,
-                (
-                    None
-                    if config.source_language[0] == "auto"
-                    else config.source_language[0]
+                # 2. Transcription (10-40%)
+                transcription = registry.transcriber().transcribe(
+                    audio_path,
+                    (
+                        None
+                        if config.source_language[0] == "auto"
+                        else config.source_language[0]
+                    )
                 )
-            )
-            segments_en = registry.transcriber().get_segments(transcription)
-            self.progress.emit(video_path, 40)
+                segments_en = registry.transcriber().get_segments(transcription)
+                self.progress.emit(video_path, 40)
 
-            # 3. Save English subtitles
-            srt_en_path = PATHS["temp"] / f"{video_name}_en.srt"
-            registry.subtitle_generator().generate_srt(segments_en, srt_en_path)
+                # 3. Save English subtitles
+                srt_en_path = PATHS["temp"] / f"{video_name}_en.srt"
+                registry.subtitle_generator().generate_srt(segments_en, srt_en_path)
 
-            if is_need_translate:
-                # 4. Translation (40-80%)
-                texts_en = [seg["text"] for seg in segments_en]
-                texts_tgt_lang = registry.translate().translate(
-                    texts_en, "en", config.target_language[0]
-                )
+                if is_need_translate:
+                    # 4. Translation (40-80%)
+                    texts_en = [seg["text"] for seg in segments_en]
+                    texts_tgt_lang = registry.translate().translate(
+                        texts_en, "en", config.target_language[0]
+                    )
 
-                # Creating target language segments
-                segments_tgt_lang = []
-                for seg_en, text_tgt_lang in zip(segments_en, texts_tgt_lang):
-                    segments_tgt_lang.append(
-                        {
-                            "text": text_tgt_lang,
-                            "start": seg_en["start"],
-                            "end": seg_en["end"],
+                    # Creating target language segments
+                    segments_tgt_lang = []
+                    for seg_en, text_tgt_lang in zip(segments_en, texts_tgt_lang):
+                        segments_tgt_lang.append(
+                            {
+                                "text": text_tgt_lang,
+                                "start": seg_en["start"],
+                                "end": seg_en["end"],
+                            }
+                        )
+                    self.progress.emit(video_path, 80)
+
+                    # 5. Save target language subtitles
+                    srt_tgt_lang_path = (
+                            PATHS["temp"]
+                            / f"{video_name}_{config.target_language[0]}.srt"
+                    )
+                    registry.subtitle_generator().generate_srt(
+                        segments_tgt_lang,
+                        srt_tgt_lang_path,
+                        config.target_language[1]
+                    )
+
+                    # 6. Add subtitles to the video (80-100%)
+                    outputs = []
+                    if config.subtitle_toggle:
+                        subtitle_paths = {
+                            "eng": str(srt_en_path),
+                            f"{config.target_language[0][:3]}": str(srt_tgt_lang_path),
                         }
-                    )
-                self.progress.emit(video_path, 80)
 
-                # 5. Save target language subtitles
-                srt_tgt_lang_path = (
-                        PATHS["temp"]
-                        / f"{video_name}_{config.target_language[0]}.srt"
-                )
-                registry.subtitle_generator().generate_srt(
-                    segments_tgt_lang,
-                    srt_tgt_lang_path,
-                    config.target_language[1]
-                )
+                        output_video = registry.video_processor().add_subtitles(
+                            video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
+                        )
 
-                # 6. Add subtitles to the video (80-100%)
-                outputs = []
-                if config.subtitle_toggle:
-                    subtitle_paths = {
-                        "eng": str(srt_en_path),
-                        f"{config.target_language[0][:3]}": str(srt_tgt_lang_path),
-                    }
+                        outputs.append(output_video)
 
-                    output_video = registry.video_processor().add_subtitles(
-                        video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
-                    )
-
-                    outputs.append(output_video)
+                    else:
+                        shutil.copy(srt_en_path, PATHS["output"] / srt_en_path.name)
+                        shutil.copy(
+                            srt_tgt_lang_path, PATHS["output"] / srt_tgt_lang_path.name
+                        )
+                        outputs.append(PATHS["output"] / srt_en_path.name)
+                        outputs.append(PATHS["output"] / srt_tgt_lang_path.name)
 
                 else:
-                    shutil.copy(srt_en_path, PATHS["output"] / srt_en_path.name)
-                    shutil.copy(
-                        srt_tgt_lang_path, PATHS["output"] / srt_tgt_lang_path.name
-                    )
-                    outputs.append(PATHS["output"] / srt_en_path.name)
-                    outputs.append(PATHS["output"] / srt_tgt_lang_path.name)
+                    # 4. Add subtitle to the video (40-100%)
+                    outputs = []
+                    if config.subtitle_toggle:
+                        subtitle_paths = {"eng": str(srt_en_path)}
 
-            else:
-                # 4. Add subtitle to the video (40-100%)
-                outputs = []
-                if config.subtitle_toggle:
-                    subtitle_paths = {"eng": str(srt_en_path)}
+                        output_video = registry.video_processor().add_subtitles(
+                            video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
+                        )
 
-                    output_video = registry.video_processor().add_subtitles(
-                        video_path, subtitle_paths, f"{video_name}_subtitled.mkv"
-                    )
+                        outputs.append(output_video)
 
-                    outputs.append(output_video)
+                    else:
+                        shutil.copy(srt_en_path, PATHS["output"] / srt_en_path.name)
+                        outputs.append(PATHS["output"] / srt_en_path.name)
 
-                else:
-                    shutil.copy(srt_en_path, PATHS["output"] / srt_en_path.name)
-                    outputs.append(PATHS["output"] / srt_en_path.name)
+                self.progress.emit(video_path, 100)
+                self.status.emit(video_path, QueueStatus.DONE)
 
-            self.progress.emit(video_path, 100)
-            self.status.emit(video_path, QueueStatus.DONE)
+            except RuntimeError:
+                self.status.emit(video_path, QueueStatus.FAILED)
+                break
+
+            except Exception as e:
+                # TODO: At this point, it should logs with the text e
+                self.status.emit(video_path, QueueStatus.FAILED)
+                break
 
         self.process_finished.emit()
