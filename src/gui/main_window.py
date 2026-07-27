@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QThread
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
@@ -9,7 +9,9 @@ from PySide6.QtWidgets import (
 )
 
 from src.core.app_checker import AppChecker
+from src.core.app_config import AppConfig
 from src.core.paths import PATHS
+from src.workers.processing_worker import ProcessingWorker
 from .widgets import (
     TitleBar,
     FramelessResizeMixin,
@@ -23,6 +25,8 @@ from .widgets import (
 
 class MainWindow(FramelessResizeMixin, QMainWindow):
     notification = Signal(str)
+    process_started = Signal()
+    process_finished = Signal()
 
     def __init__(self):
         super().__init__()
@@ -70,7 +74,7 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         splitter.addWidget(preview)
 
         # ---------- Right ----------
-        inspector = InspectorPanel("Properties", 320, 420)
+        inspector = InspectorPanel(self, "Properties", 320, 420)
         splitter.addWidget(inspector)
 
         splitter.setStretchFactor(0, 0)
@@ -83,18 +87,18 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         # Queue / Progress
         # =====================================================
 
-        queue = QueuePanel("Queue / Progress")
-        queue.setFixedHeight(160)
+        self.queue = QueuePanel("Queue / Progress")
+        self.queue.setFixedHeight(160)
 
-        content_layout.addWidget(queue)
+        content_layout.addWidget(self.queue)
 
         # =====================================================
         # Bottom Toolbar
         # =====================================================
 
-        bottom = BottomBar()
+        self.bottom = BottomBar(self)
 
-        content_layout.addWidget(bottom)
+        content_layout.addWidget(self.bottom)
 
         # =====================================================
         # Connects
@@ -117,10 +121,13 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         self.app_checker.ffmpeg_checked.connect(self._on_ffmpeg_checked)
         self.app_checker.exists_ffmpeg()
 
+        self.app_checker.internet_checked.connect(self._on_internet_checked)
+        self.has_internet_access = False
+
         sidebar.file_selected.connect(preview.load_video)
 
         inspector.start_processing.connect(
-            lambda app_config: queue.start_queue(sidebar.selected_files())
+            lambda app_config: self._on_start_processing(app_config, sidebar.selected_files())
         )
 
         # =====================================================
@@ -156,5 +163,33 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
             QMessageBox.information(self, "No Update Available", "No update available.")
 
     def _on_ffmpeg_checked(self, found: bool) -> None:
-        if found:
+        if not found:
             self.notification.emit("FFmpeg not found!")
+
+    def _on_internet_checked(self, has_access: bool) -> None:
+        if not has_access:
+            QMessageBox.information(self, "Access Denied", "Access denied!")
+            self.has_internet_access = False
+        else:
+            self.has_internet_access = True
+
+    def _on_start_processing(self, config: AppConfig, selected_files: list[str]) -> None:
+        self.thread = QThread()
+        self.worker = ProcessingWorker(config, selected_files)
+        self.worker.moveToThread(self.thread)
+
+        self.queue.start_queue(selected_files)
+
+        self.thread.started.connect(self.worker.run)
+
+        self.worker.process_started.connect(lambda: self.process_started.emit())
+        self.worker.status.connect(lambda video_path, status: self.queue.set_status(video_path, status))
+        self.worker.progress.connect(lambda video_path, progress: self.queue.set_progress(video_path, progress))
+        self.worker.process_finished.connect(lambda: self.process_finished.emit())
+
+        self.worker.process_finished.connect(self.thread.quit)
+        self.worker.process_finished.connect(self.worker.deleteLater)
+
+        self.worker.process_finished.connect(self.thread.deleteLater)
+
+        self.thread.start()

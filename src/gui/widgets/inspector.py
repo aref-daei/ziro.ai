@@ -12,10 +12,11 @@ from PySide6.QtWidgets import (
     QComboBox,
     QLineEdit,
     QPushButton,
-    QSizePolicy,
+    QSizePolicy, QMainWindow,
 )
 
 from src.core.app_config import AppConfig
+from src.workers.processing_worker import MainProcessWorker
 from .panel import Panel
 
 # LANGUAGES: dict {"Language": ("lang_code", is_rtl: True/False)}
@@ -37,8 +38,11 @@ LANGUAGES = {
 class InspectorPanel(Panel):
     start_processing = Signal(AppConfig)
 
-    def __init__(self, title: str, min_width: int = None, max_width: int = None):
+    def __init__(self, window: QMainWindow, title: str, min_width: int = None, max_width: int = None):
+        # TODO: باید ورودی ها اصلاح شود. عنوان و ابعاد لازم نیست از بیرون تنظیم شود.
         Panel.__init__(self, title, min_width, max_width)
+
+        self._window = window
 
         layout = QVBoxLayout(self)
         layout.setSpacing(10)
@@ -124,6 +128,9 @@ class InspectorPanel(Panel):
         layout.addWidget(self.start_button)
 
         self.start_button.clicked.connect(self._on_start_clicked)
+
+        self._window.process_started.connect(lambda: self.start_button.setEnabled(False))
+        self._window.process_finished.connect(lambda: self.start_button.setEnabled(True))
 
     def _make_row(self) -> QFrame:
         row = QFrame()

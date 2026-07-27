@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from PySide6.QtCore import Qt, Signal, QUrl
 from PySide6.QtGui import QDesktopServices
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QPushButton
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QPushButton, QMainWindow
 
 from src.core.paths import PATHS
 
@@ -10,10 +10,12 @@ from src.core.paths import PATHS
 class BottomBar(QFrame):
     stop_requested = Signal()
 
-    def __init__(self):
+    def __init__(self, window: QMainWindow):
         super().__init__()
 
         self.setFixedHeight(50)
+
+        self._window = window
 
         bottom_layout = QHBoxLayout(self)
 
@@ -22,6 +24,9 @@ class BottomBar(QFrame):
         self.stop_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         self.stop_btn.setEnabled(False)
         self.stop_btn.clicked.connect(self.stop_requested.emit)
+
+        self._window.process_started.connect(lambda: self.stop_btn.setEnabled(True))
+        self._window.process_finished.connect(lambda: self.stop_btn.setEnabled(False))
 
         self.output_btn = QPushButton("Open Output")
         self.output_btn.setObjectName("OpenOutput")
