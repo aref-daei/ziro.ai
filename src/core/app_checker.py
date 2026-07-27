@@ -71,5 +71,5 @@ class AppChecker(QObject):
 
     # ------------------------------------------------------------ ffmpeg check
 
-    def exists_ffmpeg(self) -> None:
+    def check_for_ffmpeg(self) -> None:
         self.ffmpeg_checked.emit(shutil.which("ffmpeg") is not None)
