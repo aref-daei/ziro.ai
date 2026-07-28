@@ -1,62 +1,68 @@
 from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
 
-from core.settings import BATCH_SIZE
+from src.core.settings import BATCH_SIZE
+
+try:
+    from src.core.settings import MAX_WORKERS
+except ImportError:
+    MAX_WORKERS = 5  # default worker count
 
 
 class Translator(ABC):
+
     def translate(self, texts: list[str], src_lang: str, tgt_lang: str) -> list[str]:
-        translations = []
+        translations = [""] * len(texts)
 
-        for i in range(0, len(texts), BATCH_SIZE):
-            batch = texts[i : i + BATCH_SIZE]
+        non_empty_indices = [i for i, t in enumerate(texts) if t.strip()]
+        if not non_empty_indices:
+            return translations
 
-            # Filter empty strings
-            non_empty = [t for t in batch if t.strip()]
-            if not non_empty:
-                translations.extend([""] * len(batch))
-                continue
+        non_empty_texts = [texts[i] for i in non_empty_indices]
+        translated = self._translate_impl(non_empty_texts, src_lang, tgt_lang)
 
-            # Delegate to subclass
-            translated = self._translate_batch_impl(non_empty, src_lang, tgt_lang)
-
-            # Reconstruct with empty strings
-            idx = 0
-            for t in batch:
-                if t.strip():
-                    translations.append(translated[idx])
-                    idx += 1
-                else:
-                    translations.append("")
+        # restore original positions
+        for idx, translation in zip(non_empty_indices, translated):
+            translations[idx] = translation
 
         return translations
 
     @abstractmethod
-    def _translate_batch_impl(
-        self, texts: list[str], src_lang: str, tgt_lang: str
+    def _translate_impl(
+            self, texts: list[str], src_lang: str, tgt_lang: str
     ) -> list[str]:
         pass
 
 
 class LocalTranslator(Translator):
-    def _translate_batch_impl(
-        self, texts: list[str], src_lang: str, tgt_lang: str
+
+    def _translate_impl(
+            self, texts: list[str], src_lang: str, tgt_lang: str
     ) -> list[str]:
-        # Subclass implements native batch translation
-        return self._translate_batch(texts, src_lang, tgt_lang)
+        translations = []
+        for i in range(0, len(texts), BATCH_SIZE):
+            batch = texts[i: i + BATCH_SIZE]
+            translations.extend(self._translate_batch(batch, src_lang, tgt_lang))
+        return translations
 
     @abstractmethod
     def _translate_batch(
-        self, texts: list[str], src_lang: str, tgt_lang: str
+            self, texts: list[str], src_lang: str, tgt_lang: str
     ) -> list[str]:
         pass
 
 
 class ApiTranslator(Translator):
-    def _translate_batch_impl(
-        self, texts: list[str], src_lang: str, tgt_lang: str
+
+    def _translate_impl(
+            self, texts: list[str], src_lang: str, tgt_lang: str
     ) -> list[str]:
-        # Convert single-text API to batch by looping
-        return [self._translate_text(t, src_lang, tgt_lang) for t in texts]
+        def call(text: str) -> str:
+            return self._translate_text(text, src_lang, tgt_lang)
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            # executor.map preserves input order
+            return list(executor.map(call, texts))
 
     @abstractmethod
     def _translate_text(self, text: str, src_lang: str, tgt_lang: str) -> str:
