@@ -3,8 +3,8 @@ from urllib.error import URLError
 
 import whisper
 
-from core.exceptions import ConnectionError, TranscriptionError
-from core.paths import PATHS
+from src.core.exceptions import ConnectionError, TranscriptionError
+from src.core.paths import PATHS
 from ..interfaces import Transcriber
 
 
@@ -34,25 +34,16 @@ class WhisperTranscriber(Transcriber):
             raise ConnectionError(f"{e}")
 
         except Exception as e:
-            raise TranscriptionError(f"Whisper loading failed with error: {e}")
+            raise TranscriptionError(f"Whisper model loading failed with error: {e}")
 
     def transcribe(self, audio_path: str, language: str | None) -> dict:
         try:
-            if language is None:
-                result = self._model.transcribe(
-                    audio_path,
-                    task="translate",
-                    word_timestamps=False,
-                )
-            else:
-                result = self._model.transcribe(
-                    audio_path,
-                    language=language,
-                    task="translate",
-                    word_timestamps=False,
-                )
+            kwargs = {"task": "translate", "word_timestamps": False}
+            if language is not None:
+                kwargs["language"] = language
 
-            return result
+            return self._model.transcribe(audio=audio_path, **kwargs)
+
         except Exception as e:
             raise TranscriptionError(f"Transcription failed with error: {e}")
 
