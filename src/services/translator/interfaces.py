@@ -1,12 +1,7 @@
 from abc import ABC, abstractmethod
 from concurrent.futures import ThreadPoolExecutor
 
-from src.core.settings import BATCH_SIZE
-
-try:
-    from src.core.settings import MAX_WORKERS
-except ImportError:
-    MAX_WORKERS = 5  # default worker count
+from src.core.settings import BATCH_SIZE, MAX_WORKERS
 
 
 class Translator(ABC):

@@ -149,7 +149,7 @@ class TitleBar(QFrame):
             "Ziro.ai\n\nAutomatic subtitle generation and translation for video.",
         )
 
-    # ------------------------------------------------------------- رفتار
+    # ------------------------------------------------------------- Behavior
 
     def toggle_maximize(self) -> None:
         if self._window.isMaximized():
@@ -159,7 +159,7 @@ class TitleBar(QFrame):
             self._window.showMaximized()
             self.max_btn.setIcon(qta.icon("mdi6.window-restore", color=ICONS_COLOR))
 
-    # -------------------------------------------------- جابه‌جایی با ماوس
+    # -------------------------------------------------- Moving with the mouse
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
