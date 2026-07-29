@@ -22,7 +22,6 @@ VIDEO_FILE_FILTER = "Video Files (*.mp4 *.mkv *.mov *.avi *.webm *.flv *.wmv)"
 
 
 class TitleBar(QFrame):
-
     # File menu: emits the paths chosen via "Open File..." / "Open Folder..."
     open_file_requested = Signal(list)
     open_folder_requested = Signal(str)
@@ -163,20 +162,10 @@ class TitleBar(QFrame):
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
-            self._drag_pos = event.globalPosition().toPoint() - self._window.frameGeometry().topLeft()
+            window_handle = self._window.windowHandle()
+            if window_handle is not None:
+                window_handle.startSystemMove()
             event.accept()
-
-    def mouseMoveEvent(self, event: QMouseEvent) -> None:
-        if self._drag_pos is not None and event.buttons() & Qt.MouseButton.LeftButton:
-            if self._window.isMaximized():
-                self.toggle_maximize()
-                self._drag_pos = event.globalPosition().toPoint() - self._window.frameGeometry().topLeft()
-            self._window.move(event.globalPosition().toPoint() - self._drag_pos)
-            event.accept()
-
-    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
-        self._drag_pos = None
-        event.accept()
 
     def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
