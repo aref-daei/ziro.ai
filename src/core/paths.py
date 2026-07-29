@@ -39,8 +39,8 @@ def _get_app_paths():
         "output": output,
     }
 
-    # for key in ["config", "models", "logs", "temp", "output"]:
-    #     paths[key].mkdir(parents=True, exist_ok=True)
+    for key in ["config", "logs", "temp", "output"]:
+        paths[key].mkdir(parents=True, exist_ok=True)
 
     return paths
 

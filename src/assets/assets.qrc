@@ -1,4 +1,4 @@
-<!--  pyside6-rcc resources.qrc -o resources_rc.py -->
+<!--  pyside6-rcc assets.qrc -o assets_rc.py -->
 
 <RCC>
     <qresource prefix="/">
