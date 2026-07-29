@@ -156,17 +156,10 @@ class TitleBar(QFrame):
                 <p>Licensed under {PROJECT_LICENSE}</p>
                 <p>
                     <b>Source Code</b><br>
-                    <a href="{PROJECT_URL}">{PROJECT_URL}</a>
+                    <a href="https://{PROJECT_URL}">{PROJECT_URL}</a>
                 </p>
             </div>
         """)
-
-        msg.setTextFormat(Qt.RichText)
-        msg.setTextInteractionFlags(Qt.TextBrowserInteraction)
-
-        label = msg.findChild(QLabel)
-        if label:
-            label.setOpenExternalLinks(True)
 
         msg.exec()
 
