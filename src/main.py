@@ -21,9 +21,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Contact: aref.daei@outlook.com
 """
 
-import os
 import sys
 
+from PySide6.QtCore import QLoggingCategory
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 
@@ -42,12 +42,10 @@ LOADING_STEPS = [
     ("Preparing UI...", lambda: None),
 ]
 
-os.environ["QT_LOGGING_RULES"] = (
-    "qt.multimedia.*=false;"
-    "qt.multimedia.ffmpeg=false;"
-)
-
-os.environ["QT_FFMPEG_DEBUG"] = "0"
+QLoggingCategory.setFilterRules("""
+qt.multimedia.*=false
+qt.multimedia.ffmpeg=false
+""")
 
 
 def main():
