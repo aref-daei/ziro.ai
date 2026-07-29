@@ -127,6 +127,9 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
             lambda app_config: self._on_start_processing(app_config, sidebar.selected_files())
         )
 
+        self.worker = None
+        self.bottom.stop_requested.connect(self._on_stop_requested)
+
         # Notification ========================================
         self.is_there_problems = (False, "")
         self.app_checker.check_for_ffmpeg()
@@ -181,6 +184,10 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
                 self.notification.emit("")
                 self.is_there_problems = (False, "")
 
+    def _on_stop_requested(self) -> None:
+        if self.worker is not None:
+            self.worker.request_stop()
+
     def _on_start_processing(self, config: AppConfig, selected_files: list[str]) -> None:
         if self.is_there_problems[0]:
             QMessageBox.information(self, "There is a Problem!", self.is_there_problems[1] + ".")
@@ -201,7 +208,11 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
 
         self.worker.process_finished.connect(self.thread.quit)
         self.worker.process_finished.connect(self.worker.deleteLater)
+        self.worker.process_finished.connect(self._on_worker_finished)
 
         self.worker.process_finished.connect(self.thread.deleteLater)
 
         self.thread.start()
+
+    def _on_worker_finished(self) -> None:
+        self.worker = None

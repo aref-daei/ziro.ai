@@ -1,4 +1,5 @@
 import shutil
+import threading
 from pathlib import Path
 
 import requests
@@ -25,6 +26,11 @@ def has_internet(timeout=2) -> bool:
         return False
 
 
+class _StoppedByUser(Exception):
+    """Internal signal used to unwind out of the per-file try block when
+    request_stop() was called mid-processing."""
+
+
 class ProcessingWorker(QObject):
     process_started = Signal()
     status = Signal(str, QueueStatus)
@@ -37,6 +43,15 @@ class ProcessingWorker(QObject):
         self.selected_files = selected_files
 
         self.logger = Logger()
+        self._stop_event = threading.Event()
+
+    def request_stop(self) -> None:
+        """Call this directly from the main thread (not via a queued Qt
+        signal - see the note in run() for why that wouldn't work here)."""
+        self._stop_event.set()
+
+    def is_stop_requested(self) -> bool:
+        return self._stop_event.is_set()
 
     @Slot()
     def run(self):
@@ -51,6 +66,10 @@ class ProcessingWorker(QObject):
         is_need_translate = config.target_language[0] != "en"
 
         for video_path in selected_files:
+
+            if self.is_stop_requested():
+                break
+
             self.status.emit(video_path, QueueStatus.PROCESSING)
             self.progress.emit(video_path, 0)
 
@@ -64,6 +83,9 @@ class ProcessingWorker(QObject):
                 # 1. Sound extraction (0-10%)
                 audio_path = registry.audio_extractor().extract(video_path)
                 self.progress.emit(video_path, 10)
+
+                if self.is_stop_requested():
+                    raise _StoppedByUser()
 
                 # 2. Transcription (10-40%)
                 transcription = registry.transcriber().transcribe(
@@ -80,6 +102,9 @@ class ProcessingWorker(QObject):
                 # 3. Save English subtitles
                 srt_en_path = PATHS["temp"] / f"{video_name}_en.srt"
                 registry.subtitle_generator().generate_srt(segments_en, srt_en_path)
+
+                if self.is_stop_requested():
+                    raise _StoppedByUser()
 
                 if is_need_translate:
                     # 4. Translation (40-80%)
@@ -99,6 +124,9 @@ class ProcessingWorker(QObject):
                             }
                         )
                     self.progress.emit(video_path, 80)
+
+                    if self.is_stop_requested():
+                        raise _StoppedByUser()
 
                     # 5. Save target language subtitles
                     srt_tgt_lang_path = (
@@ -151,6 +179,11 @@ class ProcessingWorker(QObject):
 
                 self.progress.emit(video_path, 100)
                 self.status.emit(video_path, QueueStatus.DONE)
+
+            except _StoppedByUser:
+                self.status.emit(video_path, QueueStatus.CANCELLED)
+                self.logger.error(f"Processing stopped by user during: {video_path}")
+                break
 
             except ConnectionError as e:
                 self.status.emit(video_path, QueueStatus.FAILED)
