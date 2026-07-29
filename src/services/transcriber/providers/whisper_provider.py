@@ -19,15 +19,12 @@ class WhisperTranscriber(Transcriber):
         LARGE = "large"
 
     def __init__(self, variant: Variant, device: str = "cpu") -> None:
-        model_dir_path = PATHS["base"] / "models" / "whisper"
-
-        base_model_path = model_dir_path / f"{variant.value}.pt"
-        if not base_model_path.exists():
-            model_dir_path = PATHS["models"] / "whisper"
+        model_dir = PATHS["models"] / "whisper"
+        model_dir.mkdir(parents=True, exist_ok=True)
 
         try:
             self._model = whisper.load_model(
-                variant.value, device=device, download_root=f"{model_dir_path}"
+                variant.value, device=device, download_root=f"{model_dir}"
             )
 
         except URLError as e:
