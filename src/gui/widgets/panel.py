@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QFrame
 
 
 class Panel(QFrame):
-    def __init__(self, title: str, min_width: int = None, max_width: int = None):
+    def __init__(self, min_width: int = None, max_width: int = None):
         super().__init__()
 
         self.setFrameShape(QFrame.Shape.StyledPanel)

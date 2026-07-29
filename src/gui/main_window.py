@@ -68,7 +68,7 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         splitter = QSplitter(Qt.Orientation.Horizontal)
 
         # ---------- Left ----------
-        sidebar = SidebarPanel("Files", 260, 360)
+        sidebar = SidebarPanel("Files", 300, 400)
         splitter.addWidget(sidebar)
 
         # ---------- Center ----------

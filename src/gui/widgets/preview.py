@@ -25,7 +25,7 @@ def _format_ms(ms: int) -> str:
 
 class PreviewPanel(Panel):
     def __init__(self, title: str, min_width: int = None, max_width: int = None):
-        Panel.__init__(self, title, min_width, max_width)
+        Panel.__init__(self, min_width, max_width)
 
         layout = QVBoxLayout(self)
         layout.setSpacing(10)

@@ -38,8 +38,7 @@ class InspectorPanel(Panel):
     start_processing = Signal(AppConfig)
 
     def __init__(self, window: QMainWindow, title: str, min_width: int = None, max_width: int = None):
-        # TODO: باید ورودی ها اصلاح شود. عنوان و ابعاد لازم نیست از بیرون تنظیم شود.
-        Panel.__init__(self, title, min_width, max_width)
+        Panel.__init__(self, min_width, max_width)
 
         self._window = window
 

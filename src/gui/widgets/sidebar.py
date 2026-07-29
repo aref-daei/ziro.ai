@@ -108,7 +108,7 @@ class SidebarPanel(Panel):
     file_selected = Signal(str)
 
     def __init__(self, title: str, min_width: int = None, max_width: int = None):
-        Panel.__init__(self, title, min_width, max_width)
+        Panel.__init__(self, min_width, max_width)
 
         self._active_row: FileRow | None = None
 
