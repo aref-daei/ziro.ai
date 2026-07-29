@@ -3,5 +3,6 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/arrow-down.svg</file>
+        <file>icons/Ziro.png</file>
     </qresource>
 </RCC>
