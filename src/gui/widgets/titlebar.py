@@ -12,9 +12,10 @@ from PySide6.QtWidgets import (
     QWidget,
     QMenu,
     QFileDialog,
-    QMessageBox,
+    QMessageBox, QLayout,
 )
 
+from src.core.constants import PROJECT_NAME, PROJECT_DESCRIPTION, PROJECT_VERSION, PROJECT_LICENSE, PROJECT_URL
 from src.core.paths import PATHS
 
 ICONS_COLOR = "#F0F2F0"
@@ -142,11 +143,32 @@ class TitleBar(QFrame):
             self.open_folder_requested.emit(folder_path)
 
     def _show_about_dialog(self) -> None:
-        QMessageBox.about(
-            self,
-            "About Ziro.ai",
-            "Ziro.ai\n\nAutomatic subtitle generation and translation for video.",
-        )
+        msg = QMessageBox(self)
+        msg.setObjectName("About")
+        msg.setWindowTitle(f"About {PROJECT_NAME}")
+
+        msg.setText(f"""
+            <div align="center">
+                <h2>{PROJECT_NAME}</h2>
+                <p><b>Version {PROJECT_VERSION}</b></p>
+                <p>{PROJECT_DESCRIPTION}</p>
+                <p>Built with ❤️ using PySide6</p>
+                <p>Licensed under {PROJECT_LICENSE}</p>
+                <p>
+                    <b>Source Code</b><br>
+                    <a href="{PROJECT_URL}">{PROJECT_URL}</a>
+                </p>
+            </div>
+        """)
+
+        msg.setTextFormat(Qt.RichText)
+        msg.setTextInteractionFlags(Qt.TextBrowserInteraction)
+
+        label = msg.findChild(QLabel)
+        if label:
+            label.setOpenExternalLinks(True)
+
+        msg.exec()
 
     # ------------------------------------------------------------- Behavior
 
