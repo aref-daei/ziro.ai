@@ -91,6 +91,11 @@ class QueueRow(QFrame):
             ),
             QueueStatus.DONE: ("mdi6.check-circle", "#54C750", "Done"),
             QueueStatus.FAILED: ("mdi6.alert-circle", "#e05c5c", "Failed"),
+            QueueStatus.CANCELLED: (
+                "mdi6.cancel",
+                "#F0AD4E",
+                "Cancelled",
+            ),
         }
         icon_name, color, text = icon_by_status[status]
 

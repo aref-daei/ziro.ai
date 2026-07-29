@@ -6,3 +6,4 @@ class QueueStatus(str, Enum):
     PROCESSING = "processing"
     DONE = "done"
     FAILED = "failed"
+    CANCELLED = "cancelled"
