@@ -2,10 +2,8 @@
 
 **Automatically add any language subtitles to your favorite videos.**
 
-![License](https://img.shields.io/badge/license-AGPL-orange.svg)
-![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
-![Python](https://img.shields.io/badge/python-3.11+-yellow.svg)
-![FFmpeg](https://img.shields.io/badge/ffmpeg-8.0-green.svg)
+![License](https://img.shields.io/badge/license-AGPL-white.svg)
+![Version](https://img.shields.io/badge/version-2.0-green.svg)
 
 [Persian](/docs/README.fa.md)
 
@@ -24,12 +22,11 @@ Our automated pipeline:
 
 ## Prerequisites
 
-Before you begin, make sure you have the following installed:
+Before you begin, make sure your system meets the following requirements:
 
-- Python 3.11 or higher **(for development)**
-- FFmpeg 8.0
-- 8GB RAM (16GB recommended)
-- GPU with CUDA support recommended for faster performance
+- Dual-core CPU (Quad-core recommended)
+- 8 GB RAM (16 GB recommended)
+- A CUDA-compatible GPU is recommended for faster performance
 
 ## Installation Guide
 
@@ -46,19 +43,8 @@ Getting started with Ziro is quick and straightforward. Follow the steps below b
 3. **Install for All Users**  
    When prompted, choose **“Install for all users”** and proceed by clicking **Next** until the installation is complete.
 
-4. **Launch Ziro**  
-   After installation, Ziro will launch automatically.  
-   - If you already have **FFmpeg** installed, the app will start loading its modules.  
-   - If FFmpeg is not installed, Simply run the following command in **Command Prompt** or **PowerShell**:
-
-     ```bash
-     winget install "FFmpeg (Essentials Build)"
-     ```
-
-     Then restart Ziro.
-
-5. **You’re All Set!**  
-   Once the modules are loaded, you can start translating your favorite videos into any language subtitles in just a few clicks.
+4. **You're All Set!**  
+   After installation, Ziro will launch automatically, and you can start generating subtitles for your favorite videos in any language with just a few clicks.
 
 ### Linux & macOS
 
@@ -76,9 +62,9 @@ On your first run, the selected models will be downloaded **automatically in the
 > **You won’t see a separate download progress bar** – instead, you’ll notice the processing time is longer for the first run as the models are being fetched and installed.
 
 | Transcription Model | Size (approx.) |
-| :-----------------: | :------------: |
+| :-----------------: |:--------------:|
 |        Tiny         |     70 MB      |
-|        Base         |   *default*    |
+|        Base         |     120 MB     |
 |        Small        |     460 MB     |
 |       Medium        |     1.4 GB     |
 |        Large        |     2.8 GB     |
@@ -88,13 +74,8 @@ On your first run, the selected models will be downloaded **automatically in the
 | Google Translate  |    *online*    |
 |       DeepL       |    *online*    |
 
-⚠️ **Note 3: Completion & Output**  
-Once processing finishes, you’ll see a success message. Click **OK** to automatically open the folder containing your subtitled video.
-
-## Future Development
-
-- Upgrade to PyQt 6 and UI improvements
-- Add support for offline translation
+⚠️ **Note 3: Processing Complete**  
+Once processing is complete, click **Open Output** to automatically open the folder containing your subtitled video.
 
 ## Contributing
 
