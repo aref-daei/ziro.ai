@@ -28,19 +28,19 @@ def _get_app_paths():
 
     paths = {
         "base": base_dir,
-        "styles": base_dir / "resources" / "styles",
-        "icons": base_dir / "resources" / "icons",
-        "fonts": base_dir / "resources" / "fonts",
+        "styles": base_dir / "assets" / "styles",
+        "icons": base_dir / "assets" / "icons",
         "app_data": app_data,
         "config": app_data / "config",
-        "models": app_data / "models",
+        "models": app_data / "runtime" / "models",
+        "ffmpeg": app_data / "runtime" / "ffmpeg",
         "logs": app_data / "logs",
         "temp": app_data / "temp",
         "output": output,
     }
 
-    for key in ["config", "models", "logs", "temp", "output"]:
-        paths[key].mkdir(parents=True, exist_ok=True)
+    # for key in ["config", "models", "logs", "temp", "output"]:
+    #     paths[key].mkdir(parents=True, exist_ok=True)
 
     return paths
 
