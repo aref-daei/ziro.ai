@@ -27,7 +27,9 @@ import sys
 from PySide6.QtWidgets import QApplication
 
 from core.constants import PROJECT_NAME
-from gui import SplashScreen
+from gui.splash_screen import SplashScreen
+from logger import Logger
+
 import assets.assets_rc
 
 LOADING_STEPS = [
@@ -48,27 +50,40 @@ os.environ["QT_FFMPEG_DEBUG"] = "0"
 
 
 def main():
+    logger = Logger()
+
+    logger.info("Starting application...")
     app = QApplication(sys.argv)
     screen_geometry = app.primaryScreen().geometry()
 
+    logger.info("Showing splash screen...")
     splash = SplashScreen(PROJECT_NAME, len(LOADING_STEPS))
     splash.center_on_screen(screen_geometry)
     splash.show()
     app.processEvents()
 
+    logger.info("Loading application modules...")
     for i, (message, loader) in enumerate(LOADING_STEPS, start=1):
         splash.set_progress(i, message)
         app.processEvents()
         loader()
 
-    from gui import MainWindow
+    logger.info("Loading main window...")
+    from gui.main_window import MainWindow
 
+    logger.info("Creating main window...")
     window = MainWindow()
     window.center_on_screen(screen_geometry)
     window.show()
     splash.close()
 
-    sys.exit(app.exec())
+    logger.info("Application started.")
+
+    exit_code = app.exec()
+
+    logger.info("Application exited.")
+
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":
