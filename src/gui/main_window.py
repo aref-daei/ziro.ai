@@ -190,7 +190,8 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
 
         self.ff_downloader.finished.connect(self.ff_thread.quit)
         self.ff_downloader.finished.connect(self.ff_downloader.deleteLater)
-        self.ff_downloader.finished.connect(self.ff_thread.deleteLater)
+
+        self.ff_thread.finished.connect(self.ff_thread.deleteLater)
 
         self.ff_thread.start()
 
@@ -241,9 +242,9 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
 
         self.worker.process_finished.connect(self.thread.quit)
         self.worker.process_finished.connect(self.worker.deleteLater)
-        self.worker.process_finished.connect(self._on_worker_finished)
 
-        self.worker.process_finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(self._on_worker_finished)
 
         self.thread.start()
 
