@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QApplication, QWidget
 
 class FramelessResizeMixin:
 
-    _RESIZE_BORDER = 6  # پهنای ناحیه‌ی فعال برای resize، بر حسب پیکسل
+    _RESIZE_BORDER = 6
 
     _CURSOR_MAP = {
         Qt.Edge.LeftEdge: Qt.CursorShape.SizeHorCursor,
@@ -21,17 +21,13 @@ class FramelessResizeMixin:
     }
 
     def enable_frameless_resize(self) -> None:
-        """باید یک‌بار، بعد از ساخته‌شدن کامل UI پنجره صدا زده شود."""
         QApplication.instance().installEventFilter(self)
         self._enable_mouse_tracking_recursive(self)
 
-    # -------------------------------------------------------------- کمکی
+    # -------------------------------------------------------------- Auxiliary
 
     @staticmethod
     def _enable_mouse_tracking_recursive(widget: QWidget) -> None:
-        # بدون فعال بودن mouse tracking روی ویجت‌های فرزند (دکمه‌ها و...)،
-        # رویداد MouseMove فقط وقتی دکمه‌ی ماوس پایین باشد تولید می‌شود،
-        # در نتیجه تغییر کرسر روی لبه‌ها فقط هنگام hover کار نمی‌کرد.
         widget.setMouseTracking(True)
         for child in widget.findChildren(QWidget):
             child.setMouseTracking(True)

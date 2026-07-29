@@ -10,7 +10,9 @@ from PySide6.QtWidgets import (
 
 from src.core.app_checker import AppChecker
 from src.core.app_config import AppConfig
+from src.core.ffmpeg_locator import ensure_ffmpeg_available
 from src.core.paths import PATHS
+from src.workers.ffdownloader_worker import FFDownloader
 from src.workers.processing_worker import ProcessingWorker
 from .widgets import (
     TitleBar,
@@ -119,7 +121,6 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         self.app_checker.update_checked.connect(self._on_update_checked)
 
         self.app_checker.internet_checked.connect(self._on_internet_checked)
-        self.app_checker.ffmpeg_checked.connect(self._on_ffmpeg_checked)
 
         sidebar.file_selected.connect(preview.load_video)
 
@@ -132,7 +133,7 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
 
         # Notification ========================================
         self.is_there_problems = (False, "")
-        self.app_checker.check_for_ffmpeg()
+        self._ensure_ffmpeg()
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.app_checker.check_for_internet)
@@ -170,10 +171,40 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         else:
             QMessageBox.information(self, "No Update Available", "No update available.")
 
-    def _on_ffmpeg_checked(self, found: bool) -> None:
-        if not found:
-            self.notification.emit("FFmpeg not found")
-            self.is_there_problems = (True, "FFmpeg not found")
+    def _ensure_ffmpeg(self) -> None:
+        # Cheap synchronous check first - no thread, no download, no
+        # notification needed if it's already there.
+        if ensure_ffmpeg_available():
+            return
+
+        self.notification.emit("Downloading FFmpeg... 0%")
+        self.is_there_problems = (True, "FFmpeg is still downloading, please wait")
+
+        self.ff_thread = QThread()
+        self.ff_downloader = FFDownloader()
+        self.ff_downloader.moveToThread(self.ff_thread)
+
+        self.ff_thread.started.connect(self.ff_downloader.run)
+        self.ff_downloader.progress.connect(self._on_ffmpeg_download_progress)
+        self.ff_downloader.finished.connect(self._on_ffmpeg_download_finished)
+
+        self.ff_downloader.finished.connect(self.ff_thread.quit)
+        self.ff_downloader.finished.connect(self.ff_downloader.deleteLater)
+        self.ff_downloader.finished.connect(self.ff_thread.deleteLater)
+
+        self.ff_thread.start()
+
+    def _on_ffmpeg_download_progress(self, percent: int) -> None:
+        self.notification.emit(f"Downloading FFmpeg... {percent}%")
+
+    def _on_ffmpeg_download_finished(self, success: bool, message: str) -> None:
+        if success:
+            self.notification.emit("")
+            if "FFmpeg" in self.is_there_problems[1]:
+                self.is_there_problems = (False, "")
+        else:
+            self.notification.emit(f"⚠ {message}")
+            self.is_there_problems = (True, message)
 
     def _on_internet_checked(self, has_access: bool) -> None:
         if not has_access:
@@ -185,6 +216,8 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
                 self.is_there_problems = (False, "")
 
     def _on_stop_requested(self) -> None:
+        # request_stop() only sets a threading.Event - safe to call directly
+        # from the main thread, no queued-connection timing issues here.
         if self.worker is not None:
             self.worker.request_stop()
 
