@@ -13,15 +13,14 @@ author = "Aref Daei"
 # Data files
 # -----------------------------
 datas = []
-datas += [("src/resources", "resources")]
-datas += [("src/models/whisper", "models/whisper")]
+datas += [("src/assets", "assets")]
 datas += collect_data_files("whisper")
 
 # -----------------------------
 # Hidden imports
 # -----------------------------
 hiddenimports = []
-hiddenimports += collect_submodules("customtkinter")
+# hiddenimports += collect_submodules("<package>")
 
 # -----------------------------
 # Analysis
