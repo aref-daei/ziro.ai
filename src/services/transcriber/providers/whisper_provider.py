@@ -19,6 +19,8 @@ class WhisperTranscriber(Transcriber):
         LARGE = "large"
 
     def __init__(self, variant: Variant, device: str = "cpu") -> None:
+        self.device = device
+
         model_dir = PATHS["models"] / "whisper"
         model_dir.mkdir(parents=True, exist_ok=True)
 
@@ -38,6 +40,8 @@ class WhisperTranscriber(Transcriber):
             kwargs = {"task": "translate", "word_timestamps": False}
             if language is not None:
                 kwargs["language"] = language
+            if self.device == "cpu":
+                kwargs["fp16"] = False
 
             return self._model.transcribe(audio=audio_path, **kwargs)
 
