@@ -1,7 +1,7 @@
 from deepl import DeepLClient
 from deepl.exceptions import ConnectionException
 
-from src.core.exceptions import ConnectionError, TranslationError
+from core.exceptions import ConnectionError, TranslationError
 from ..interfaces import ApiTranslator
 
 MAX_RETRIES = 3

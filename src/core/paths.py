@@ -3,7 +3,7 @@ import platform
 import sys
 from pathlib import Path
 
-from src.core.constants import PROJECT_NAME
+from .constants import PROJECT_NAME
 
 
 def _get_app_paths():

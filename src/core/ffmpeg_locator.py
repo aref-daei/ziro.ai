@@ -5,7 +5,7 @@ import platform
 import shutil
 from pathlib import Path
 
-from src.core.paths import PATHS
+from .paths import PATHS
 
 _INSTALL_DIR = PATHS["ffmpeg"]
 

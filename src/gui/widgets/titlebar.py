@@ -15,8 +15,8 @@ from PySide6.QtWidgets import (
     QMessageBox, QLayout,
 )
 
-from src.core.constants import PROJECT_NAME, PROJECT_DESCRIPTION, PROJECT_VERSION, PROJECT_LICENSE, PROJECT_URL
-from src.core.paths import PATHS
+from core.constants import PROJECT_NAME, PROJECT_DESCRIPTION, PROJECT_VERSION, PROJECT_LICENSE, PROJECT_URL
+from core.paths import PATHS
 
 ICONS_COLOR = "#F0F2F0"
 VIDEO_FILE_FILTER = "Video Files (*.mp4 *.mkv *.mov *.avi *.webm *.flv *.wmv)"

@@ -5,14 +5,14 @@ from pathlib import Path
 import requests
 from PySide6.QtCore import QObject, Signal, Slot
 
-from src.core.app_config import AppConfig
-from src.core.exceptions import *
-from src.core.paths import PATHS
-from src.core.queue_status import QueueStatus
-from src.core.settings import DEBUG
-from src.filesystem import FileHandler
-from src.logger import Logger
-from src.services import ServiceRegistry
+from core.app_config import AppConfig
+from core.exceptions import *
+from core.paths import PATHS
+from core.queue_status import QueueStatus
+from core.settings import DEBUG
+from filesystem import FileHandler
+from logger import Logger
+from services import ServiceRegistry
 
 
 def has_internet(timeout=2) -> bool:

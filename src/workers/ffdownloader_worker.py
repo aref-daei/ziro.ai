@@ -12,9 +12,9 @@ from urllib.parse import urlparse
 import requests
 from PySide6.QtCore import QObject, Signal, Slot
 
-from src.core.ffmpeg_locator import find_ffmpeg, register_ffmpeg_in_env
-from src.core.paths import PATHS
-from src.logger import Logger
+from core.ffmpeg_locator import find_ffmpeg, register_ffmpeg_in_env
+from core.paths import PATHS
+from logger import Logger
 
 # Third-party static-build host; no checksums provided, so HTTPS + archive
 # validation below are our only integrity checks.

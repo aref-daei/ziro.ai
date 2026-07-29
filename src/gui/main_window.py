@@ -8,12 +8,12 @@ from PySide6.QtWidgets import (
     QSplitter, QMessageBox,
 )
 
-from src.core.app_checker import AppChecker
-from src.core.app_config import AppConfig
-from src.core.ffmpeg_locator import ensure_ffmpeg_available
-from src.core.paths import PATHS
-from src.workers.ffdownloader_worker import FFDownloader
-from src.workers.processing_worker import ProcessingWorker
+from core.app_checker import AppChecker
+from core.app_config import AppConfig
+from core.ffmpeg_locator import ensure_ffmpeg_available
+from core.paths import PATHS
+from workers.ffdownloader_worker import FFDownloader
+from workers.processing_worker import ProcessingWorker
 from .widgets import (
     TitleBar,
     FramelessResizeMixin,

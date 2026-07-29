@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QSizePolicy, QMainWindow,
 )
 
-from src.core.app_config import AppConfig
+from core.app_config import AppConfig
 from .panel import Panel
 
 # LANGUAGES: dict {"Language": ("lang_code", is_rtl: True/False)}

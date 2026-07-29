@@ -4,7 +4,7 @@ from PySide6.QtCore import Qt, Signal, QUrl
 from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QPushButton, QMainWindow
 
-from src.core.paths import PATHS
+from core.paths import PATHS
 
 
 class BottomBar(QFrame):

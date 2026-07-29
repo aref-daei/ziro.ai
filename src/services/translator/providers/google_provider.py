@@ -3,7 +3,7 @@ import asyncio
 from googletrans import Translator
 from httpx import ConnectError
 
-from src.core.exceptions import ConnectionError, TranslationError
+from core.exceptions import ConnectionError, TranslationError
 from ..interfaces import ApiTranslator
 
 MAX_RETRIES = 3

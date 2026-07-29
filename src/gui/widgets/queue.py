@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from src.core.queue_status import QueueStatus
+from core.queue_status import QueueStatus
 from .panel import Panel
 
 

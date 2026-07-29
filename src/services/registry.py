@@ -1,4 +1,4 @@
-from src.core.app_config import AppConfig
+from core.app_config import AppConfig
 from .audio_extractor import AudioExtractorService
 from .subtitle_generator import SubtitleGeneratorService
 from .transcriber import TranscriberService

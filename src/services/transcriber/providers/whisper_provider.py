@@ -3,8 +3,8 @@ from urllib.error import URLError
 
 import whisper
 
-from src.core.exceptions import ConnectionError, TranscriptionError
-from src.core.paths import PATHS
+from core.exceptions import ConnectionError, TranscriptionError
+from core.paths import PATHS
 from ..interfaces import Transcriber
 
 
