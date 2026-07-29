@@ -6,7 +6,7 @@ from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 block_cipher = None
 
 app_name = "Ziro"
-version = "1.4.2"
+version = "2.0.0"
 author = "Aref Daei"
 
 # -----------------------------
