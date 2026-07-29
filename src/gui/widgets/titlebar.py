@@ -64,6 +64,7 @@ class TitleBar(QFrame):
         self.edit_menu_btn = QPushButton("Edit")
         self.edit_menu_btn.setObjectName("MenuButton")
         self._build_edit_menu()
+        self.edit_menu_btn.hide()
 
         self.help_menu_btn = QPushButton("Help")
         self.help_menu_btn.setObjectName("MenuButton")
