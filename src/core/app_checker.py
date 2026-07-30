@@ -12,7 +12,6 @@ REQUEST_TIMEOUT_MS = 8000
 class AppChecker(QObject):
     internet_checked = Signal(bool)
     update_checked = Signal(bool)
-    ffmpeg_checked = Signal(bool)
 
     def __init__(self):
         super().__init__()
@@ -68,8 +67,3 @@ class AppChecker(QObject):
         status = reply.attribute(QNetworkRequest.Attribute.HttpStatusCodeAttribute)
         self.internet_checked.emit(status == 200)
         reply.deleteLater()
-
-    # ------------------------------------------------------------ ffmpeg check
-
-    def check_for_ffmpeg(self) -> None:
-        self.ffmpeg_checked.emit(shutil.which("ffmpeg") is not None)
