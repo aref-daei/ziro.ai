@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 import sys
-from PyInstaller.utils.hooks import collect_submodules, collect_data_files
+from PyInstaller.utils.hooks import collect_data_files
 
 block_cipher = None
 
@@ -17,10 +17,24 @@ datas += [("src/assets", "assets")]
 datas += collect_data_files("whisper")
 
 # -----------------------------
-# Hidden imports
+# Excludes
 # -----------------------------
-hiddenimports = []
-# hiddenimports += collect_submodules("<package>")
+excludes = [
+    "PySide6.Qt3DCore", "PySide6.Qt3DExtras",
+    "PySide6.QtBluetooth", "PySide6.QtCharts",
+    "PySide6.QtDataVisualization", "PySide6.QtDesigner",
+    "PySide6.QtHelp", "PySide6.QtLocation",
+    "PySide6.QtNetworkAuth", "PySide6.QtPdf",
+    "PySide6.QtPositioning", "PySide6.QtQml",
+    "PySide6.QtQuick", "PySide6.QtQuickControls2",
+    "PySide6.QtQuick3D", "PySide6.QtRemoteObjects",
+    "PySide6.QtScxml", "PySide6.QtSensors",
+    "PySide6.QtSerialBus", "PySide6.QtSerialPort",
+    "PySide6.QtSql", "PySide6.QtTest",
+    "PySide6.QtTextToSpeech", "PySide6.QtWebChannel",
+    "PySide6.QtWebEngineCore", "PySide6.QtWebEngineWidgets",
+    "PySide6.QtWebSockets",
+]
 
 # -----------------------------
 # Analysis
@@ -30,10 +44,10 @@ a = Analysis(
     pathex=["src"],
     binaries=[],
     datas=datas,
-    hiddenimports=hiddenimports,
+    hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
-    excludes=[],
+    excludes=excludes,
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
@@ -64,7 +78,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon="src/resources/Ziro.ico" if sys.platform == "win32" else "src/resources/Ziro.png",
+    icon="src/assets/icons/Ziro.ico" if sys.platform == "win32" else "src/assets/icons/Ziro.png",
 )
 
 # -----------------------------
@@ -87,8 +101,8 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name=f"{app_name}.app",
-    icon="src/resources/Ziro.icns",
-    bundle_identifier="com.arefdaei.ziro",
+    icon="src/assets/icons/Ziro.icns",
+    bundle_identifier="ir.ardastudio.ziro",
     info_plist={
         "CFBundleName": app_name,
         "CFBundleDisplayName": app_name,
