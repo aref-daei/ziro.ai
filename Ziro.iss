@@ -15,7 +15,7 @@ VersionInfoCopyright=Copyright (C) 2025-2026  Aref Daei - AGPL-3.0
 
 DefaultDirName={commonpf}\Ziro
 DefaultGroupName=Ziro
-SetupIconFile=src\resources\Ziro.ico
+SetupIconFile=src\assets\icons\Ziro.ico
 UninstallDisplayIcon={app}\Ziro.exe
 LicenseFile=LICENSE
 
