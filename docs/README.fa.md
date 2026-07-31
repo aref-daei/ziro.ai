@@ -64,7 +64,7 @@ Ziro در حال حاضر تنها در **حالت آنلاین** کار می‌
 | Transcription Model | Size (approx.) |
 | :-----------------: |:--------------:|
 |        Tiny         |     70 MB      |
-|        Base         |     120 MB     |
+|        Base         |     140 MB     |
 |        Small        |     460 MB     |
 |       Medium        |     1.4 GB     |
 |        Large        |     2.8 GB     |
