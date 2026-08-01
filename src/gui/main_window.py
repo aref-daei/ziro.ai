@@ -226,6 +226,8 @@ class MainWindow(FramelessResizeMixin, QMainWindow):
         if self.is_there_problems[0]:
             QMessageBox.information(self, "There is a Problem!", self.is_there_problems[1] + ".")
             return
+        if not selected_files:
+            return
 
         self.thread = QThread()
         self.worker = ProcessingWorker(config, selected_files)
