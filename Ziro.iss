@@ -1,7 +1,8 @@
 [Setup]
-AppName=Ziro
+AppName=Ziro.ai
+AppId={{B30C851B-3D88-477D-AED9-9D5476BB7051}}
 AppVersion=2.0.0
-AppVerName=Ziro 2.0.0
+AppVerName=Ziro.ai 2.0.0
 AppPublisher=Aref Daei
 AppPublisherURL=https://github.com/aref-daei/ziro.ai
 AppSupportURL=https://github.com/aref-daei/ziro.ai/issues
@@ -13,10 +14,10 @@ VersionInfoCompany=Aref Daei
 VersionInfoDescription=Automated Subtitle Generation Application
 VersionInfoCopyright=Copyright (C) 2025-2026  Aref Daei - AGPL-3.0
 
-DefaultDirName={commonpf}\Ziro
-DefaultGroupName=Ziro
+DefaultDirName={commonpf}\Ziro.ai
+DefaultGroupName=Ziro.ai
 SetupIconFile=src\assets\icons\Ziro.ico
-UninstallDisplayIcon={app}\Ziro.exe
+UninstallDisplayIcon={app}\Ziro.ai.exe
 LicenseFile=LICENSE
 
 Compression=lzma2/ultra64
@@ -35,11 +36,11 @@ PrivilegesRequiredOverridesAllowed=dialog
 CloseApplications=yes
 
 [Files]
-Source: "dist\Ziro\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\Ziro.ai\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\Ziro"; Filename: "{app}\Ziro.exe"
-Name: "{commondesktop}\Ziro"; Filename: "{app}\Ziro.exe"
+Name: "{group}\Ziro.ai"; Filename: "{app}\Ziro.ai.exe"
+Name: "{commondesktop}\Ziro.ai"; Filename: "{app}\Ziro.ai.exe"
 
 [Run]
-Filename: "{app}\Ziro.exe"; Description: "Launch Ziro"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Ziro.ai.exe"; Description: "Launch Ziro.ai"; Flags: nowait postinstall skipifsilent
