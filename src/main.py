@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-Ziro.ai - Desktop AI Media Processing Platform
+Ziro.ai - AI-Powered Video Transcription, Translation & Subtitle Generation
 Version 2.0.0
 Copyright (C) 2025-2026  Aref Daei
 

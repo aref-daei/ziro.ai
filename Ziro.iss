@@ -11,7 +11,7 @@ AppCopyright=Copyright (C) 2025-2026  Aref Daei - AGPL-3.0
 
 VersionInfoVersion=2.0.0.0
 VersionInfoCompany=Aref Daei
-VersionInfoDescription=Automated Subtitle Generation Application
+VersionInfoDescription=AI-Powered Video Transcription, Translation & Subtitle Generation
 VersionInfoCopyright=Copyright (C) 2025-2026  Aref Daei - AGPL-3.0
 
 DefaultDirName={commonpf}\Ziro.ai
