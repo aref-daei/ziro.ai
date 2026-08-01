@@ -21,6 +21,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 Contact: aref.daei@outlook.com
 """
 
+import core.no_console_patch
+
 import sys
 
 from PySide6.QtCore import QLoggingCategory
