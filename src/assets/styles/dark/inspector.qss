@@ -75,12 +75,6 @@ QComboBox QAbstractItemView::item:selected {
     color: white;
 }
 
-
-/* Hide scrollbar */
-QComboBox QAbstractItemView QScrollBar:vertical {
-    width: 0px;
-}
-
 #InspectorKeyInput {
     background-color: #F0F2F0;
     color: #1e1e1e;

@@ -23,6 +23,12 @@ QSplitter::handle {
     background: transparent;
 }
 
+/* Resize scrollbar */
+QScrollBar:vertical, QScrollBar:horizontal {
+    width: 10px;
+    height: 10px;
+}
+
 QMessageBox {
     background-color: #f0f2f0;
     color: #3E3F3E;
