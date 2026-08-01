@@ -33,7 +33,7 @@ excludes = [
     "PySide6.QtSql", "PySide6.QtTest",
     "PySide6.QtTextToSpeech", "PySide6.QtWebChannel",
     "PySide6.QtWebEngineCore", "PySide6.QtWebEngineWidgets",
-    "PySide6.QtWebSockets",
+    "PySide6.QtWebSockets", "PySide6.QtOpenGL"
 ]
 
 # -----------------------------
