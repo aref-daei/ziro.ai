@@ -1,6 +1,6 @@
 # Ziro.ai 🎬
 
-**افزودن خودکار زیرنویس هر زبانی به ویدیوهای دلخواه شما.**
+**ویدیوهای خود را با قدرت هوش مصنوعی رونویسی، ترجمه و زیرنویس‌گذاری کنید.**
 
 ![License](https://img.shields.io/badge/license-AGPL-white.svg)
 ![Version](https://img.shields.io/badge/version-2.0.0-green.svg)

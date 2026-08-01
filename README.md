@@ -1,6 +1,6 @@
 # Ziro.ai 🎬
 
-**Automatically add any language subtitles to your favorite videos.**
+**Transcribe, translate, and generate subtitles for your videos with the power of AI.**
 
 ![License](https://img.shields.io/badge/license-AGPL-white.svg)
 ![Version](https://img.shields.io/badge/version-2.0-green.svg)
